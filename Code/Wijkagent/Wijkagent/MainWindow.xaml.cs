@@ -22,9 +22,7 @@ namespace Wijkagent
     {
         public MainWindow()
         {
-            Console.WriteLine("ASD");
-            Console.ReadLine();
-          //  InitializeComponent();
+            InitializeComponent();
         }
     }
 }
