@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\
+C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\obj\Release\
 Wijkagent
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\App.xaml
 11151548125
 
@@ -16,5 +16,5 @@ C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\Ap
 13-1505183044
 MainWindow.xaml;
 
-False
+True
 
