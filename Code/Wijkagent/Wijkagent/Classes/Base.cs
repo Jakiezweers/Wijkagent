@@ -8,5 +8,12 @@ namespace Wijkagent.Classes
 {
     class Base
     {
+        public string Location;
+        public string Regio;
+
+        public Base()
+        {
+
+        }
     }
 }

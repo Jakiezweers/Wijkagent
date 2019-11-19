@@ -8,5 +8,14 @@ namespace Wijkagent.Classes
 {
     class Archive
     {
+        public int ArchiveId;
+        public Delict Delict;
+        public int AddedBy;
+        public DateTime CreationDate;
+
+        public Archive()
+        {
+
+        }
     }
 }

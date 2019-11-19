@@ -8,5 +8,18 @@ namespace Wijkagent.Classes
 {
     class Database_connection
     {
+        public string DatabaseName;
+        public string DatabasePassword;
+        public string DatabaseUsername;
+
+        public Database_connection()
+        {
+
+        }
+        
+        public void Connection()
+        {
+
+        }
     }
 }

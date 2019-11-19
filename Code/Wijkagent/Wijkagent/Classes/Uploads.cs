@@ -8,5 +8,16 @@ namespace Wijkagent.Classes
 {
     class Uploads
     {
+
+        //Abstract maken? zodat er mogelijke uiteindelijk ook documenten geupload kunne worden.
+
+        public int UploadId;
+        public string Path;
+        public DateTime AddedDate;
+
+        public Uploads()
+        {
+
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace Wijkagent.Classes
 {
     class Function
     {
+        public string Name;
     }
 }

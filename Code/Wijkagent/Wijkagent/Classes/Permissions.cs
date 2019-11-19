@@ -8,5 +8,13 @@ namespace Wijkagent.Classes
 {
     class Permissions
     {
+        public int PermissionId;
+        public string Name;
+        public string Act;
+
+        public Permissions()
+        {
+
+        }
     }
 }
