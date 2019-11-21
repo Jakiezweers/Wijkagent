@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\school\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\
+C:\Users\jorim\Documents\GitHub\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\
 Wijkagent
 none
 false
 DEBUG;TRACE
-D:\school\Wijkagent\Code\Wijkagent\Wijkagent\App.xaml
-11151548125
+C:\Users\jorim\Documents\GitHub\Wijkagent\Code\Wijkagent\Wijkagent\App.xaml
+7-1876443315
 
-6952403136
+301413136555
 13-1505183044
-MainWindow.xaml;
+AddDelictWindow.xaml;AddPersonWindow.xaml;DelictArchiveWindow.xaml;DelictListWindow.xaml;LoginWindow.xaml;MainWindow.xaml;RegisterWindow.xaml;
 
-True
+False
 
