@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\school\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\
+C:\Users\steph\Source\Repos\Wijkagentv2\Code\Wijkagent\Wijkagent\obj\Debug\
 Wijkagent
 none
 false
 DEBUG;TRACE
-D:\school\Wijkagent\Code\Wijkagent\Wijkagent\App.xaml
-11151548125
-
-6952403136
+C:\Users\steph\Source\Repos\Wijkagentv2\Code\Wijkagent\Wijkagent\App.xaml
+7-1876443315
+4344894404
+30-83202468
 13-1505183044
-MainWindow.xaml;
+AddDelictWindow.xaml;AddPersonWindow.xaml;DelictArchiveWindow.xaml;DelictListWindow.xaml;LoginWindow.xaml;MainWindow.xaml;RegisterWindow.xaml;
 
-True
+False
 
