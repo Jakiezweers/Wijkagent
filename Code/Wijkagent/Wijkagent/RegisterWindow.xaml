@@ -45,7 +45,7 @@
                 <PasswordBox HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top" Width="120" Height="23"/>
             </Grid>
             <Grid HorizontalAlignment="Left" Height="250" Margin="426,0,0,0" VerticalAlignment="Top" Width="348">
-                <Image Source="C:\Users\steph\Downloads\download (2).jpg" HorizontalAlignment="Left" Height="200" Margin="148,0,0,0" VerticalAlignment="Top" Width="200"/>
+                <Image Source="Images\StockImage.jpg" HorizontalAlignment="Left" Height="200" Margin="148,0,0,0" VerticalAlignment="Top" Width="200"/>
                 <Button Content="Kies Foto" HorizontalAlignment="Left" Margin="247,221,0,0" VerticalAlignment="Top" Width="91" Click="Button_Click"/>
             </Grid>
             <Button Content="Aanmaken gebruiker" HorizontalAlignment="Left" Margin="644,371,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click_1"/>

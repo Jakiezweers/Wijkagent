@@ -171,6 +171,7 @@
     <Content Include="bin\Debug\Wijkagent.exe" />
     <Content Include="bin\Debug\Wijkagent.pdb" />
     <Resource Include="obj\Debug\Wijkagent.csproj.FileListAbsolute.txt" />
+    <Resource Include="Images\StockImage.jpg" />
     <Content Include="obj\Debug\Wijkagent.exe" />
     <Content Include="obj\Debug\Wijkagent.pdb" />
   </ItemGroup>
