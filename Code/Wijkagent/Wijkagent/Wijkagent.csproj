@@ -63,6 +63,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\Archive.cs" />
+    <Compile Include="Classes\Base.cs" />
+    <Compile Include="Classes\Database_connection.cs" />
+    <Compile Include="Classes\Database_queries.cs" />
+    <Compile Include="Classes\Delict.cs" />
+    <Compile Include="Classes\Function.cs" />
+    <Compile Include="Classes\Permissions.cs" />
+    <Compile Include="Classes\Person.cs" />
+    <Compile Include="Classes\Roles.cs" />
+    <Compile Include="Classes\Unit.cs" />
+    <Compile Include="Classes\Uploads.cs" />
+    <Compile Include="Classes\User.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -95,7 +107,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Classes\" />
     <Folder Include="Database\" />
     <Folder Include="Forms\" />
   </ItemGroup>
