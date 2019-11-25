@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wijkagent"
         mc:Ignorable="d"
-        Title="AddDelictWindow" Height="450" Width="800">
+        Title="AddDelictWindow" Height="450" Width="1423.2">
     <Grid>
-        
+        <Button Content="Delict opslaan" HorizontalAlignment="Left" Margin="509,371,0,0" VerticalAlignment="Top" Width="126" Height="37" Click="Button_Click"/>
+        <Button Content="Delict annuleren" HorizontalAlignment="Left" Margin="656,371,0,0" VerticalAlignment="Top" Width="126" Height="37"/>
+        <Button Content="Personen toevoegen" HorizontalAlignment="Left" Margin="525,218,0,0" VerticalAlignment="Top" Width="197" Height="50"/>
+        <ComboBox Height="23" TextBoxBase.TextChanged="ddlCountry_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="ddlCountry" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="120" SelectionChanged="ddlCountry_SelectionChanged" Margin="41,30,0,0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Name="chkCountry" Width="220" Checked="AllCheckbocx_CheckedAndUnchecked" Unchecked="AllCheckbocx_CheckedAndUnchecked" Content="{Binding Country_Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Country_ID}">
+                    </CheckBox>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ListBox Name="testListbox" HorizontalAlignment="Left" Height="79" Margin="166,10,0,0" VerticalAlignment="Top" Width="100" />
+        <TextBox x:Name="StraatTB" HorizontalAlignment="Left" Height="23" Margin="436,157,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PostcodeTB" HorizontalAlignment="Left" Height="23" Margin="436,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="HuisnummerTB" HorizontalAlignment="Left" Height="23" Margin="436,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Huisnummer" HorizontalAlignment="Left" Margin="436,4,0,0" VerticalAlignment="Top"/>
+        <Label Content="Postcode" HorizontalAlignment="Left" Margin="436,63,0,0" VerticalAlignment="Top"/>
+        <Label Content="Straat" HorizontalAlignment="Left" Margin="436,126,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="DatumTB" HorizontalAlignment="Left" Margin="41,157,0,0" VerticalAlignment="Top" Width="149" FirstDayOfWeek="Monday" RenderTransformOrigin="0.542,2.75"/>
+        <TextBox x:Name="OmschijvingTB" HorizontalAlignment="Left" Height="190" Margin="41,218,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449"/>
+        <Label Content="Categorie" HorizontalAlignment="Left" Margin="41,4,0,0" VerticalAlignment="Top"/>
+        <Label Content="Plaats" HorizontalAlignment="Left" Margin="41,64,0,0" VerticalAlignment="Top"/>
+        <Label Content="Datum" HorizontalAlignment="Left" Margin="41,131,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PlaatsTB" HorizontalAlignment="Left" Height="23" Margin="41,90,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Omschijving" HorizontalAlignment="Left" Margin="41,192,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="LabelTest" HorizontalAlignment="Left" Margin="525,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="93" Width="869"/>
     </Grid>
 </Window>

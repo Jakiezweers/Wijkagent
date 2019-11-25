@@ -13,7 +13,7 @@
         <TextBox HorizontalAlignment="Left" Height="23" Margin="415,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Leeftijd" HorizontalAlignment="Left" Margin="415,29,0,0" VerticalAlignment="Top"/>
         <Label Content="BSN" HorizontalAlignment="Left" Margin="593,29,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" Margin="40,55,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+        <ComboBox HorizontalAlignment="Left" Margin="40,55,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Content="Categie van persoon" HorizontalAlignment="Left" Margin="40,29,0,0" VerticalAlignment="Top"/>
         <Button Content="Persoon toevoegen" HorizontalAlignment="Left" Margin="638,306,0,0" VerticalAlignment="Top" Width="125" Height="35"/>
         <Button Content="Annuleren" HorizontalAlignment="Left" Margin="638,374,0,0" VerticalAlignment="Top" Width="125" Height="35"/>

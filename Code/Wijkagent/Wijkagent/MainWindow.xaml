@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button x:Name="AddDelict" Content="Nieuw delict aanmaken" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddDelict_Click"/>
-        <Button x:Name="DelictArchive" Content="Delicten archief" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="DelictArchive_Click"/>
-        <Button x:Name="DelictList" Content="Delicten lijst" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="DelictList_Click"/>
-        <Button x:Name="AddUser" Content="Nieuwe gebruiker" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddUser_Click"/>
-        <Button x:Name="LogOut" Content="Log-uit" HorizontalAlignment="Left" Margin="672,380,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
+        <Button x:Name="AddDelictBtn" Content="Nieuw delict aanmaken" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddDelict_Click"/>
+        <Button x:Name="DelictArchiveBtn" Content="Delicten archief" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="DelictArchive_Click"/>
+        <Button x:Name="DelictListBtn" Content="Delicten lijst" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="DelictList_Click"/>
+        <Button x:Name="AddUserBtn" Content="Nieuwe gebruiker" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddUser_Click"/>
+        <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Left" Margin="672,380,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
     </Grid>
 </Window>
