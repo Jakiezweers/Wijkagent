@@ -22,6 +22,7 @@ namespace Wijkagent
         public DelictListWindow()
         {
             InitializeComponent();
+            
         }
     }
 }

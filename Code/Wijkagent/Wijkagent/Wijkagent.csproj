@@ -55,13 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Permissions.xaml.cs">
-      <DependentUpon>Permissions.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="User.cs" />
     <Page Include="AddDelictWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,10 +117,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Permissions.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="RegisterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -150,21 +142,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="obj\Debug\Wijkagent.g.resources" />
-    <EmbeddedResource Include="obj\Debug\Wijkagent.Properties.Resources.resources" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="bin\Debug\Wijkagent.exe.config" />
     <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="obj\Debug\Wijkagent.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\Wijkagent.csproj.GenerateResource.cache" />
     <None Include="obj\Debug\Wijkagent.csprojAssemblyReference.cache" />
     <None Include="obj\Debug\Wijkagent_MarkupCompile.cache" />
     <None Include="obj\Debug\Wijkagent_MarkupCompile.i.cache" />
     <None Include="obj\Debug\Wijkagent_MarkupCompile.i.lref" />
     <None Include="obj\Debug\Wijkagent_MarkupCompile.lref" />
+    <None Include="obj\Release\Wijkagent.csproj.CoreCompileInputs.cache" />
     <None Include="obj\Release\Wijkagent_MarkupCompile.cache" />
     <None Include="obj\Release\Wijkagent_MarkupCompile.lref" />
     <None Include="Properties\Settings.settings">
@@ -176,15 +165,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\Wijkagent.exe" />
-    <Content Include="bin\Debug\Wijkagent.pdb" />
-    <Resource Include="obj\Debug\Wijkagent.csproj.FileListAbsolute.txt" />
-    <Resource Include="Images\StockImage.jpg" />
-    <Resource Include="Images\StockImage2.jpg" />
-    <Content Include="obj\Debug\Wijkagent.exe" />
-    <Content Include="obj\Debug\Wijkagent.pdb" />
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="bin\Debug\" />
     <Folder Include="bin\Release\" />
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
