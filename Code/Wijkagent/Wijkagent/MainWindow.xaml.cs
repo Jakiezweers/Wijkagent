@@ -23,6 +23,29 @@ namespace Wijkagent
         public MainWindow()
         {
             InitializeComponent();
+            Employee john = new Employee();
+            john.test1 = "test1";
+            john.test2 = "test2";
+            john.test3 = "test3";
+            john.test4 = "test4";
+
+            Delicten.Items.Add(john);
+            Delicten.Items.Add(john);
+
+            InitializeComponent();
+        }
+        public class Employee
+        {
+            public string test1 { get; set; }
+            public string test2 { get; set; }
+            public string test3 { get; set; }
+            public string test4 { get; set; }
+
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

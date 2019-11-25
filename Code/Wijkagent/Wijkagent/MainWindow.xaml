@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <DataGrid x:Name="Delicten" HorizontalAlignment="Left" Height="304" Margin="174,58,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Delict" Binding="{Binding test1}" Width="150"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding test2}" Width="150"/>
+                <DataGridTextColumn Header="Activeren" Binding="{Binding test3}"/>
+                <DataGridTextColumn Header="Aanmaakdatum" Binding="{Binding test4}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </Window>

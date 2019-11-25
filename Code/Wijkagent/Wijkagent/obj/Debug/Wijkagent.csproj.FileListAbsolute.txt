@@ -13,3 +13,5 @@ C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\ob
 C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\Wijkagent.csproj.CoreCompileInputs.cache
 C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\Wijkagent.exe
 C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\Wijkagent.pdb
+C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\bin\Debug\System.Data.SqlClient.dll
+C:\Users\sybre\OneDrive\Bureaublad\Project\Wijkagent\Code\Wijkagent\Wijkagent\obj\Debug\Wijkagent.csproj.CopyComplete

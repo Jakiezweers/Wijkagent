@@ -1,0 +1,57 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\sybre\\OneDrive\\Bureaublad\\Project\\Wijkagent\\Code\\Wijkagent\\Wijkagent\\Wijkagent.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\sybre\\OneDrive\\Bureaublad\\Project\\Wijkagent\\Code\\Wijkagent\\Wijkagent\\Wijkagent.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\sybre\\OneDrive\\Bureaublad\\Project\\Wijkagent\\Code\\Wijkagent\\Wijkagent\\Wijkagent.csproj",
+        "projectName": "Wijkagent",
+        "projectPath": "C:\\Users\\sybre\\OneDrive\\Bureaublad\\Project\\Wijkagent\\Code\\Wijkagent\\Wijkagent\\Wijkagent.csproj",
+        "packagesPath": "C:\\Users\\sybre\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sybre\\OneDrive\\Bureaublad\\Project\\Wijkagent\\Code\\Wijkagent\\Wijkagent\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\sybre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "dependencies": {
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.6.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
