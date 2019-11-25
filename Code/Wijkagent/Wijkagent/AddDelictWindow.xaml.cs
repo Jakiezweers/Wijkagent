@@ -29,7 +29,7 @@ namespace Wijkagent
             objCountryList = new List<DDL_Country>();
             AddElementsInList();
             BindCountryDropDown();
-            GoogleSigned.AssignAllServices(new GoogleSigned("AIzaSyBAtBGzg51rSwEbmcb5udCffFUXQVhV4uA"));
+            GoogleSigned.AssignAllServices(new GoogleSigned("-"));
         }
 
 
