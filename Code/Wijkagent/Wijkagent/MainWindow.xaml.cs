@@ -86,7 +86,6 @@ namespace Wijkagent
         {
             var myValue = ((System.Windows.Controls.Button)sender).Tag;
             Console.WriteLine("ID: " + myValue);
-            sender.ToString();
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
