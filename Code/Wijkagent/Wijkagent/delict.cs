@@ -20,8 +20,6 @@ namespace Wijkagent
         public int status { get; set; }
         public DateTime createtime { get; set; }
 
-        public string activeren { get; set; }
-
 
     }
 }

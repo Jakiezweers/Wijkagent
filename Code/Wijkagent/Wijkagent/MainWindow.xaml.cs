@@ -68,7 +68,6 @@ namespace Wijkagent
                         Delict d1 = new Delict();
                         d1.id = id;
                         d1.street = (string)dataReader["street"];
-                        d1.activeren = "Activeren";
                         d1.createtime = (DateTime)dataReader["added_date"];
                         Console.WriteLine($"{dataReader["street"]}");
                         Delicten.Items.Add(d1);
@@ -80,14 +79,6 @@ namespace Wijkagent
             }
 
             
-
-        }
-        public class Employee
-        {
-            public string test1 { get; set; }
-            public string test2 { get; set; }
-            public string test3 { get; set; }
-            public string test4 { get; set; }
 
         }
 
