@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\steph\Source\Repos\Wijkagentv2\Code\Wijkagent\Wijkagent\App.xaml
-7-1876443315
+8-746722138
 4344894404
-30-83202468
+32-569674867
 13-1505183044
-AddDelictWindow.xaml;AddPersonWindow.xaml;DelictArchiveWindow.xaml;DelictListWindow.xaml;LoginWindow.xaml;MainWindow.xaml;RegisterWindow.xaml;
+AddDelictWindow.xaml;AddPersonWindow.xaml;DelictArchiveWindow.xaml;DelictListWindow.xaml;LoginWindow.xaml;MainWindow.xaml;Permissions.xaml;RegisterWindow.xaml;
 
-True
+False
 
