@@ -55,7 +55,6 @@ namespace Wijkagent
                         CategoryList obj = new CategoryList((int)dataReader["category_id"], (string)(dataReader["name"]));
                         categoryList.Add(obj);
                     }
-                    categoryCB.MaxDropDownHeight = 20 * categoryList.Count();
                 }
 
             }
@@ -94,12 +93,7 @@ namespace Wijkagent
             }
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveDelict_Click(object sender, RoutedEventArgs e)
         {
             string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
             bool errorBool = false;
@@ -125,55 +119,7 @@ namespace Wijkagent
 
             if (errorBool == false) //Hieronder alles wat uitgevoerd moet worden als alles goed is.
             {
-                string provider = ConfigurationManager.AppSettings["provider"];
-                string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-                string sqlDelictInsert = null;
-                string sqlCategoryInsert = null;
-
-                int id = 0;
-
-                sqlDelictInsert = "insert into dbo.delict (date, place, homenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.ID values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
-                using (SqlConnection cnn = new SqlConnection(connectionstring))
-                {
-                    try
-                    {
-                        cnn.Open();
-                        using (SqlCommand cmd = new SqlCommand(sqlDelictInsert, cnn))
-                        {
-                            cmd.Parameters.Add("@first", SqlDbType.DateTime).Value = date;
-                            cmd.Parameters.Add("@second", SqlDbType.NVarChar).Value = placeName;
-                            cmd.Parameters.Add("@third", SqlDbType.NVarChar).Value = homeNumber;
-                            cmd.Parameters.Add("@fourth", SqlDbType.NVarChar).Value = zipCode;
-                            cmd.Parameters.Add("@fifth", SqlDbType.NVarChar).Value = street;
-                            cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
-                            cmd.Parameters.Add("@seventh", SqlDbType.NVarChar).Value = longCoord;
-                            cmd.Parameters.Add("@eight", SqlDbType.NVarChar).Value = latCoord;
-                            cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = 1;
-
-                            id = (int)cmd.ExecuteScalar();
-                        }
-                        sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
-                        foreach (var item in categoryList)
-                        {
-                            if (item.Check_Status == true)
-                            {
-                                using (SqlCommand cmd = new SqlCommand(sqlCategoryInsert, cnn))
-                                {
-                                    cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
-                                    cmd.Parameters.Add("@categoryID", SqlDbType.NVarChar).Value = item.Category_ID;
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // We should log the error somewhere, 
-                        // for this example let's just show a message
-                        MessageBox.Show("ERROR:" + ex.Message);
-                    }
-                }
+                SendDelictToDatabase(date, placeName,homeNumber,zipCode,street,description,longCoord,latCoord);
                 this.Close();
             }
             else //Hieronder alles wat gedaan moet worden als er iets fout gaat.
@@ -191,6 +137,56 @@ namespace Wijkagent
 
         }
 
+        private void SendDelictToDatabase(string date, string placeName, string homeNumber, string zipCode, string street, string description, double longCoord, double latCoord)
+        {
+            string provider = ConfigurationManager.AppSettings["provider"];
+            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+            string sqlDelictInsert = "insert into dbo.delict (date, place, homenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.ID values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
+            string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
+
+            int id = 0;
+            using (SqlConnection cnn = new SqlConnection(connectionstring))
+            {
+                try
+                {
+                    cnn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlDelictInsert, cnn))
+                    {
+                        cmd.Parameters.Add("@first", SqlDbType.DateTime).Value = date;
+                        cmd.Parameters.Add("@second", SqlDbType.NVarChar).Value = placeName;
+                        cmd.Parameters.Add("@third", SqlDbType.NVarChar).Value = homeNumber;
+                        cmd.Parameters.Add("@fourth", SqlDbType.NVarChar).Value = zipCode;
+                        cmd.Parameters.Add("@fifth", SqlDbType.NVarChar).Value = street;
+                        cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
+                        cmd.Parameters.Add("@seventh", SqlDbType.NVarChar).Value = longCoord;
+                        cmd.Parameters.Add("@eight", SqlDbType.NVarChar).Value = latCoord;
+                        cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = 1;
+
+                        id = (int)cmd.ExecuteScalar();
+                    }
+
+                    //Insert delict met gekoppelde categorieen in de database.
+                    foreach (var item in categoryList)
+                    {
+                        if (item.Check_Status == true)
+                        {
+                            using (SqlCommand cmd = new SqlCommand(sqlCategoryInsert, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
+                                cmd.Parameters.Add("@categoryID", SqlDbType.NVarChar).Value = item.Category_ID;
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("ERROR:" + ex.Message);
+                }
+            }
+        }
+
         private bool CheckCategorie()
         {
             foreach (var item in categoryList)
@@ -203,7 +199,7 @@ namespace Wijkagent
             return false;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void CancelDelict_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
