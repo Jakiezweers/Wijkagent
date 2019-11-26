@@ -34,28 +34,24 @@ namespace Wijkagent
         {
             AddDelictWindow adddelict = new AddDelictWindow();
             adddelict.Show();
-            this.Close();
         }
 
         private void DelictList_Click(object sender, RoutedEventArgs e)
         {
             DelictListWindow delictlist = new DelictListWindow();
             delictlist.Show();
-            this.Close();
         }
 
         private void DelictArchive_Click(object sender, RoutedEventArgs e)
         {
             DelictArchiveWindow delictarchive = new DelictArchiveWindow();
             delictarchive.Show();
-            this.Close();
         }
 
         private void AddUser_Click(object sender, RoutedEventArgs e)
         {
             RegisterWindow register = new RegisterWindow();
             register.Show();
-            this.Close();
         }
     }
 }
