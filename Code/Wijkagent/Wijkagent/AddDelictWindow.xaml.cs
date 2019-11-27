@@ -26,6 +26,10 @@ namespace Wijkagent
     public partial class AddDelictWindow : Window
     {
         List<CategoryList> categoryList;
+        List<int> personsbsn;
+        List<string> personstype;
+        int i = 0;
+
 
         public AddDelictWindow()
         {
@@ -166,6 +170,30 @@ namespace Wijkagent
                         id = (int)cmd.ExecuteScalar();
                     }
 
+
+                    if (personsbsn.Count != 0)
+                    {
+                      string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
+
+                        Console.WriteLine("NIET GOED");
+
+                        //insert personen in database
+                        foreach (var item in personsbsn)
+                        {
+                        Console.WriteLine("NOPE");
+                            using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
+                                cmd.Parameters.Add("@bsn", SqlDbType.NVarChar).Value = personsbsn[i];
+                                cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
+                                cmd.ExecuteNonQuery();
+                                i++;
+                            }
+
+                        }
+                   }
+
+
                     //Insert delict met gekoppelde categorieen in de database.
                     foreach (var item in categoryList)
                     {
@@ -206,8 +234,14 @@ namespace Wijkagent
 
         private void AddPerson_Click(object sender, RoutedEventArgs e)
         {
+
             personentoevoegen addperson = new personentoevoegen();
-            addperson.ShowDialog();
+            var result = addperson.ShowDialog();
+            if(result == false)
+            {
+                personsbsn = addperson.bsnlist;
+                personstype = addperson.typelist;
+            }
         }
     }
 
