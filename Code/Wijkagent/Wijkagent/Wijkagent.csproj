@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="Classes\Archive.cs" />
     <Compile Include="Classes\Base.cs" />
+    <Compile Include="Classes\Uploader.cs" />
     <Compile Include="Classes\Database_connection.cs" />
     <Compile Include="Classes\Database_queries.cs" />
     <Compile Include="Classes\Delict.cs" />
