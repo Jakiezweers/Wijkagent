@@ -32,6 +32,7 @@ namespace Wijkagent
         {
             InitializeComponent();
 
+            /*
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
@@ -80,9 +81,43 @@ namespace Wijkagent
 
             }
 
+            */
+
             
 
         }
+
+
+
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void AddDelict_Click(object sender, RoutedEventArgs e)
+        {
+            AddDelictWindow adddelict = new AddDelictWindow();
+            adddelict.Show();
+        }
+
+        private void DelictList_Click(object sender, RoutedEventArgs e)
+        {
+            DelictListWindow delictlist = new DelictListWindow();
+            delictlist.Show();
+        }
+
+        private void DelictArchive_Click(object sender, RoutedEventArgs e)
+        {
+            DelictArchiveWindow delictarchive = new DelictArchiveWindow();
+            delictarchive.Show();
+        }
+
+        private void AddUser_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterWindow register = new RegisterWindow();
+            register.Show();
+        }
+
 
         private void Activate(object sender, RoutedEventArgs e)
         {
