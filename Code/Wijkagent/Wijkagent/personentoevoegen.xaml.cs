@@ -27,6 +27,7 @@ namespace Wijkagent
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
             public List<int> bsnlist = new List<int>();
             public List<string> typelist = new List<string>();
+        int i = 0;
 
 
         public personentoevoegen()
@@ -35,45 +36,6 @@ namespace Wijkagent
             combobox.Items.Add("Verdachte");
             combobox.Items.Add("Getuige");
             combobox.Items.Add("Moordenaar");
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
-            {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                if (command == null)
-                {
-                    Console.WriteLine("geen command gegeven");
-                    Console.ReadLine();
-                    return;
-                }
-                command.Connection = connection;           
-                command.CommandText = "Select * from dbo.delict_person";
-
-                using (DbDataReader dataReader1 = command.ExecuteReader())
-                {
-                    while (dataReader1.Read())
-                    {
-                        Person p1 = new Person();
-                        p1.bsn = (int)dataReader1["bsn"];
-                        p1.type = (string)dataReader1["type"];
-                        Console.WriteLine($"{dataReader1["bsn"]}");
-                        Personen.Items.Add(p1);
-
-
-                    }
-                }
-                connection.Close();
-
-                    }
 
         }
 
@@ -81,46 +43,7 @@ namespace Wijkagent
         public void refreshData()
         {
 
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
-            {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                if (command == null)
-                {
-                    Console.WriteLine("geen command gegeven");
-                    Console.ReadLine();
-                    return;
-                }
-                command.Connection = connection;
-                command.CommandText = "Select TOP 1 * from dbo.delict_person ORDER BY delict_person_id DESC";
-                using (DbDataReader dataReader1 = command.ExecuteReader())
-                {
-                    while (dataReader1.Read())
-                    {
-                        Person p1 = new Person();
-                        p1.bsn = (int)dataReader1["bsn"];
-                        p1.type = (string)dataReader1["type"];
-                        Console.WriteLine($"{dataReader1["bsn"]}");
-                        Personen.Items.Add(p1);
-                    }
-                }
-
-                connection.Close();
-            }
-        }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+            //DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
             //using (DbConnection connection = factory.CreateConnection())
             //{
             //    if (connection == null)
@@ -131,44 +54,50 @@ namespace Wijkagent
             //    }
             //    Console.WriteLine("connection geslaagd");
 
-            //    DbCommand command = factory.CreateCommand();
-
             //    connection.ConnectionString = connectionstring;
-
+            //    connection.Open();
+            //    DbCommand command = factory.CreateCommand();
+            //    if (command == null)
+            //    {
+            //        Console.WriteLine("geen command gegeven");
+            //        Console.ReadLine();
+            //        return;
+            //    }
             //    command.Connection = connection;
-            //    command.CommandType = CommandType.Text;
-            //    command.CommandText = "Insert into dbo.delict_person VALUES (@bsnperson, @typeperson)";
-            //    command.Prepare();                
-            //    var cmd2 = command.CreateParameter();
-            //    cmd2.ParameterName = "@bsnperson";
-            //    cmd2.Value = bsnfield.Text;
-            //    var cmd3 = command.CreateParameter();
-            //    cmd3.ParameterName = "@typeperson";
-            //    cmd3.Value = combobox.Text;
-            //    command.Parameters.Add(cmd2);
-            //    command.Parameters.Add(cmd3);
-            //    try
+            //    command.CommandText = "Select TOP 1 * from dbo.delict_person ORDER BY delict_person_id DESC";
+            //    using (DbDataReader dataReader1 = command.ExecuteReader())
             //    {
-            //        connection.Open();
-            //        command.ExecuteNonQuery();
-            //    }
-            //    catch (Exception ek)
-            //    {
-            //        Console.WriteLine(ek);
-            //    }
-            //    finally
-            //    {
-            //        connection.Close();
-            //        refreshData();
-            //        this.Close()
+            //        while (dataReader1.Read())
+            //        {
+            //            Person p1 = new Person();
+            //            p1.bsn = (int)dataReader1["bsn"];
+            //            p1.type = (string)dataReader1["type"];
+            //            Console.WriteLine($"{dataReader1["bsn"]}");
+            //            Personen.Items.Add(p1);
+            //        }
             //    }
 
+            //    connection.Close();
             //}
+            int i = 0;
+            Personen.Items.Clear();
+            foreach (string item in typelist) {
+                Person p1 = new Person();
+                    p1.bsn = bsnlist[i];
+                    p1.type = typelist[i];
+                    Personen.Items.Add(p1);
+                
+                i++;
+                    }
+        }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
             int parse = int.Parse(bsnfield.Text);
             bsnlist.Add(parse);
             typelist.Add(combobox.Text);
             Console.WriteLine(combobox.Text);
-            Console.WriteLine(bsnfield.Text);          
+            Console.WriteLine(bsnfield.Text);
+            refreshData();
         }
 
         private void Personen_SelectionChanged(object sender, SelectionChangedEventArgs e)

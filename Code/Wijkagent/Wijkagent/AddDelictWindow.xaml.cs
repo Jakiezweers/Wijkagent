@@ -170,8 +170,7 @@ namespace Wijkagent
                         id = (int)cmd.ExecuteScalar();
                     }
 
-
-                    if (personsbsn.Count != 0)
+                    if (personsbsn != null)
                     {
                       string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
 
