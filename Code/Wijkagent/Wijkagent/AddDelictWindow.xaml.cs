@@ -142,7 +142,7 @@ namespace Wijkagent
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
-            string sqlDelictInsert = "insert into dbo.delict (date, place, homenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.ID values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
+            string sqlDelictInsert = "insert into dbo.delict (date, place, housenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.delict_id values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
             string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
 
             int id = 0;
@@ -202,6 +202,12 @@ namespace Wijkagent
         private void CancelDelict_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void AddPerson_Click(object sender, RoutedEventArgs e)
+        {
+            personentoevoegen addperson = new personentoevoegen();
+            addperson.ShowDialog();
         }
     }
 

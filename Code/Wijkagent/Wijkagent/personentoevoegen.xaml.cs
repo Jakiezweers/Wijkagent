@@ -134,23 +134,16 @@ namespace Wijkagent
                 Console.WriteLine("connection geslaagd");
 
                 DbCommand command = factory.CreateCommand();
+
                 connection.ConnectionString = connectionstring;
 
                 command.Connection = connection;
                 command.CommandType = CommandType.Text;
-                command.CommandText = "Insert into dbo.person VALUES (@nameperson, @ageperson, @bsnperson)";
-                command.Prepare();
-                var cmd = command.CreateParameter();
-                cmd.ParameterName = "@nameperson";
-                cmd.Value = namefield.Text;
-                var cmd1 = command.CreateParameter();
-                cmd1.ParameterName = "@ageperson";
-                cmd1.Value = agefield.Text;
+                command.CommandText = "Insert into dbo.delict_person VALUES (@nameperson, @ageperson, @bsnperson)";
+                command.Prepare();                
                 var cmd2 = command.CreateParameter();
                 cmd2.ParameterName = "@bsnperson";
                 cmd2.Value = bsnfield.Text;
-                command.Parameters.Add(cmd);
-                command.Parameters.Add(cmd1);
                 command.Parameters.Add(cmd2);
                 try
                 {
@@ -171,8 +164,6 @@ namespace Wijkagent
 
 
             Console.WriteLine(combobox.Text);
-            Console.WriteLine(namefield.Text);
-            Console.WriteLine(agefield.Text);
             Console.WriteLine(bsnfield.Text);
           
         }

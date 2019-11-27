@@ -7,17 +7,12 @@
         mc:Ignorable="d"
         Title="personentoevoegen" Height="450" Width="800">
     <Grid>
-        <Label Content="Personen toevoegen&#xD;&#xA;" HorizontalAlignment="Left" Margin="340,17,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="combobox" HorizontalAlignment="Left" Margin="49,71,0,0" VerticalAlignment="Top" Width="120"  IsEditable="True"
+        <ComboBox x:Name="combobox" HorizontalAlignment="Left" Margin="99,52,0,0" VerticalAlignment="Top" Width="120"  IsEditable="True"
  IsReadOnly="True"  Text="Categorie van persoon"/>
-        <TextBox x:Name="namefield" HorizontalAlignment="Left" Height="24" Margin="217,68,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="117" />
-        <TextBox x:Name="agefield" HorizontalAlignment="Left" Height="24" Margin="366,68,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="117" />
-        <TextBox x:Name="bsnfield" HorizontalAlignment="Left" Height="24" Margin="518,68,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="209"/>
-        <Label Content="Naam" HorizontalAlignment="Left" Margin="216,40,0,0" VerticalAlignment="Top"/>
-        <Label Content="Leeftijd" HorizontalAlignment="Left" Margin="362,41,0,0" VerticalAlignment="Top"/>
-        <Label Content="BSN" HorizontalAlignment="Left" Margin="516,41,0,0" VerticalAlignment="Top"/>
-        <Button Content="Voeg persoon toe" HorizontalAlignment="Left" Margin="624,118,0,0" VerticalAlignment="Top" Width="105" Height="27" Click="Button_Click_1"/>
-        <Button Content="Annuleren" HorizontalAlignment="Left" Margin="661,344,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox x:Name="bsnfield" HorizontalAlignment="Left" Height="24" Margin="344,50,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="209"/>
+        <Label Content="BSN" HorizontalAlignment="Left" Margin="344,24,0,0" VerticalAlignment="Top"/>
+        <Button Content="Voeg persoon toe" HorizontalAlignment="Left" Margin="598,52,0,0" VerticalAlignment="Top" Width="105" Height="27" Click="Button_Click_1"/>
+        <Button Content="Annuleren" HorizontalAlignment="Left" Margin="628,356,0,0" VerticalAlignment="Top" Width="75"/>
         <DataGrid x:Name="Personen" HorizontalAlignment="Left" Height="304" Margin="99,107,0,0" VerticalAlignment="Top" Width="454">
             <DataGrid.Columns>
                 <DataGridTextColumn  Header="Naam" Binding="{Binding naam}"  Width="150"/>
