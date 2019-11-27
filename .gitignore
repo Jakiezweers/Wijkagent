@@ -92,6 +92,7 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+storage.ide
 
 # Chutzpah Test files
 _Chutzpah*
@@ -203,6 +204,8 @@ csx/
 # Microsoft Azure Emulator
 ecf/
 rcf/
+sqlite3/
+Debug/
 
 # Windows Store app package directories and files
 AppPackages/

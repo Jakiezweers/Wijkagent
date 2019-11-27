@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Wijkagent.Classes
 {
     class Delict
     {
-        public int DelictId;
-        public DateTime Date;
-        public List<Person> PersonList = new List<Person>();
-        public string Place;
-        public string HouseNumber; //Double?
-        public string ZipCode;
-        public string Street;
-        public string Description;
-        public decimal Long;
-        public decimal Lat;
-        public int Status;
-        public DateTime CreationDate;
 
-        public Delict()
-        {
+        public int id { get; set; }
+        public DateTime datetime1 { get; set; }
+        public string plaats { get; set; }
+        public int huisnummer { get; set; }
+        public string zip { get; set; }
+        public string street { get; set; }
+        public StringBuilder description { get; set; }
+        public decimal longitude { get; set; }
+        public decimal lat { get; set; }
+        public int status { get; set; }
+        public DateTime createtime { get; set; }
 
-        }
+
     }
 }

@@ -7,6 +7,22 @@
         mc:Ignorable="d"
         Title="DelictListWindow" Height="450" Width="800">
     <Grid>
-        
+        <DataGrid x:Name="Delicten" HorizontalAlignment="Left" Height="304" Margin="174,58,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="150"/>
+                <DataGridTextColumn Header="Aanmaakdatum" Binding="{Binding createtime}"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+
+                        <DataTemplate>
+                            <Button Click="Activate" Tag="{Binding id}" >Activeren</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
