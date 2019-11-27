@@ -30,13 +30,15 @@ namespace Wijkagent
         List<string> personstype;
         int i = 0;
 
-
         public AddDelictWindow()
         {
             InitializeComponent();
             categoryList = new List<CategoryList>();
             BindCountryDropDown();
             DatumTB.SelectedDate = DateTime.Today;
+            AddPerson addperson = new AddPerson();
+
+            AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
 
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
@@ -172,14 +174,10 @@ namespace Wijkagent
 
                     if (personsbsn != null)
                     {
-                      string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
-
-                        Console.WriteLine("NIET GOED");
-
+                        string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
                         //insert personen in database
                         foreach (var item in personsbsn)
                         {
-                        Console.WriteLine("NOPE");
                             using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
                             {
                                 cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
@@ -231,16 +229,11 @@ namespace Wijkagent
             this.Close();
         }
 
-        private void AddPerson_Click(object sender, RoutedEventArgs e)
+        private void AddPerson_Click(object sender, RoutedEventArgs e, AddPerson addperson)
         {
-
-            personentoevoegen addperson = new personentoevoegen();
-            var result = addperson.ShowDialog();
-            if(result == false)
-            {
-                personsbsn = addperson.bsnlist;
-                personstype = addperson.typelist;
-            }
+            addperson.ShowDialog();
+            personsbsn = addperson.bsnlist;
+            personstype = addperson.typelist;
         }
     }
 
