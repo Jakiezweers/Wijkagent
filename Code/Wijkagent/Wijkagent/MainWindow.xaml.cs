@@ -38,7 +38,7 @@ namespace Wijkagent
 
             Random r = new Random();
             String resp = await upload.SendFileAsync(file_data, filename, "icon/", r.Next(0,10000000)+ ".png");
-            LblResp.Content = resp;
+            //LblResp.Content = resp;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -55,6 +55,35 @@ namespace Wijkagent
 
 
             }
+        }
+
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void AddDelict_Click(object sender, RoutedEventArgs e)
+        {
+            AddDelictWindow adddelict = new AddDelictWindow();
+            adddelict.Show();
+        }
+
+        private void DelictList_Click(object sender, RoutedEventArgs e)
+        {
+            DelictListWindow delictlist = new DelictListWindow();
+            delictlist.Show();
+        }
+
+        private void DelictArchive_Click(object sender, RoutedEventArgs e)
+        {
+            DelictArchiveWindow delictarchive = new DelictArchiveWindow();
+            delictarchive.Show();
+        }
+
+        private void AddUser_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterWindow register = new RegisterWindow();
+            register.Show();
         }
     }
 }
