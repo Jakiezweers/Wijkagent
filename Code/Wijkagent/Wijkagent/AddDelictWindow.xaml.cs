@@ -30,16 +30,13 @@ namespace Wijkagent
         List<string> personstype;
         int i = 0;
 
+
         public AddDelictWindow()
         {
             InitializeComponent();
             categoryList = new List<CategoryList>();
             BindCountryDropDown();
             DatumTB.SelectedDate = DateTime.Today;
-
-            personentoevoegen addperson = new personentoevoegen();
-            AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
-
 
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
@@ -233,11 +230,17 @@ namespace Wijkagent
         {
             this.Close();
         }
-        private void AddPerson_Click(object sender, RoutedEventArgs e, personentoevoegen addperson)
+
+        private void AddPerson_Click(object sender, RoutedEventArgs e)
         {
-            addperson.ShowDialog();
-            personsbsn = addperson.bsnlist;
-            personstype = addperson.typelist;
+
+            personentoevoegen addperson = new personentoevoegen();
+            var result = addperson.ShowDialog();
+            if(result == false)
+            {
+                personsbsn = addperson.bsnlist;
+                personstype = addperson.typelist;
+            }
         }
     }
 
