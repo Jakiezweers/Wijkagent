@@ -97,6 +97,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\delicten\view_delict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +122,9 @@
     </Compile>
     <Compile Include="Pages\delicten\delict_archive.xaml.cs">
       <DependentUpon>delict_archive.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\delicten\view_delict.xaml.cs">
+      <DependentUpon>view_delict.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
