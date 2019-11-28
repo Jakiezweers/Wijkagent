@@ -9,7 +9,7 @@
     <Grid>
         <Button Content="Delict opslaan" HorizontalAlignment="Left" Margin="509,371,0,0" VerticalAlignment="Top" Width="126" Height="37" Click="SaveDelict_Click"/>
         <Button Content="Delict annuleren" HorizontalAlignment="Left" Margin="656,371,0,0" VerticalAlignment="Top" Width="126" Height="37" Click="CancelDelict_Click"/>
-        <Button Content="Personen toevoegen" HorizontalAlignment="Left" Margin="529,218,0,0" VerticalAlignment="Top" Width="197" Height="50" Click="AddPerson_Click"/>
+        <Button Content="Personen toevoegen" HorizontalAlignment="Left" Margin="529,218,0,0" VerticalAlignment="Top" Width="197" Height="50" x:Name="AddPersonButton"/>
         <ComboBox ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="23" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" SelectionChanged="category_SelectionChanged" Margin="41,30,0,0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
