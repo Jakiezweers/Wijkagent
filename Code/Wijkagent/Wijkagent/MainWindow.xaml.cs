@@ -1,22 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Wijkagent
 {
@@ -31,63 +13,37 @@ namespace Wijkagent
         public MainWindow()
         {
             InitializeComponent();
-
-            /*
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-            using (DbConnection connection = factory.CreateConnection())
-            {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                if (command == null)
-                {
-                    Console.WriteLine("geen command gegeven");
-                    Console.ReadLine();
-                    return;
-                }
-
-                command.Connection = connection;
-                command.CommandText = "Select * from dbo.delict";
-
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        int id = Convert.ToInt32(dataReader["delict_id"]);
-                        Delict d1 = new Delict();
-                        d1.id = id;
-                        d1.street = (string)dataReader["street"];
-                        d1.createtime = (DateTime)dataReader["added_date"];
-                        Console.WriteLine($"{dataReader["street"]}");
-                        Delicten.Items.Add(d1);
-
-
-                    }
-                }
-
-                connection.Close();
-
-            }
-
-            */
-
             
-
         }
 
+        /*
 
+        public async Task sendFileAsync(String file_data, string filename)
+        {
+            Uploader upload = new Uploader();
+
+
+            Random r = new Random();
+            String resp = await upload.SendFileAsync(file_data, filename, "icon/", r.Next(0,10000000)+ ".png");
+            //LblResp.Content = resp;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+
+
+                byte[] imageArray = System.IO.File.ReadAllBytes(openFileDialog.FileName);
+                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                this.sendFileAsync(base64ImageRepresentation, openFileDialog.FileName);
+
+
+            }
+        }
+        */
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
@@ -117,23 +73,6 @@ namespace Wijkagent
             RegisterWindow register = new RegisterWindow();
             register.Show();
         }
-
-
-        private void Activate(object sender, RoutedEventArgs e)
-        {
-            var myValue = ((System.Windows.Controls.Button)sender).Tag;
-            Console.WriteLine("ID: " + myValue);
-        }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            personentoevoegen per = new personentoevoegen();
-            per.ShowDialog();
-        }
+        
     }
 }

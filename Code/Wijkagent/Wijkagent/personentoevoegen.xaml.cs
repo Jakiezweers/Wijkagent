@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Forms;
+//using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,160 +23,53 @@ namespace Wijkagent
     /// </summary>
     public partial class personentoevoegen : Window
     {
-        
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+        public List<int> bsnlist = new List<int>();
+        public List<string> typelist = new List<string>();
+
         public personentoevoegen()
         {
             InitializeComponent();
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
-            {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                if (command == null)
-                {
-                    Console.WriteLine("geen command gegeven");
-                    Console.ReadLine();
-                    return;
-                }
-                command.Connection = connection;
-                command.CommandText = "Select * from dbo.category";
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        combobox.Items.Add(dataReader["name"]);
-                    }
-                }
-                command.CommandText = "Select * from dbo.person";
-
-                using (DbDataReader dataReader1 = command.ExecuteReader())
-                {
-                    while (dataReader1.Read())
-                    {
-                        Person p1 = new Person();
-                        p1.naam = (string)dataReader1["name"];
-                        p1.leeftijd = (int)dataReader1["age"];
-                        p1.bsn = (string)dataReader1["bsn"];
-                        Console.WriteLine($"{dataReader1["name"]}");
-                        Personen.Items.Add(p1);
-
-
-                    }
-                }
-                connection.Close();
-
-                    }
+            AddPersonCategoryCB();
         }
 
-
-        public void refreshData()
+        public void RefreshData()
         {
-
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
+            Personen.Items.Clear();
+            for (int i = 0; i < typelist.Count; i++)
             {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                if (command == null)
-                {
-                    Console.WriteLine("geen command gegeven");
-                    Console.ReadLine();
-                    return;
-                }
-                command.Connection = connection;
-                command.CommandText = "Select TOP 1 * from dbo.person ORDER BY person_id DESC";
-                using (DbDataReader dataReader1 = command.ExecuteReader())
-                {
-                    while (dataReader1.Read())
-                    {
-                        Person p1 = new Person();
-                        p1.naam = (string)dataReader1["name"];
-                        p1.leeftijd = (int)dataReader1["age"];
-                        p1.bsn = (string)dataReader1["bsn"];
-                        Console.WriteLine($"{dataReader1["name"]}");
-                        Personen.Items.Add(p1);
-                    }
-                }
-
-                connection.Close();
+                Person p1 = new Person();
+                p1.bsn = bsnlist[i];
+                p1.type = typelist[i];
+                Personen.Items.Add(p1);
             }
         }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void AddPersonButton(object sender, RoutedEventArgs e)
         {
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
-            {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
-                DbCommand command = factory.CreateCommand();
-                connection.ConnectionString = connectionstring;
-
-                command.Connection = connection;
-                command.CommandType = CommandType.Text;
-                command.CommandText = "Insert into dbo.person VALUES (@nameperson, @ageperson, @bsnperson)";
-                command.Prepare();
-                var cmd = command.CreateParameter();
-                cmd.ParameterName = "@nameperson";
-                cmd.Value = namefield.Text;
-                var cmd1 = command.CreateParameter();
-                cmd1.ParameterName = "@ageperson";
-                cmd1.Value = agefield.Text;
-                var cmd2 = command.CreateParameter();
-                cmd2.ParameterName = "@bsnperson";
-                cmd2.Value = bsnfield.Text;
-                command.Parameters.Add(cmd);
-                command.Parameters.Add(cmd1);
-                command.Parameters.Add(cmd2);
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception ek)
-                {
-                    Console.WriteLine(ek);
-                }
-                finally
-                {
-                    connection.Close();
-                    refreshData();
-                }
-
-            }
-
-
-            Console.WriteLine(combobox.Text);
-            Console.WriteLine(namefield.Text);
-            Console.WriteLine(agefield.Text);
-            Console.WriteLine(bsnfield.Text);
-          
+            bsnlist.Add(int.Parse(bsnfield.Text));
+            typelist.Add(CategoryCB.Text);
+            RefreshData();
         }
 
+        private void Personen_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ClickCancel(object sender, RoutedEventArgs e)
+        {
+            Visibility = Visibility.Hidden;
+        }
+
+        private void AddPersonCategoryCB()
+        {
+            CategoryCB.Items.Add("Verdachte");
+            CategoryCB.Items.Add("Getuige");
+            CategoryCB.Items.Add("Moordenaar");
+        }
     }
 }

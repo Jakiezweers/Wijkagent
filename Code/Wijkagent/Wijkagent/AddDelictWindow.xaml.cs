@@ -26,6 +26,9 @@ namespace Wijkagent
     public partial class AddDelictWindow : Window
     {
         List<CategoryList> categoryList;
+        List<int> personsbsn;
+        List<string> personstype;
+        int i = 0;
 
         public AddDelictWindow()
         {
@@ -33,6 +36,10 @@ namespace Wijkagent
             categoryList = new List<CategoryList>();
             BindCountryDropDown();
             DatumTB.SelectedDate = DateTime.Today;
+
+            personentoevoegen addperson = new personentoevoegen();
+            AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
+
 
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
@@ -142,7 +149,7 @@ namespace Wijkagent
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
-            string sqlDelictInsert = "insert into dbo.delict (date, place, homenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.ID values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
+            string sqlDelictInsert = "insert into dbo.delict (date, place, housenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.delict_id values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
             string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
 
             int id = 0;
@@ -165,6 +172,29 @@ namespace Wijkagent
 
                         id = (int)cmd.ExecuteScalar();
                     }
+
+                    if (personsbsn != null)
+                    {
+                      string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
+
+                        Console.WriteLine("NIET GOED");
+
+                        //insert personen in database
+                        foreach (var item in personsbsn)
+                        {
+                        Console.WriteLine("NOPE");
+                            using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
+                                cmd.Parameters.Add("@bsn", SqlDbType.NVarChar).Value = personsbsn[i];
+                                cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
+                                cmd.ExecuteNonQuery();
+                                i++;
+                            }
+
+                        }
+                   }
+
 
                     //Insert delict met gekoppelde categorieen in de database.
                     foreach (var item in categoryList)
@@ -202,6 +232,12 @@ namespace Wijkagent
         private void CancelDelict_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        private void AddPerson_Click(object sender, RoutedEventArgs e, personentoevoegen addperson)
+        {
+            addperson.ShowDialog();
+            personsbsn = addperson.bsnlist;
+            personstype = addperson.typelist;
         }
     }
 
