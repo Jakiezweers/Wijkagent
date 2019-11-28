@@ -124,6 +124,21 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Beschrijving, ";
                 errorBool = true;
             }
+            if (placeName == "")
+            {
+                errorMessage += "Plaats, ";
+                errorBool = true;
+            }
+            if (zipCode == "")
+            {
+                errorMessage += "Postcode, ";
+                errorBool = true;
+            }
+            if (homeNumber == "")
+            {
+                errorMessage += "Huisnummer, ";
+                errorBool = true;
+            }
 
             if (errorBool == false) //Hieronder alles wat uitgevoerd moet worden als alles goed is.
             {
@@ -135,7 +150,6 @@ namespace WijkAgent2.Pages.delicten
                 string errorCaption = "Delict toevoegen mislukt.";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBox.Show(errorBoxText, errorCaption, button);
-
             }
         }
 
@@ -194,7 +208,6 @@ namespace WijkAgent2.Pages.delicten
 
                         }
                     }
-
 
                     //Insert delict met gekoppelde categorieen in de database.
                     foreach (var item in categoryList)
