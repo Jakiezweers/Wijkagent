@@ -40,7 +40,6 @@ namespace Wijkagent
                 Person p1 = new Person();
                 p1.bsn = bsnlist[i];
                 p1.type = typelist[i];
-                p1.counter = i;
                 Personen.Items.Add(p1);
             }
         }
