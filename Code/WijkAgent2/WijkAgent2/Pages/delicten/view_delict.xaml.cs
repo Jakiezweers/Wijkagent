@@ -71,6 +71,23 @@ namespace WijkAgent2.Pages.delicten
                         DelictDateLabel.Content += ": " + dataReader["added_date"];
                     }
                 }
+                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        CategoryListbox.Items.Add(dataReader["name"]);
+                    }
+                }
+                command.CommandText = "SELECT bsn, type FROM delict_person WHERE delict_id = " + delictID;
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        string text = dataReader["type"] + " - " + dataReader["bsn"];
+                        PersonenListbox.Items.Add(text);
+                    }
+                }
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e)

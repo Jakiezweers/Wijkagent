@@ -16,8 +16,12 @@
         <Label x:Name="DelictZipcodeLabel" Content="Postcode" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
         <Label x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="175"/>
         <Label x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="10,196,132,10" Padding="5,5,5,5">
-            <TextBlock x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="215" Width="638"/>
+        <Border BorderBrush="Black" BorderThickness="1" Margin="10,0,0,15" Padding="5,5,5,5" Height="200" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="658">
+            <TextBlock x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,0,-6,-9" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Height="197" Width="653"/>
         </Border>
+        <Label Content="Categorieen:" HorizontalAlignment="Left" Margin="260,10,0,0" VerticalAlignment="Top"/>
+        <ListBox x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="260,36,0,0" VerticalAlignment="Top" Width="214"/>
+        <ListBox x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="518,36,0,0" VerticalAlignment="Top" Width="214"/>
+        <Label Content="Personen:" HorizontalAlignment="Left" Margin="518,10,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>
