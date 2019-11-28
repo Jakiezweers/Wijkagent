@@ -23,6 +23,7 @@ namespace WijkAgent2.Pages.delicten
     public partial class view_delict : Page
     {
         MainWindow mw;
+        bool redirect = true;
         public view_delict(MainWindow MW, int delictID)
         {
             InitializeComponent();
@@ -39,23 +40,9 @@ namespace WijkAgent2.Pages.delicten
 
             using (DbConnection connection = factory.CreateConnection())
             {
-                if (connection == null)
-                {
-                    Console.WriteLine("connection Error");
-                    Console.ReadLine();
-                    return;
-                }
-                Console.WriteLine("connection geslaagd");
-
                 connection.ConnectionString = connectionstring;
                 connection.Open();
                 DbCommand command = factory.CreateCommand();
-                if (command == null)
-                {
-                    Console.WriteLine("geen command gegeven");
-                    Console.ReadLine();
-                    return;
-                }
 
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + delictID;
@@ -68,10 +55,12 @@ namespace WijkAgent2.Pages.delicten
                         if((int)dataReader["status"] == 1)
                         {
                             status = "Actief";
+                            redirect = true;
                         } else
                         {
                             status = "Inactief";
                         }
+
                         DelictPlaceLabel.Content += ": " + dataReader["place"];
                         DelictIDLabel.Content += ": " + dataReader["delict_id"];
                         DelictStreetLabel.Content += ": " + dataReader["street"];
@@ -86,7 +75,11 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelictenList();
+            if (redirect)
+            {
+                mw.ShowDelictenList();
+            }
+            mw.ShowDelictenArchive();
         }
     }
 }
