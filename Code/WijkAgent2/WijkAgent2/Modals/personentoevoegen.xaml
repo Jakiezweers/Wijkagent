@@ -19,5 +19,6 @@
                 <DataGridTextColumn Width="150" Header="Categorie" Binding="{Binding type}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Label x:Name="BSNErrorLabel" Content="" HorizontalAlignment="Left" Margin="344,73,0,0" VerticalAlignment="Top" Width="209"/>
     </Grid>
 </Window>

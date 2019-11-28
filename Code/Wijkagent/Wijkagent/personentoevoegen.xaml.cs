@@ -30,7 +30,8 @@ namespace Wijkagent
         {
             InitializeComponent();
             AddPersonCategoryCB();
-        }
+/*            base.Closing += this.CloseScreen;
+*/        }
 
         public void RefreshData()
         {
@@ -64,12 +65,18 @@ namespace Wijkagent
         {
             Visibility = Visibility.Hidden;
         }
+        private void CloseScreen(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Visibility = Visibility.Hidden;
+        }
 
         private void AddPersonCategoryCB()
         {
             CategoryCB.Items.Add("Verdachte");
             CategoryCB.Items.Add("Getuige");
-            CategoryCB.Items.Add("Moordenaar");
+            CategoryCB.Items.Add("Dader");
+            CategoryCB.Items.Add("Slachtoffer");
         }
     }
 }

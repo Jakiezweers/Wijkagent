@@ -27,6 +27,7 @@ namespace WijkAgent2.Modals
         {
             InitializeComponent();
             AddPersonCategoryCB();
+            base.Closing += this.CloseWindow;
         }
 
         public void RefreshData()
@@ -42,7 +43,17 @@ namespace WijkAgent2.Modals
         }
         private void AddPersonButton(object sender, RoutedEventArgs e)
         {
-            bsnlist.Add(int.Parse(bsnfield.Text));
+            int BSNNumber = int.Parse(bsnfield.Text);
+            foreach (var item in bsnlist)
+            {
+                if(item == BSNNumber)
+                {
+                    BSNErrorLabel.Content = "BSN nummer is al gebruikt.";
+                    return;
+                }
+            }
+            BSNErrorLabel.Content = "BSN succesvol toegevoegd.";
+            bsnlist.Add(BSNNumber);
             typelist.Add(CategoryCB.Text);
             RefreshData();
         }
@@ -61,12 +72,17 @@ namespace WijkAgent2.Modals
         {
             Visibility = Visibility.Hidden;
         }
-
+        private void CloseWindow(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Visibility = Visibility.Hidden;
+        }
         private void AddPersonCategoryCB()
         {
             CategoryCB.Items.Add("Verdachte");
             CategoryCB.Items.Add("Getuige");
-            CategoryCB.Items.Add("Moordenaar");
+            CategoryCB.Items.Add("Dader");
+            CategoryCB.Items.Add("Slachtoffer");
         }
     }
 }

@@ -85,6 +85,10 @@ namespace WijkAgent2.Pages.delicten
             Console.WriteLine("ID: " + myValue);
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            mw.LoadHomeScreen();
+        }
     }
 
 }

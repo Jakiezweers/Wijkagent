@@ -42,7 +42,7 @@
         </Grid>
         <Grid HorizontalAlignment="Left" Height="400" Background="BlueViolet" Margin="10,10,0,0" VerticalAlignment="Top" Width="530">
             <Grid HorizontalAlignment="Left" Height="250" Margin="10,10,0,0" VerticalAlignment="Top" Width="250">
-                <Image x:Name="PolitieLogoImage" HorizontalAlignment="Left" Source="https://images-cdn.9gag.com/photo/aE28jVx_460s.jpg" Height="250" VerticalAlignment="Top" Width="250"/>
+                <Image x:Name="PolitieLogoImage" HorizontalAlignment="Left" Source="https://www.ondernemerskringheerenveen.nl/wp-content/uploads/2019/07/politie-logo.png" Height="250" VerticalAlignment="Top" Width="250"/>
             </Grid>
         </Grid>
     </Grid>
