@@ -52,7 +52,8 @@ namespace Wijkagent
                 }
 
                 command.Connection = connection;
-                command.CommandText = "Select * from dbo.delict";
+                command.CommandText = "SELECT * FROM dbo.delict " +
+                                      "WHERE status = 1";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
