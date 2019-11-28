@@ -14,20 +14,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Wijkagent2.Classes;
 
 namespace WijkAgent2.Pages.delicten
 {
     /// <summary>
-    /// Interaction logic for lijst.xaml
+    /// Interaction logic for view_delict.xaml
     /// </summary>
-    public partial class delicten_list : Page
+    public partial class view_delict : Page
     {
         MainWindow mw;
-        public delicten_list(MainWindow MW)
+        public view_delict(MainWindow MW, int delictID)
         {
-            mw = MW;
             InitializeComponent();
+            LoadDelict(delictID);
+            mw = MW;
+        }
+
+        private void LoadDelict(int delictID)
+        {
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
@@ -54,44 +58,35 @@ namespace WijkAgent2.Pages.delicten
                 }
 
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.delict " +
-                                      "WHERE status = 1";
+                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + delictID;
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
                     {
-                        int id = Convert.ToInt32(dataReader["delict_id"]);
-                        Delict d1 = new Delict();
-                        d1.id = id;
-                        d1.street = (string)dataReader["street"];
-                        d1.createtime = (DateTime)dataReader["added_date"];
-                        Console.WriteLine($"{dataReader["street"]}");
-                        Delicten.Items.Add(d1);
+                        string status = "";
+                        if((int)dataReader["status"] == 1)
+                        {
+                            status = "Actief";
+                        } else
+                        {
+                            status = "Inactief";
+                        }
+                        DelictPlaceLabel.Content += ": " + dataReader["place"];
+                        DelictIDLabel.Content += ": " + dataReader["delict_id"];
+                        DelictStreetLabel.Content += ": " + dataReader["street"];
+                        DelictStreetLabel.Content += ": " + dataReader["housenumber"];
+                        DelictZipcodeLabel.Content += ": " + dataReader["zipcode"];
+                        DelictStatusLabel.Content += ": " + status;
+                        DelictDescriptionTB.Text = (string)dataReader["description"];
+                        DelictDateLabel.Content += ": " + dataReader["added_date"];
                     }
                 }
             }
         }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-        private void Activate(object sender, RoutedEventArgs e)
-        {
-            var myValue = ((System.Windows.Controls.Button)sender).Tag;
-            Console.WriteLine("ID: " + myValue);
-        }
-
-        private void ViewDelict(object sender, RoutedEventArgs e)
-        {
-            var DelictID = (int)((System.Windows.Controls.Button)sender).Tag;
-            mw.ShowDelict(DelictID);
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mw.LoadHomeScreen();
+            mw.ShowDelictenList();
         }
     }
 }

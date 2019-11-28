@@ -54,6 +54,11 @@ namespace WijkAgent2
             MainFrame.Navigate(new Login(this));
         }
 
+        public void ShowDelict(int delictID)
+        {
+            MainFrame.Navigate(new view_delict(this,delictID));
+        }
+
         public void close()
         {
             Close();
