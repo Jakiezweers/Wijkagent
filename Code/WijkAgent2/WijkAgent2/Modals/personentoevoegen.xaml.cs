@@ -38,6 +38,7 @@ namespace WijkAgent2.Modals
                 Person p1 = new Person();
                 p1.bsn = bsnlist[i];
                 p1.type = typelist[i];
+                p1.bsn = bsnlist[i];
                 Personen.Items.Add(p1);
             }
         }
@@ -52,10 +53,27 @@ namespace WijkAgent2.Modals
                     return;
                 }
             }
+            if(CategoryCB.Text == "Categorie van persoon")
+            {
+                BSNErrorLabel.Content = "Ongeldig categorie ingevuld";
+                return;
+            }
             BSNErrorLabel.Content = "BSN succesvol toegevoegd.";
             bsnlist.Add(BSNNumber);
             typelist.Add(CategoryCB.Text);
             RefreshData();
+        }
+
+        private void DeletePerson(object sender, RoutedEventArgs e)
+        {
+            var person_bsn = ((System.Windows.Controls.Button)sender).Tag;
+            Console.WriteLine("BSN: " + person_bsn);
+           var index = bsnlist.FindIndex(el => el.Equals(person_bsn));
+            bsnlist.RemoveAt(index);
+            typelist.RemoveAt(index);
+            RefreshData();
+
+
         }
 
         private void Personen_SelectionChanged(object sender, SelectionChangedEventArgs e)

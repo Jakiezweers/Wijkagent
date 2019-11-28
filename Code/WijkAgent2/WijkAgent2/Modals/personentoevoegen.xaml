@@ -13,10 +13,20 @@
         <Label Content="BSN" HorizontalAlignment="Left" Margin="344,24,0,0" VerticalAlignment="Top"/>
         <Button Content="Voeg persoon toe" HorizontalAlignment="Left" Margin="598,52,0,0" VerticalAlignment="Top" Width="105" Height="27" Click="AddPersonButton"/>
         <Button Content="Annuleren" HorizontalAlignment="Left" Margin="628,356,0,0" VerticalAlignment="Top" Width="75" Click="ClickCancel"/>
+        
         <DataGrid x:Name="Personen" HorizontalAlignment="Left" Height="304" Margin="128,104,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="Personen_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="150" Header="BSN" Binding="{Binding bsn}"/>
                 <DataGridTextColumn Width="150" Header="Categorie" Binding="{Binding type}"/>
+                <DataGridTemplateColumn>
+                <DataGridTemplateColumn.CellTemplate>
+
+                    <DataTemplate>
+                            <Button Tag="{Binding bsn}" Click="DeletePerson">Verwijderen</Button>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+
+            </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Label x:Name="BSNErrorLabel" Content="" HorizontalAlignment="Left" Margin="344,73,0,0" VerticalAlignment="Top" Width="209"/>
