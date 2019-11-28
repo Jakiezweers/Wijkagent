@@ -1,0 +1,18 @@
+﻿<Page x:Class="WijkAgent2.Pages.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WijkAgent2.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HomePage">
+
+    <Grid>
+        <Button x:Name="AddDelictBtn" Content="Nieuw delict aanmaken" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddDelict_Click"/>
+        <Button x:Name="DelictArchiveBtn" Content="Delicten archief" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="DelictArchive_Click"/>
+        <Button x:Name="DelictListBtn" Content="Delicten lijst" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="DelictList_Click"/>
+        <Button x:Name="AddUserBtn" Content="Nieuwe gebruiker" HorizontalAlignment="Left" Margin="10,341,0,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddUser_Click"/>
+        <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Left" Margin="672,380,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
+    </Grid>
+</Page>
