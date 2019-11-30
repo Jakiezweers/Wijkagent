@@ -25,9 +25,10 @@ namespace WijkAgent2.Pages.delicten
     /// </summary>
     public partial class add_delict : Page
     {
-        List<CategoryList> categoryList;
-        List<int> personsbsn;
-        List<string> personstype;
+        List<CategoryList> categoryList = new List<CategoryList>();
+        List<int> personsbsn = new List<int>();
+        List<string> personstype = new List<string>();
+        List<int> person_id = new List<int>();
         int i = 0;
         private MainWindow mw;
         public add_delict(MainWindow MW)
@@ -189,18 +190,14 @@ namespace WijkAgent2.Pages.delicten
 
                     if (personsbsn != null)
                     {
-                        string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
-
-                        Console.WriteLine("NIET GOED");
-
+                        string sqlPersonInsert = "insert into dbo.delict_person (delict_id, person_id, type) values (@delictID, @person_id, @type)";
                         //insert personen in database
-                        foreach (var item in personsbsn)
+                        foreach (var item in person_id)
                         {
-                            Console.WriteLine("NOPE");
                             using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
                             {
                                 cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
-                                cmd.Parameters.Add("@bsn", SqlDbType.NVarChar).Value = personsbsn[i];
+                                cmd.Parameters.Add("@person_id", SqlDbType.NVarChar).Value = person_id[i];
                                 cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
                                 cmd.ExecuteNonQuery();
                                 i++;
@@ -225,8 +222,10 @@ namespace WijkAgent2.Pages.delicten
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("ERROR:" + ex.Message);
+                    MessageBox.Show("ERROROR?:" + ex.Message);
                 }
+                MessageBox.Show("Delict succesvol toegevoegd!");
+                mw.ShowDelictenList();
             }
         }
 
@@ -251,6 +250,7 @@ namespace WijkAgent2.Pages.delicten
             addperson.ShowDialog();
             personsbsn = addperson.bsnlist;
             personstype = addperson.typelist;
+            person_id = addperson.person_idList;
         }
     }
 

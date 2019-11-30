@@ -12,6 +12,7 @@ namespace Wijkagent2.Classes
         public int leeftijd { get; set; }
         public int bsn { get; set; }
         public string type { get; set; }
+        public int person_id { get; set; }
 
     }
 }
