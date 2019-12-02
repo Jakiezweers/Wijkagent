@@ -51,7 +51,26 @@ namespace WijkAgent2.Modals
         }
         private void AddPersonButton(object sender, RoutedEventArgs e)
         {
-            int BSNNumber = int.Parse(bsnfield.Text);
+            string bsnTextField = bsnfield.Text;
+            int value;
+            int BSNNumber;
+            string errorMessage = "";
+            bool error = false;
+            if (bsnTextField.Length == 9 && int.TryParse(bsnTextField, out value))
+            {
+                BSNNumber = value;
+            } 
+            else
+            {
+                errorMessage += "BSN is niet correct ingevoegd.\n";
+                error = true;
+                BSNNumber = 0;
+            }
+            if(error == true)
+            {
+                CheckErrorMessage(errorMessage);
+                return;
+            }
             int person_id = CheckIfPersonExists(BSNNumber);
             if(person_id == 0)
             {
@@ -81,6 +100,14 @@ namespace WijkAgent2.Modals
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+        private void CheckErrorMessage(string message)
+        {
+
+            string errorBoxText = message;
+            string errorCaption = "Persoon toevoegen mislukt.";
+            System.Windows.Forms.MessageBoxButtons button = MessageBoxButtons.OK;
+            MessageBox.Show(errorBoxText, errorCaption, button);
         }
 
         private void ClickCancel(object sender, RoutedEventArgs e)
@@ -128,7 +155,6 @@ namespace WijkAgent2.Modals
 
         private void AddPersonCategoryCB()
         {
-            CategoryCB.Items.Add("Verdachte");
             CategoryCB.Items.Add("Getuige");
             CategoryCB.Items.Add("Dader");
             CategoryCB.Items.Add("Slachtoffer");

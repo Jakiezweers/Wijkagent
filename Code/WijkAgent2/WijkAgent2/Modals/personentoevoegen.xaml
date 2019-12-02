@@ -8,7 +8,7 @@
         Title="personentoevoegen" Height="450" Width="800">
     <Grid>
         <ComboBox x:Name="CategoryCB" HorizontalAlignment="Left" Margin="99,52,0,0" VerticalAlignment="Top" Width="120"  IsEditable="True"
- IsReadOnly="True"  Text="Categorie van persoon" SelectionChanged="Combobox_SelectionChanged"/>
+ IsReadOnly="True"  Text="Verdachte" SelectionChanged="Combobox_SelectionChanged"/>
         <TextBox x:Name="bsnfield" HorizontalAlignment="Left" Height="24" Margin="344,50,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="209"/>
         <Label Content="BSN" HorizontalAlignment="Left" Margin="344,24,0,0" VerticalAlignment="Top"/>
         <Button Content="Voeg persoon toe" HorizontalAlignment="Left" Margin="598,52,0,0" VerticalAlignment="Top" Width="105" Height="27" Click="AddPersonButton"/>

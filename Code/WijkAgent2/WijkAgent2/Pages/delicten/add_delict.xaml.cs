@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -107,7 +108,7 @@ namespace WijkAgent2.Pages.delicten
             string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
             bool errorBool = false;
             string placeName = PlaatsTB.Text;
-            string zipCode = PostcodeTB.Text;
+            string zipCode = Regex.Replace(PostcodeTB.Text, @" ", "");
             string homeNumber = HuisnummerTB.Text;
             string street = StraatTB.Text;
             string description = OmschijvingTB.Text;
@@ -130,7 +131,7 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Plaats, ";
                 errorBool = true;
             }
-            if (zipCode == "")
+            if (zipCode == "" || zipCode.Length != 6)
             {
                 errorMessage += "Postcode, ";
                 errorBool = true;
@@ -138,6 +139,11 @@ namespace WijkAgent2.Pages.delicten
             if (homeNumber == "")
             {
                 errorMessage += "Huisnummer, ";
+                errorBool = true;
+            }
+            if(street == "")
+            {
+                errorMessage += "Straat, ";
                 errorBool = true;
             }
 
