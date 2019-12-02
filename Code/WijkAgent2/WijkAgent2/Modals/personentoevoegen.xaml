@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WijkAgent2"
         mc:Ignorable="d"
-        Title="personentoevoegen" Height="450" Width="800">
-    <Grid>
-        <ComboBox x:Name="CategoryCB" HorizontalAlignment="Left" Margin="99,52,0,0" VerticalAlignment="Top" Width="120"  IsEditable="True"
- IsReadOnly="True"  Text="Verdachte" SelectionChanged="Combobox_SelectionChanged"/>
-        <TextBox x:Name="bsnfield" HorizontalAlignment="Left" Height="24" Margin="344,50,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="209"/>
-        <Label Content="BSN" HorizontalAlignment="Left" Margin="344,24,0,0" VerticalAlignment="Top"/>
-        <Button Content="Voeg persoon toe" HorizontalAlignment="Left" Margin="598,52,0,0" VerticalAlignment="Top" Width="160" Height="27" Click="AddPersonButton"/>
-        <Button Content="Annuleren" HorizontalAlignment="Left" Margin="645,365,0,0" VerticalAlignment="Top" Width="113" Click="ClickCancel"/>
-        <DataGrid x:Name="Personen" HorizontalAlignment="Left" Height="304" Margin="128,104,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="Personen_SelectionChanged">
+        Title="personentoevoegen" Height="465.429" Width="711.285">
+    <Grid HorizontalAlignment="Center" Margin="16,0,2,0">
+        <ComboBox x:Name="CategoryCB" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True"  Text="" SelectionChanged="Combobox_SelectionChanged"/>
+        <TextBox x:Name="bsnfield" HorizontalAlignment="Left" Height="24" Margin="255,59,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="209"/>
+        <Label Content="BSN" HorizontalAlignment="Left" Margin="255,28,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="AddNewPersonBTN" Content="Voeg persoon toe" Margin="500,40,0,0" VerticalAlignment="Top" Height="27" Click="AddPersonButton" HorizontalAlignment="Left" Width="145"/>
+        <Button Content="Terug" HorizontalAlignment="Left" Margin="548,377,0,0" VerticalAlignment="Top" Width="113" Click="ClickCancel"/>
+        <DataGrid x:Name="Personen" HorizontalAlignment="Left" Height="304" Margin="10,105,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="Personen_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="150" Header="BSN" Binding="{Binding bsn}"/>
-                <DataGridTextColumn Width="150" Header="Categorie" Binding="{Binding type}"/>
+                <DataGridTextColumn Header="BSN" Binding="{Binding bsn}"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding type}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Label x:Name="BSNErrorLabel" Content="" HorizontalAlignment="Left" Margin="344,73,0,0" VerticalAlignment="Top" Width="209"/>
+        <Label x:Name="BSNErrorLabel" Content="" HorizontalAlignment="Left" Margin="331,14,0,0" VerticalAlignment="Top" Width="314"/>
+        <Label Content="Categorie" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

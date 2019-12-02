@@ -4,36 +4,43 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      mc:Ignorable="d" d:DesignWidth="800"
       Title="add_delict">
 
-    <Grid>
-        <Button Content="Delict opslaan" HorizontalAlignment="Left" Margin="509,371,0,0" VerticalAlignment="Top" Width="126" Height="37" Click="SaveDelict_Click"/>
-        <Button Content="Delict annuleren" HorizontalAlignment="Left" Margin="656,371,0,0" VerticalAlignment="Top" Width="126" Height="37" Click="CancelDelict_Click"/>
-        <Button Content="Personen toevoegen" HorizontalAlignment="Left" Margin="529,218,0,0" VerticalAlignment="Top" Width="197" Height="50" x:Name="AddPersonButton"/>
-        <ComboBox ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="23" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" SelectionChanged="category_SelectionChanged" Margin="41,30,0,0">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Width="780" Height="538">
+        <Button FontSize="18" Content="Delict opslaan" Margin="0,432,18,0" VerticalAlignment="Top" Height="36" Click="SaveDelict_Click" HorizontalAlignment="Right" Width="176"/>
+        <Button FontSize="18" Content="Delict annuleren" Margin="0,491,18,0" VerticalAlignment="Top" Height="37" Click="CancelDelict_Click" HorizontalAlignment="Right" Width="176"/>
+        <Button FontSize="18" Content="Personen toevoegen" Margin="0,308,18,0" VerticalAlignment="Top" Height="50" x:Name="AddPersonButton" HorizontalAlignment="Right" Width="253"/>
+        <ComboBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="35" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="41,63,0,0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Width="220" Checked="AllCheckbocx_CheckedAndUnchecked" Unchecked="AllCheckbocx_CheckedAndUnchecked" Content="{Binding Category_Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Category_ID}">
+                    <CheckBox FontSize="18" Width="220" Checked="AllCheckbocx_CheckedAndUnchecked" Unchecked="AllCheckbocx_CheckedAndUnchecked" Content="{Binding Category_Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Category_ID}">
                     </CheckBox>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ListBox Name="testListbox" HorizontalAlignment="Left" Height="89" Margin="41,63,0,0" VerticalAlignment="Top" Width="210" />
-        <TextBox x:Name="StraatTB" HorizontalAlignment="Left" Height="23" Margin="606,169,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PostcodeTB" HorizontalAlignment="Left" Height="23" Margin="606,102,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="HuisnummerTB" HorizontalAlignment="Left" Height="23" Margin="606,42,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Huisnummer" HorizontalAlignment="Left" Margin="606,16,0,0" VerticalAlignment="Top"/>
-        <Label Content="Postcode" HorizontalAlignment="Left" Margin="606,75,0,0" VerticalAlignment="Top"/>
-        <Label Content="Straat" HorizontalAlignment="Left" Margin="606,138,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="DatumTB" HorizontalAlignment="Left" Margin="406,102,0,0" VerticalAlignment="Top" Width="147" FirstDayOfWeek="Monday" RenderTransformOrigin="0.542,2.75"/>
-        <TextBox x:Name="OmschijvingTB" HorizontalAlignment="Left" Height="190" AcceptsReturn="True" Margin="41,218,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="449"/>
-        <Label Content="Categorie" HorizontalAlignment="Left" Margin="41,4,0,0" VerticalAlignment="Top"/>
-        <Label Content="Plaats" HorizontalAlignment="Left" Margin="406,16,0,0" VerticalAlignment="Top"/>
-        <Label Content="Datum" HorizontalAlignment="Left" Margin="406,76,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="PlaatsTB" HorizontalAlignment="Left" Height="23" Margin="406,42,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147"/>
-        <Label Content="Omschijving" HorizontalAlignment="Left" Margin="41,192,0,0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="LabelTest" HorizontalAlignment="Left" Margin="525,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="93" Width="257"/>
+        <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="101" Margin="41,98,0,0" VerticalAlignment="Top" Width="210" />
+        <TextBox FontSize="18" x:Name="StraatTB" Height="35" Margin="0,249,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.494,1.71" HorizontalAlignment="Right" Width="142"/>
+        <TextBox FontSize="18" x:Name="PostcodeTB" Height="35" Margin="0,158,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
+        <TextBox FontSize="18" x:Name="HuisnummerTB" Height="35" Margin="0,63,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
+        <Label FontSize="18" Content="Huisnummer" Margin="0,29,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
+        <Label FontSize="18" Content="Postcode" Margin="0,119,77,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="83"/>
+        <Label FontSize="18" Content="Straat" Margin="0,210,87,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="73"/>
+        <DatePicker FontSize="18" x:Name="DatumTB" HorizontalAlignment="Right" Height="35" Margin="0,158,250,0" VerticalAlignment="Top" Width="147" FirstDayOfWeek="Monday" RenderTransformOrigin="0.542,2.75"/>
+        <TextBox FontSize="18" x:Name="OmschijvingTB" AcceptsReturn="True" Margin="41,249,310,10" TextWrapping="Wrap" Text=""/>
+        <Label FontSize="18" Content="Categorie" HorizontalAlignment="Left" Margin="41,29,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Plaats" Margin="0,29,341,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56"/>
+        <Label FontSize="18" Content="Datum" Margin="0,123,322,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.124"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <TextBox FontSize="18" Height="35" x:Name="PlaatsTB" Margin="0,63,250,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="147"/>
+        <Label FontSize="18" Content="Omschijving" HorizontalAlignment="Left" Margin="41,215,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>

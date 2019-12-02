@@ -40,7 +40,7 @@ namespace WijkAgent2.Pages.delicten
             BindCountryDropDown();
             DatumTB.SelectedDate = DateTime.Today;
 
-            personentoevoegen addperson = new personentoevoegen();
+            personentoevoegen addperson = new personentoevoegen(mw);
             AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
 
 
@@ -70,19 +70,22 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
-
         private void BindCountryDropDown()
         {
             categoryCB.ItemsSource = categoryList;
         }
         private void category_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
 
         private void category_TextChanged(object sender, TextChangedEventArgs e)
         {
-            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.StartsWith(categoryCB.Text.Trim()));
+            if(!categoryCB.IsDropDownOpen)
+            {
+                categoryCB.IsDropDownOpen = true;
+            }
+            var t = categoryCB.SelectedIndex;
+            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
         }
 
         private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
@@ -150,6 +153,7 @@ namespace WijkAgent2.Pages.delicten
             if (errorBool == false) //Hieronder alles wat uitgevoerd moet worden als alles goed is.
             {
                 SendDelictToDatabase(date, placeName, homeNumber, zipCode, street, description, longCoord, latCoord);
+                mw.ShowMessage("Delict toegevoegd");
             }
             else //Hieronder alles wat gedaan moet worden als er iets fout gaat.
             {
@@ -160,9 +164,14 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
-        private void GetLongLat()
+        private void GetLatLon()
         {
 
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            categoryCB.SelectedIndex = -1;
         }
 
         private void SendDelictToDatabase(string date, string placeName, string homeNumber, string zipCode, string street, string description, double longCoord, double latCoord)
@@ -230,7 +239,6 @@ namespace WijkAgent2.Pages.delicten
                 {
                     MessageBox.Show("ERROROR?:" + ex.Message);
                 }
-                MessageBox.Show("Delict succesvol toegevoegd!");
                 mw.ShowDelictenList();
             }
         }

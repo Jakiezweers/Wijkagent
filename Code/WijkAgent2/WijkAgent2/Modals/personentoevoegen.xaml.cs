@@ -29,12 +29,14 @@ namespace WijkAgent2.Modals
         public List<int> bsnlist = new List<int>();
         public List<string> typelist = new List<string>();
         public List<int> person_idList = new List<int>();
+        private MainWindow mw;
 
-        public personentoevoegen()
+        public personentoevoegen(MainWindow MW)
         {
             InitializeComponent();
             AddPersonCategoryCB();
             base.Closing += this.CloseWindow;
+            mw = MW;
         }
 
         public void RefreshData()
@@ -59,14 +61,19 @@ namespace WijkAgent2.Modals
             if (bsnTextField.Length == 9 && int.TryParse(bsnTextField, out value))
             {
                 BSNNumber = value;
-            } 
+            }
             else
             {
                 errorMessage += "BSN is niet correct ingevoegd.\n";
                 error = true;
                 BSNNumber = 0;
             }
-            if(error == true)
+            if(CategoryCB.Text == "")
+            {
+                errorMessage += "Categorie is leeg.";
+                error = true;
+            }
+            if(error)
             {
                 CheckErrorMessage(errorMessage);
                 return;
@@ -155,12 +162,13 @@ namespace WijkAgent2.Modals
 
         private void AddPersonCategoryCB()
         {
+            CategoryCB.Items.Add("Verdachte");
             CategoryCB.Items.Add("Getuige");
             CategoryCB.Items.Add("Dader");
             CategoryCB.Items.Add("Slachtoffer");
         }
     }
-    public class Prompt
+    public class Prompt : Page
     {
         public static int ShowDialog(int bsnNumber)
         {
@@ -179,6 +187,7 @@ namespace WijkAgent2.Modals
             System.Windows.Forms.TextBox SurNameTextBox = new System.Windows.Forms.TextBox() { Left = 50, Top = 110, Width = 400 };
             System.Windows.Forms.Label BirthDateLabel = new System.Windows.Forms.Label() { Left = 50, Top = 140, Text = "Geboorte datum: " };
             DateTimePicker BirthDateTextBox = new DateTimePicker() { Left = 50, Top = 170, Width = 170 };
+
             System.Windows.Forms.Button confirmation = new System.Windows.Forms.Button() { Text = "Persoon toevoegen", Left = 350, Width = 130, Top = 200, DialogResult = DialogResult.OK };
             confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(NameTextLabel);
