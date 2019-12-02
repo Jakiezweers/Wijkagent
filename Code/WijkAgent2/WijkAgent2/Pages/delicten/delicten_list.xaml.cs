@@ -44,7 +44,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.delict_person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date";
+                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.delict_person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date ";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -54,7 +54,7 @@ namespace WijkAgent2.Pages.delicten
                         int count = Convert.ToInt32(dataReader["firstname"]);
                         Delict d1 = new Delict();
                         d1.id = id;
-                        d1.street = (string)dataReader["street"];
+                        d1.street = GetDelictCategory(id);
                         d1.createtime = (DateTime)dataReader["added_date"];
 
                         d1.firstnamecount = count;
@@ -62,6 +62,34 @@ namespace WijkAgent2.Pages.delicten
                         Delicten.Items.Add(d1);
                     }
                 }
+            }
+        }
+
+        private string GetDelictCategory(int delictID)
+        {
+            string returnString = "";
+            string provider = ConfigurationManager.AppSettings["provider"];
+            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+            using (DbConnection connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionstring;
+                connection.Open();
+                DbCommand command = factory.CreateCommand();
+
+                command.Connection = connection;
+                command.CommandText = "SELECT name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        returnString += dataReader["name"];
+                        returnString += ", ";
+                    }
+                }
+                return returnString.Substring(0, returnString.Length - 2);
             }
         }
         private void Activate(object sender, RoutedEventArgs e)

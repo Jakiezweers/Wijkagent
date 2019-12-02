@@ -5,7 +5,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        WindowState="Normal"
+        WindowState="Maximized"
         xmlns:local="clr-namespace:WijkAgent2"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -14,10 +14,11 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}" Icon="favicon.ico"
-        Width="800"
-        Height="500"
+        Width="1920"
+        Height="1080"
         mc:Ignorable="d"
-        Title="MainWindow">
+        Title="MainWindow"
+        WindowStartupLocation="CenterScreen">
     <Window.CommandBindings>
         <CommandBinding Command="Copy" Executed="OnCopy"></CommandBinding>
     </Window.CommandBindings>
