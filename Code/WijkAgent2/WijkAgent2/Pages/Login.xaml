@@ -15,21 +15,16 @@
             </Grid>
             <Grid HorizontalAlignment="Left" Height="80" Margin="0,50,0,0" VerticalAlignment="Top" Width="260">
                 <Grid HorizontalAlignment="Left" Height="40" Margin="0,40,0,0" VerticalAlignment="Top" Width="252">
-                    <TextBox Name="UsernameTextBox"  HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0" TextChanged="TextBox_TextChanged_1"/>
+                    <TextBox Name="UsernameTextBox"  HorizontalAlignment="Left" Height="35" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0" KeyDown="UsernameTextBox_KeyDown" TextChanged="UsernameTextBox_Changed"/>
                 </Grid>
                 <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
                     <Label x:Name="UsernameLabel" Content="Badge ID" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,-1" VerticalAlignment="Top" Height="26" Width="72"/>
                 </Grid>
             </Grid>
             <Grid HorizontalAlignment="Left" Height="80" Margin="0,130,0,0" VerticalAlignment="Top" Width="260">
-                <Grid HorizontalAlignment="Left" Height="40" Margin="0,40,0,0" VerticalAlignment="Top" Width="252">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="205*"/>
-                        <ColumnDefinition Width="47*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="PasswordTextBox" HorizontalAlignment="Left" Height="20" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0" TextChanged="TextBox_TextChanged" Grid.ColumnSpan="2"/>
-                </Grid>
-                <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0">
+                <PasswordBox x:Name="PasswordTextBox" MaxLength="512" HorizontalAlignment="Left" Height="35" PasswordChar="•" VerticalAlignment="Bottom" Width="232" Margin="10,-5,0,10" KeyDown="PasswordBox_KeyDown" PasswordChanged="PasswordBox_Changed"/>
+
+                <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
                     <Label x:Name="PasswordLabel" Content="Wachtwoord" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="25" Width="82"/>
                 </Grid>
             </Grid>
@@ -38,12 +33,13 @@
                     <Button x:Name="LogInButton" Content="Log in" HorizontalAlignment="Left" Margin="10,0,0,10" Width="109" Click="LogInButton_Click" Height="40" VerticalAlignment="Bottom"/>
                 </Grid>
             </Grid>
-            <Border BorderBrush="Black" BorderThickness="3" HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="260"/>
+            <Label Name="FoutLoginLabel" Content="Verkeerd badge ID of wachtwoord." Foreground="Red" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Height="36" Width="242" Visibility="Hidden"/>
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="400" Background="BlueViolet" Margin="10,10,0,0" VerticalAlignment="Top" Width="530">
+        <Grid HorizontalAlignment="Left" Height="400" Background="White" Margin="10,10,0,0" VerticalAlignment="Top" Width="530">
             <Grid HorizontalAlignment="Left" Height="250" Margin="10,10,0,0" VerticalAlignment="Top" Width="250">
                 <Image x:Name="PolitieLogoImage" HorizontalAlignment="Left" Source="https://www.ondernemerskringheerenveen.nl/wp-content/uploads/2019/07/politie-logo.png" Height="250" VerticalAlignment="Top" Width="250"/>
             </Grid>
         </Grid>
+
     </Grid>
 </Page>

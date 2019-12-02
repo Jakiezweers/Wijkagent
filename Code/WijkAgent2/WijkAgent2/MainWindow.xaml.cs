@@ -33,19 +33,24 @@ namespace WijkAgent2
         {
             InitializeComponent();
 
+            ShowMessage("Werlcome");
+
+            MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            MainFrame.Navigate(new Login(this));
+        }
+
+        public void ShowMessage(string Message)
+        {
             Task.Factory.StartNew(() =>
             {
-                Thread.Sleep(2500);
+                Thread.Sleep(250);
             }).ContinueWith(t =>
             {
                 //note you can use the message queue from any thread, but just for the demo here we 
                 //need to get the message queue from the snackbar, so need to be on the dispatcher
-                MainSnackbar.MessageQueue.Enqueue("First Log in to get the Most Amazing SHOW");
+                MainSnackbar.MessageQueue.Enqueue(Message);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             Snackbar = this.MainSnackbar;
-
-            MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
-            MainFrame.Navigate(new Login(this));
         }
 
         public void LoadHomeScreen()

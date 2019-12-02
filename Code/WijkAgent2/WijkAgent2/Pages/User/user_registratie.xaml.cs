@@ -36,7 +36,8 @@ namespace WijkAgent2.Pages.User
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            //Save user
+            mw.ShowMessage("Gebruiker is toegevoegd.");
+            mw.ShowUserList();
         }
         public async Task sendFileAsync(String file_data, string filename)
         {

@@ -7,14 +7,14 @@
       mc:Ignorable="d"
       Title="user_registratie">
 
-    <Grid Background="#FF959595">
-        <Button x:Name="BtnReturn" Content="Terug" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnReturn_Click"/>
+    <Grid>
+        <Button x:Name="BtnReturn" Content="Terug" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="BtnReturn_Click" Height="40"/>
         <Grid Margin="10,35,0,50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition MaxWidth="300"/>
             </Grid.ColumnDefinitions>
-            <Grid Margin="10,20,10,0" Grid.Column="1">
+            <Grid Margin="10,20,10,0" Grid.Column="1" MaxWidth="300">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -24,21 +24,27 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button x:Name="BtnTakeImage" Content="Select" Margin="0,0,10,10" Grid.ColumnSpan="3" Height="40" VerticalAlignment="Bottom" Click="BtnTakeImage_Click"/>
-                <Image x:Name="ImgHead" Margin="0,10,10,55" Source="/WijkAgent2;component/Images/no_user.png" Grid.ColumnSpan="3">
+                <Button x:Name="BtnTakeImage" Content="Select" Margin="0,0,10,10" Grid.ColumnSpan="3" MaxHeight="40" Click="BtnTakeImage_Click" VerticalAlignment="Bottom"/>
+                <Image x:Name="ImgHead" MaxWidth="300" MaxHeight="300" Margin="0,10,10,55" Source="/WijkAgent2;component/Images/no_user.png" Grid.ColumnSpan="3">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
             </Grid>
             <Grid Margin="10,20,10,0" MinWidth="250">
-                <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="230"/>
-                <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="230"/>
-                <Label x:Name="label_Copy" Content="Label" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="230"/>
-                <TextBox x:Name="textBox_Copy" HorizontalAlignment="Left" Height="23" Margin="10,90,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="230"/>
+                <Label x:Name="LblName" Content="Naam" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <TextBox x:Name="TxtName" HorizontalAlignment="Left" Margin="10,44,0,0" TextWrapping="Wrap" Text="" Width="230" FontSize="18" Height="40" VerticalAlignment="Top"/>
+                <Label x:Name="LblBadgeNr" Content="Badge NR." HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <TextBox x:Name="TxtBadgeNr" HorizontalAlignment="Left" Margin="10,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <Label x:Name="LblTel" Content="Tel" HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <TextBox x:Name="TxtTel" HorizontalAlignment="Left" Margin="10,195,0,0" TextWrapping="Wrap" Text="" Width="230" FontSize="18" Height="40" VerticalAlignment="Top"/>
+                <Label x:Name="LblPassword" Content="Wachtwoord." HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <PasswordBox x:Name="TxtPassword" HorizontalAlignment="Left" Margin="10,274,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <Label x:Name="LblPasswordRepeat" Content="Wachtwoord check." HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <PasswordBox x:Name="TxtPasswordRepeat" HorizontalAlignment="Left" Margin="10,346,0,-24" VerticalAlignment="Top" Width="230" FontSize="18"/>
             </Grid>
         </Grid>
-        <Button x:Name="BtnSave" MaxWidth="50" MinWidth="50" Content="Save" Margin="0,0,10,5" Click="BtnSave_Click" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        <Button x:Name="BtnSave" MaxWidth="150" MinWidth="150" Content="Save" Margin="0,10,10,0" Click="BtnSave_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
 
     </Grid>
 </Page>
