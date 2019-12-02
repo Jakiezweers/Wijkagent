@@ -29,6 +29,9 @@ namespace WijkAgent2.Pages.delicten
         public delict_archive(MainWindow MW)
         {
             mw = MW;
+            getData();
+        }
+        private void getData() {
             InitializeComponent(); string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
@@ -56,11 +59,11 @@ namespace WijkAgent2.Pages.delicten
 
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM dbo.archive as a " +
-                                                      "JOIN dbo.delict as d ON a.delict_id = d.delict_id " +
-                                                      "WHERE d.status = 0 " +
-                                                      "ORDER BY a.delict_id";
+                                      "JOIN dbo.delict as d ON a.delict_id = d.delict_id " +
+                                      "WHERE d.status = 0 " +
+                                      "ORDER BY a.delict_id";
 
-
+                Delicten_archief.Items.Clear();
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
@@ -70,13 +73,16 @@ namespace WijkAgent2.Pages.delicten
                         d1.id = id;
                         d1.street = (string)dataReader["street"];
                         d1.createtime = (DateTime)dataReader["added_date"];
-                        Console.WriteLine($"{dataReader["street"]}");
-                        Delicten.Items.Add(d1);
+                        //    Console.WriteLine($"{dataReader["street"]}");
+                        Delicten_archief.Items.Add(d1);
                     }
                 }
 
             }
         }
+    
+        public enum DialogResult { }
+
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -84,7 +90,8 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Activate(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult dialogResult = MessageBox.Show("Wilt u dit delict activeren?", "Activeren", MessageBoxButton.YesNo);
+
+            MessageBoxResult dialogResult = MessageBox.Show("", "Archiveren", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
             {
                 string provider = ConfigurationManager.AppSettings["provider"];
@@ -94,19 +101,35 @@ namespace WijkAgent2.Pages.delicten
 
                 using (DbConnection connection = factory.CreateConnection())
                 {
+                    if (connection == null)
+                    {
+                        Console.WriteLine("connection Error");
+                        Console.ReadLine();
+                        return;
+                    }
+                    Console.WriteLine("connection geslaagd");
+
                     connection.ConnectionString = connectionstring;
                     connection.Open();
                     DbCommand command = factory.CreateCommand();
+                    if (command == null)
+                    {
+                        Console.WriteLine("geen command gegeven");
+                        Console.ReadLine();
+                        return;
+                    }
+
                     command.Connection = connection;
 
-                    var myValue = ((System.Windows.Controls.Button)sender).Tag;
 
+                    var myValue = ((System.Windows.Controls.Button)sender).Tag;
                     string archive = "UPDATE delict " +
                                      "SET status = 1 " +
                                      "WHERE delict_id = @delictID";
                     //TODO add use id 
                     string toActivate = "DELETE FROM dbo.archive " +
                                          "WHERE delict_id = @delictID";
+
                     using (SqlConnection cnn = new SqlConnection(connectionstring))
                     {
                         try
@@ -125,9 +148,11 @@ namespace WijkAgent2.Pages.delicten
                                 cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
                                 cmd.ExecuteNonQuery();
 
-
+                                // dgPlan.ItemsSource = null;
+                                //dgPlan.ItemsSource = ;
+                                getData();
                             }
-                            //Delicten_archief.
+                          
 
 
                         }
@@ -135,25 +160,19 @@ namespace WijkAgent2.Pages.delicten
                         {
                             MessageBox.Show("ERROR:" + ex.Message);
                         }
-
                         Console.WriteLine("ID: " + myValue);
-
+                        
                     }
+
                 }
             }
             else if (dialogResult == MessageBoxResult.No)
             {
                 //do something else
             }
+         
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            mw.LoadHomeScreen();
-        }
-        private void ViewDelict(object sender, RoutedEventArgs e)
-        {
-            var DelictID = (int)((System.Windows.Controls.Button)sender).Tag;
-            mw.ShowDelict(DelictID);
-        }
+
     }
+
 }
