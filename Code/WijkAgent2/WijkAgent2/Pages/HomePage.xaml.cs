@@ -50,7 +50,7 @@ namespace WijkAgent2.Pages
 
         private void AddUser_Click(object sender, RoutedEventArgs e)
         {
-            
+            mw.AddUser();
         }
 
     }

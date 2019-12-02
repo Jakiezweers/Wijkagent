@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,9 +26,10 @@ namespace WijkAgent2.Pages.delicten
     /// </summary>
     public partial class add_delict : Page
     {
-        List<CategoryList> categoryList;
-        List<int> personsbsn;
-        List<string> personstype;
+        List<CategoryList> categoryList = new List<CategoryList>();
+        List<int> personsbsn = new List<int>();
+        List<string> personstype = new List<string>();
+        List<int> person_id = new List<int>();
         int i = 0;
         private MainWindow mw;
         public add_delict(MainWindow MW)
@@ -106,7 +108,7 @@ namespace WijkAgent2.Pages.delicten
             string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
             bool errorBool = false;
             string placeName = PlaatsTB.Text;
-            string zipCode = PostcodeTB.Text;
+            string zipCode = Regex.Replace(PostcodeTB.Text, @" ", "");
             string homeNumber = HuisnummerTB.Text;
             string street = StraatTB.Text;
             string description = OmschijvingTB.Text;
@@ -129,7 +131,7 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Plaats, ";
                 errorBool = true;
             }
-            if (zipCode == "")
+            if (zipCode == "" || zipCode.Length != 6)
             {
                 errorMessage += "Postcode, ";
                 errorBool = true;
@@ -137,6 +139,11 @@ namespace WijkAgent2.Pages.delicten
             if (homeNumber == "")
             {
                 errorMessage += "Huisnummer, ";
+                errorBool = true;
+            }
+            if(street == "")
+            {
+                errorMessage += "Straat, ";
                 errorBool = true;
             }
 
@@ -189,18 +196,14 @@ namespace WijkAgent2.Pages.delicten
 
                     if (personsbsn != null)
                     {
-                        string sqlPersonInsert = "insert into dbo.delict_person (delict_id, bsn, type) values (@delictID, @bsn, @type)";
-
-                        Console.WriteLine("NIET GOED");
-
+                        string sqlPersonInsert = "insert into dbo.delict_person (delict_id, person_id, type) values (@delictID, @person_id, @type)";
                         //insert personen in database
-                        foreach (var item in personsbsn)
+                        foreach (var item in person_id)
                         {
-                            Console.WriteLine("NOPE");
                             using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
                             {
                                 cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
-                                cmd.Parameters.Add("@bsn", SqlDbType.NVarChar).Value = personsbsn[i];
+                                cmd.Parameters.Add("@person_id", SqlDbType.NVarChar).Value = person_id[i];
                                 cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
                                 cmd.ExecuteNonQuery();
                                 i++;
@@ -225,8 +228,10 @@ namespace WijkAgent2.Pages.delicten
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("ERROR:" + ex.Message);
+                    MessageBox.Show("ERROROR?:" + ex.Message);
                 }
+                MessageBox.Show("Delict succesvol toegevoegd!");
+                mw.ShowDelictenList();
             }
         }
 
@@ -251,6 +256,7 @@ namespace WijkAgent2.Pages.delicten
             addperson.ShowDialog();
             personsbsn = addperson.bsnlist;
             personstype = addperson.typelist;
+            person_id = addperson.person_idList;
         }
     }
 

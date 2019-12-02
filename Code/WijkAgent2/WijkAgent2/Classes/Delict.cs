@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Wijkagent2.Classes
 {
-    class Delict
+    class Delict: Person
     {
 
         public int id { get; set; }

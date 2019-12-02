@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,8 +56,9 @@ namespace WijkAgent2.Pages.delicten
 
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM dbo.archive as a " +
-                                      "JOIN dbo.delict as d ON a.delict_id = d.delict_id " +
-                                      "WHERE d.status = 0 ";
+                                                      "JOIN dbo.delict as d ON a.delict_id = d.delict_id " +
+                                                      "WHERE d.status = 0 " +
+                                                      "ORDER BY a.delict_id";
 
 
                 using (DbDataReader dataReader = command.ExecuteReader())
@@ -81,14 +84,76 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Activate(object sender, RoutedEventArgs e)
         {
-            var myValue = ((System.Windows.Controls.Button)sender).Tag;
-            Console.WriteLine("ID: " + myValue);
-        }
+            MessageBoxResult dialogResult = MessageBox.Show("Wilt u dit delict activeren?", "Activeren", MessageBoxButton.YesNo);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                string provider = ConfigurationManager.AppSettings["provider"];
+                string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
+                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+                using (DbConnection connection = factory.CreateConnection())
+                {
+                    connection.ConnectionString = connectionstring;
+                    connection.Open();
+                    DbCommand command = factory.CreateCommand();
+                    command.Connection = connection;
+
+                    var myValue = ((System.Windows.Controls.Button)sender).Tag;
+
+                    string archive = "UPDATE delict " +
+                                     "SET status = 1 " +
+                                     "WHERE delict_id = @delictID";
+                    //TODO add use id 
+                    string toActivate = "DELETE FROM dbo.archive " +
+                                         "WHERE delict_id = @delictID";
+                    using (SqlConnection cnn = new SqlConnection(connectionstring))
+                    {
+                        try
+                        {
+                            cnn.Open();
+                            using (SqlCommand cmd = new SqlCommand(archive, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
+                                cmd.ExecuteNonQuery();
+
+
+                            }
+                            using (SqlCommand cmd = new SqlCommand(toActivate, cnn))
+                            {
+
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
+                                cmd.ExecuteNonQuery();
+
+
+                            }
+                            //Delicten_archief.
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("ERROR:" + ex.Message);
+                        }
+
+                        Console.WriteLine("ID: " + myValue);
+
+                    }
+                }
+            }
+            else if (dialogResult == MessageBoxResult.No)
+            {
+                //do something else
+            }
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             mw.LoadHomeScreen();
         }
+        private void ViewDelict(object sender, RoutedEventArgs e)
+        {
+            var DelictID = (int)((System.Windows.Controls.Button)sender).Tag;
+            mw.ShowDelict(DelictID);
+        }
     }
-
 }

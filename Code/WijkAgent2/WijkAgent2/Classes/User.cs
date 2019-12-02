@@ -8,13 +8,21 @@ namespace Wijkagent2.Classes
 {
     class User
     {
-        public int BadgeId;
-        public string Name;
-        public int PhoneNumber;
-        public Unit Unit;
-        public Roles Role;
-        public Function Function;
-        public Uploads ProfilePicture;
+        private int userId;
+
+        public int UserId { get => userId; set => userId = value; }
+        public int BadgeId { get; set; }
+        public string Name { get; set; }
+        public int PhoneNumber { get; set; }
+        internal Unit Unit { get; set; }
+        internal Roles Role { get; set; }
+        internal Function Function { get; set; }
+        internal Uploads ProfilePicture { get; set; }
+
+        public User()
+        {
+
+        }
 
         public User(int badgeId, string name, int phoneNumber, Roles role)
         {
