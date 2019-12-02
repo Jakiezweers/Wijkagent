@@ -79,7 +79,7 @@ namespace WijkAgent2.Pages.delicten
                         CategoryListbox.Items.Add(dataReader["name"]);
                     }
                 }
-                command.CommandText = "SELECT bsn, type FROM delict_person WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + delictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())

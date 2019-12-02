@@ -1,0 +1,44 @@
+﻿<Page x:Class="WijkAgent2.Pages.User.user_registratie"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WijkAgent2.Pages.User"
+      mc:Ignorable="d"
+      Title="user_registratie">
+
+    <Grid Background="#FF959595">
+        <Button x:Name="BtnReturn" Content="Terug" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="BtnReturn_Click"/>
+        <Grid Margin="10,35,0,50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="10,20,10,0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="BtnTakeImage" Content="Select" Margin="0,0,10,10" Grid.ColumnSpan="3" Height="40" VerticalAlignment="Bottom" Click="BtnTakeImage_Click"/>
+                <Image x:Name="ImgHead" Margin="0,10,10,55" Source="/WijkAgent2;component/Images/no_user.png" Grid.ColumnSpan="3">
+                    <Image.Effect>
+                        <DropShadowEffect/>
+                    </Image.Effect>
+                </Image>
+            </Grid>
+            <Grid Margin="10,20,10,0" MinWidth="250">
+                <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="230"/>
+                <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="230"/>
+                <Label x:Name="label_Copy" Content="Label" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="230"/>
+                <TextBox x:Name="textBox_Copy" HorizontalAlignment="Left" Height="23" Margin="10,90,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="230"/>
+            </Grid>
+        </Grid>
+        <Button x:Name="BtnSave" MaxWidth="50" MinWidth="50" Content="Save" Margin="0,0,10,5" Click="BtnSave_Click" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+
+    </Grid>
+</Page>

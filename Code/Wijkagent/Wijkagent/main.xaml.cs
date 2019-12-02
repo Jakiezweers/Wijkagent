@@ -22,9 +22,6 @@ namespace Wijkagent
         public main()
         {
             InitializeComponent();
-            MainWindow objForm = new MainWindow();
-            SPanel.Children.Add(objForm);
-            objForm.Show();
         }
     }
 }
