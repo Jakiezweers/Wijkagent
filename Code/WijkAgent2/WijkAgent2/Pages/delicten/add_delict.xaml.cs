@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WijkAgent2.Classes;
 using WijkAgent2.Modals;
 
 namespace WijkAgent2.Pages.delicten
@@ -37,7 +38,7 @@ namespace WijkAgent2.Pages.delicten
             this.mw = MW;
             InitializeComponent();
             categoryList = new List<CategoryList>();
-            BindCountryDropDown();
+            BindCategroryDropDown();
             DatumTB.SelectedDate = DateTime.Today;
 
             personentoevoegen addperson = new personentoevoegen(mw);
@@ -70,12 +71,9 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
-        private void BindCountryDropDown()
+        private void BindCategroryDropDown()
         {
             categoryCB.ItemsSource = categoryList;
-        }
-        private void category_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
         }
 
         private void category_TextChanged(object sender, TextChangedEventArgs e)
@@ -269,30 +267,6 @@ namespace WijkAgent2.Pages.delicten
             personsbsn = addperson.bsnlist;
             personstype = addperson.typelist;
             person_id = addperson.person_idList;
-        }
-    }
-
-    public class CategoryList
-    {
-        public CategoryList(int id, string name)
-        {
-            Category_ID = id;
-            Category_Name = name;
-        }
-        public int Category_ID
-        {
-            get;
-            set;
-        }
-        public string Category_Name
-        {
-            get;
-            set;
-        }
-        public Boolean Check_Status
-        {
-            get;
-            set;
         }
     }
 }

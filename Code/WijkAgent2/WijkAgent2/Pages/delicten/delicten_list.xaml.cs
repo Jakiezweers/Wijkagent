@@ -89,7 +89,11 @@ namespace WijkAgent2.Pages.delicten
                         returnString += ", ";
                     }
                 }
-                return returnString.Substring(0, returnString.Length - 2);
+                if(returnString.Length > 2)
+                {
+                    return returnString.Substring(0, returnString.Length - 2);
+                }
+                return returnString;
             }
         }
         private void Activate(object sender, RoutedEventArgs e)

@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WijkAgent2.Classes;
 
 namespace WijkAgent2.Pages.delicten
 {
@@ -26,6 +27,7 @@ namespace WijkAgent2.Pages.delicten
     {
         MainWindow mw;
         int currDelictID;
+        List<CategoryList> categoryList = new List<CategoryList>();
         public edit_delict(MainWindow MW, int delictID)
         {
             InitializeComponent();
@@ -73,14 +75,34 @@ namespace WijkAgent2.Pages.delicten
                         DelictDateLabel.Content += ": " + dataReader["added_date"];
                     }
                 }
-                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + currDelictID;
+
+                command.CommandText = "Select * from dbo.category";
+
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
                     {
-                        CategoryListbox.Items.Add(dataReader["name"]);
+                        CategoryList obj = new CategoryList((int)dataReader["category_id"], (string)(dataReader["name"]));
+                        categoryList.Add(obj);
                     }
                 }
+
+                command.CommandText = "SELECT category.category_id FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id =" + currDelictID;
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        foreach (var item in categoryList)
+                        {
+                            if(item.Category_ID == (int)dataReader["category_id"])
+                            {
+                                item.Check_Status = true;
+                            }
+                        }
+                    }
+                }
+                BindCategoryDropDown();
+                BindListBOX();
                 command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -96,28 +118,90 @@ namespace WijkAgent2.Pages.delicten
         {
             mw.ShowDelict(currDelictID);
         }
-
+        private void category_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!categoryCB.IsDropDownOpen)
+            {
+                categoryCB.IsDropDownOpen = true;
+            }
+            var t = categoryCB.SelectedIndex;
+            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
+        }
+        private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
+        {
+            BindListBOX();
+        }
+        private void BindListBOX()
+        {
+            CategoryListbox.Items.Clear();
+            foreach (var category in categoryList)
+            {
+                if (category.Check_Status == true)
+                {
+                    CategoryListbox.Items.Add(category.Category_Name);
+                    categoryCB.Text = "";
+                }
+            }
+        }
+        private bool CheckCategorie()
+        {
+            foreach (var item in categoryList)
+            {
+                if (item.Check_Status)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            categoryCB.SelectedIndex = -1;
+        }
+        private void BindCategoryDropDown()
+        {
+            categoryCB.ItemsSource = categoryList;
+        }
         private void SaveEditDelict_Click(object sender, RoutedEventArgs e)
         {
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-            string sqlEditDelict = "UPDATE delict SET place = @placePara, street = @streetPara, zipcode = @zipcodePara, housenumber = @housenumberPara, description = @descriptionPara WHERE delict_id = " + currDelictID;
 
             using (SqlConnection cnn = new SqlConnection(connectionstring))
             {
                 try
                 {
                     cnn.Open();
+                    string sqlEditDelict = "UPDATE delict SET place = @placePara, street = @streetPara, zipcode = @zipcodePara, housenumber = @housenumberPara, description = @descriptionPara WHERE delict_id = " + currDelictID;
                     using (SqlCommand cmd = new SqlCommand(sqlEditDelict, cnn))
                     {
-                        cmd.Parameters.Add("@placePara", SqlDbType.NVarChar).Value = DelictPlaceLabel.Text;
                         cmd.Parameters.Add("@streetPara", SqlDbType.NVarChar).Value = DelictStreetLabel.Text;
+                        cmd.Parameters.Add("@placePara", SqlDbType.NVarChar).Value = DelictPlaceLabel.Text;
                         cmd.Parameters.Add("@zipcodePara", SqlDbType.NVarChar).Value = DelictZipcodeLabel.Text;
                         cmd.Parameters.Add("@housenumberPara", SqlDbType.Int).Value = DelictHouseNumberLabel.Text;
                         cmd.Parameters.Add("@descriptionPara", SqlDbType.NVarChar).Value = DelictDescriptionTB.Text;
 
-                        cmd.ExecuteScalar();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string sqlDeleteCategory = "DELETE FROM category_delict WHERE delict_id =" + currDelictID;
+                    using (SqlCommand cmd = new SqlCommand(sqlDeleteCategory, cnn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID, @categoryID)";
+                    foreach (var item in categoryList)
+                    {
+                        if (item.Check_Status == true)
+                        {
+                            using (SqlCommand cmd = new SqlCommand(sqlCategoryInsert, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = currDelictID;
+                                cmd.Parameters.Add("@categoryID", SqlDbType.NVarChar).Value = item.Category_ID;
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
