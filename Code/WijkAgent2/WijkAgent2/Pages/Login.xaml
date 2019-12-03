@@ -15,14 +15,14 @@
             </Grid>
             <Grid HorizontalAlignment="Left" Height="80" Margin="0,50,0,0" VerticalAlignment="Top" Width="260">
                 <Grid HorizontalAlignment="Left" Height="40" Margin="0,40,0,0" VerticalAlignment="Top" Width="252">
-                    <TextBox Name="UsernameTextBox"  HorizontalAlignment="Left" Height="35" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0" KeyDown="UsernameTextBox_KeyDown" TextChanged="UsernameTextBox_Changed"/>
+                    <TextBox Name="UsernameTextBox"  HorizontalAlignment="Left" Height="35" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0" KeyDown="UsernameTextBox_KeyDown"/>
                 </Grid>
                 <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
                     <Label x:Name="UsernameLabel" Content="Badge ID" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,-1" VerticalAlignment="Top" Height="26" Width="72"/>
                 </Grid>
             </Grid>
             <Grid HorizontalAlignment="Left" Height="80" Margin="0,130,0,0" VerticalAlignment="Top" Width="260">
-                <PasswordBox x:Name="PasswordTextBox" MaxLength="512" HorizontalAlignment="Left" Height="35" PasswordChar="•" VerticalAlignment="Bottom" Width="232" Margin="10,-5,0,10" KeyDown="PasswordBox_KeyDown" PasswordChanged="PasswordBox_Changed"/>
+                <PasswordBox x:Name="PasswordTextBox" MaxLength="512" HorizontalAlignment="Left" Height="35" PasswordChar="•" VerticalAlignment="Bottom" Width="232" Margin="10,-5,0,10" KeyDown="PasswordBox_KeyDown"/>
 
                 <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
                     <Label x:Name="PasswordLabel" Content="Wachtwoord" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="25" Width="82"/>

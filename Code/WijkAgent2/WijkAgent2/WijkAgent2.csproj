@@ -93,6 +93,7 @@
     <Compile Include="Classes\uploader.cs" />
     <Compile Include="Classes\Uploads.cs" />
     <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\Validator.cs" />
     <Compile Include="Database\Connection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
