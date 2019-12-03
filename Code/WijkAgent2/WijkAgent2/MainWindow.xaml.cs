@@ -1,4 +1,5 @@
 ﻿using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,16 +31,36 @@ namespace WijkAgent2
     public partial class MainWindow : Window
     {
         public static Snackbar Snackbar;
+        private User user;
+
         public MainWindow()
         {
+            user = new User();
             InitializeComponent();
-
             ShowMessage("Werlcome");
             TopHeader.Text = "Wijkagent - Login";
             MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             MainFrame.Navigate(new Login(this));
         }
 
+
+        public string select_file_dialog()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                DereferenceLinks = false,
+            };
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                return openFileDialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
 
         public async void ShowDialog(string text)
         {
@@ -55,8 +76,6 @@ namespace WijkAgent2
                 Thread.Sleep(250);
             }).ContinueWith(t =>
             {
-                //note you can use the message queue from any thread, but just for the demo here we 
-                //need to get the message queue from the snackbar, so need to be on the dispatcher
                 MainSnackbar.MessageQueue.Enqueue(Message);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             Snackbar = this.MainSnackbar;

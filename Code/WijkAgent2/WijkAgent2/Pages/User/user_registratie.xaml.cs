@@ -145,28 +145,22 @@ namespace WijkAgent2.Pages.User
             bi.UriSource = new Uri(file);
             bi.EndInit();
             bi.Freeze();
-
             await ImgHead.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate ()
-             {
+            {
                  ImgHead.Source = bi;
-             });
+            });
         }
 
         private void BtnTakeImage_Click(object sender, RoutedEventArgs e)
         {
             BtnTakeImage.Content = "Een moment geduld";
-            OpenFileDialog openFileDialog = new OpenFileDialog()
+            string file = mw.select_file_dialog();
+            if(file != "")
             {
-                DereferenceLinks = false,
-            };
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                set_image(openFileDialog.FileName);
-                Image_Uploaded = openFileDialog.FileName;
-                BtnTakeImage.Content = "Select";
+                set_image(file);
+                Image_Uploaded = file;
             }
+            BtnTakeImage.Content = "Select";
         }
 
         private void CBKazerna_SelectionChanged(object sender, SelectionChangedEventArgs e)

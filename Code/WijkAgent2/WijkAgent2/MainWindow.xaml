@@ -54,26 +54,35 @@
                         <ListBox.Resources>
                             <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
                         </ListBox.Resources>
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="domain:DemoItem">
-                                <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
                         <ListBoxItem x:Name="LBHome">
-                            <Label Content="Home"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/home.png"/>
+                                <Label Margin="40,10,0,10" Content="Home"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBDelicten">
-                            <Label Content="Delicten"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/delict.png"/>
+                                <Label Margin="40,10,0,10" Content="Delicten"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBGebruikers">
-                            <Label Content="Gebruikers"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/users.png"/>
+                                <Label Margin="40,10,0,10" Content="Gebruikers"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBArchive">
-                            <Label Content="Archive"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/archive.png"/>
+                                <Label Margin="40,10,0,10" Content="Archive"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBLogout">
-                            <Label Content="Logout"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/logout.png"/>
+                                <Label Margin="40,10,0,10" Content="Logout"/>
+                            </Grid>
                         </ListBoxItem>
                     </ListBox>
                 </DockPanel>

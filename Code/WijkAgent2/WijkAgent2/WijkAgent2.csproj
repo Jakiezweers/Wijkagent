@@ -198,5 +198,14 @@
   <ItemGroup>
     <Resource Include="Images\loader.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\archive.png" />
+    <Resource Include="Images\delict.png" />
+    <Resource Include="Images\logout.png" />
+    <Resource Include="Images\users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\home.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
