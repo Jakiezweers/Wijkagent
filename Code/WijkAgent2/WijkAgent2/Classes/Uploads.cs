@@ -8,12 +8,15 @@ namespace Wijkagent2.Classes
 {
     class Uploads
     {
+        public int UploadId { get; set; }
+        public string Path { get; set; }
+        public DateTime AddedDate { get; set; }
 
-        //Abstract maken? zodat er mogelijke uiteindelijk ook documenten geupload kunne worden.
-
-        public int UploadId;
-        public string Path;
-        public DateTime AddedDate;
+        public Uploads(int uploadId, string path)
+        {
+            UploadId = uploadId;
+            Path = path;
+        }
 
         public Uploads()
         {

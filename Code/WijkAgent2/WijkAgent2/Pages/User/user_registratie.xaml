@@ -12,9 +12,12 @@
         <Grid Margin="10,35,0,50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition MaxWidth="300"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid Margin="10,20,10,0" Grid.Column="1" MaxWidth="300">
+
+
+            <Grid Margin="10,20,10,0" Grid.Column="2" MaxWidth="200" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -24,27 +27,39 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button x:Name="BtnTakeImage" Content="Select" Margin="0,0,10,10" Grid.ColumnSpan="3" MaxHeight="40" Click="BtnTakeImage_Click" VerticalAlignment="Bottom"/>
-                <Image x:Name="ImgHead" MaxWidth="300" MaxHeight="300" Margin="0,10,10,55" Source="/WijkAgent2;component/Images/no_user.png" Grid.ColumnSpan="3">
+                <Button x:Name="BtnTakeImage" Content="Select" Margin="0,141,10,0" Grid.ColumnSpan="3" MaxHeight="40" Click="BtnTakeImage_Click" VerticalAlignment="Top"/>
+                
+                <Image x:Name="ImgHead" MaxWidth="128" MaxHeight="128" Margin="0,10,10,0" Source="/WijkAgent2;component/Images/no_user.png" Grid.ColumnSpan="3" Height="118" VerticalAlignment="Top">
                     <Image.Effect>
                         <DropShadowEffect/>
                     </Image.Effect>
                 </Image>
             </Grid>
-            <Grid Margin="10,20,10,0" MinWidth="250">
+
+            <Grid Margin="10,20,10,0" Grid.Column="1" RenderTransformOrigin="0.52,1.023" x:Name="ComboUsers">
+                <Label x:Name="LblKazerne" Content="Kazerne" Margin="10,10,10,0" VerticalAlignment="Top" FontSize="18"/>
+                <ComboBox x:Name="CBKazerna" VerticalAlignment="Top" Margin="20,49,20,0" Height="40" SelectionChanged="CBKazerna_SelectionChanged"/>
+                <Label x:Name="LblEenheid" Content="Eenheid" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <ComboBox x:Name="CBEenheid" VerticalAlignment="Top" Margin="20,128,20,0" Height="40"/>
+                <Label x:Name="LblFunctie" Content="Functie" Margin="10,173,10,0" VerticalAlignment="Top" FontSize="18"/>
+                <ComboBox x:Name="CBFuntie" VerticalAlignment="Top" Margin="20,212,20,0" Height="40"/>
+                <Label x:Name="LblRol" Content="Rol" Margin="10,257,10,0" VerticalAlignment="Top" FontSize="18"/>
+                <ComboBox x:Name="CBRol" VerticalAlignment="Top" Margin="20,296,20,0" Height="40"/>
+            </Grid>
+            <Grid Margin="10,20,10,0" x:Name="Regular">
                 <Label x:Name="LblName" Content="Naam" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
-                <TextBox x:Name="TxtName" HorizontalAlignment="Left" Margin="10,44,0,0" TextWrapping="Wrap" Text="" Width="230" FontSize="18" Height="40" VerticalAlignment="Top"/>
+                <TextBox x:Name="TxtName" Margin="10,44,10,0" TextWrapping="Wrap" Text="" FontSize="18" Height="40" VerticalAlignment="Top"/>
                 <Label x:Name="LblBadgeNr" Content="Badge NR." HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
-                <TextBox x:Name="TxtBadgeNr" HorizontalAlignment="Left" Margin="10,123,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <TextBox x:Name="TxtBadgeNr" Margin="10,123,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="18"/>
                 <Label x:Name="LblTel" Content="Tel" HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
-                <TextBox x:Name="TxtTel" HorizontalAlignment="Left" Margin="10,195,0,0" TextWrapping="Wrap" Text="" Width="230" FontSize="18" Height="40" VerticalAlignment="Top"/>
+                <TextBox x:Name="TxtTel" Margin="10,195,10,0" TextWrapping="Wrap" Text="" FontSize="18" Height="40" VerticalAlignment="Top"/>
                 <Label x:Name="LblPassword" Content="Wachtwoord." HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
-                <PasswordBox x:Name="TxtPassword" HorizontalAlignment="Left" Margin="10,274,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <PasswordBox x:Name="TxtPassword" Margin="10,274,10,0" VerticalAlignment="Top" FontSize="18"/>
                 <Label x:Name="LblPasswordRepeat" Content="Wachtwoord check." HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
-                <PasswordBox x:Name="TxtPasswordRepeat" HorizontalAlignment="Left" Margin="10,346,0,-24" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <PasswordBox x:Name="TxtPasswordRepeat" Margin="10,346,10,-24" VerticalAlignment="Top" FontSize="18"/>
             </Grid>
         </Grid>
-        <Button x:Name="BtnSave" MaxWidth="150" MinWidth="150" Content="Save" Margin="0,10,10,0" Click="BtnSave_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
+        <Button x:Name="BtnSave" MaxWidth="150" Content="Save" Margin="0,10,10,0" Click="BtnSave_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
 
     </Grid>
 </Page>

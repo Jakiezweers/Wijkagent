@@ -1,8 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wijkagent2.Classes;
+using WijkAgent2.Classes;
 using WijkAgent2.Pages;
 using WijkAgent2.Pages.delicten;
 using WijkAgent2.Pages.User;
@@ -27,16 +31,43 @@ namespace WijkAgent2
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public static Snackbar Snackbar;
+        private User user;
+
         public MainWindow()
         {
+            user = new User();
             InitializeComponent();
-
             ShowMessage("Werlcome");
-
+            TopHeader.Text = "Wijkagent - Login";
             MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             MainFrame.Navigate(new Login(this));
+        }
+
+
+        public string select_file_dialog()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                DereferenceLinks = false,
+            };
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                return openFileDialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public async void ShowDialog(string text)
+        {
+            Message ms = new Message();
+            ms.message = text;
+            await DialogHost.Show(ms, "MessageDialog");
         }
 
         public void ShowMessage(string Message)
@@ -46,8 +77,6 @@ namespace WijkAgent2
                 Thread.Sleep(250);
             }).ContinueWith(t =>
             {
-                //note you can use the message queue from any thread, but just for the demo here we 
-                //need to get the message queue from the snackbar, so need to be on the dispatcher
                 MainSnackbar.MessageQueue.Enqueue(Message);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             Snackbar = this.MainSnackbar;
@@ -56,40 +85,48 @@ namespace WijkAgent2
         public void LoadHomeScreen()
         {
             MainFrame.Navigate(new HomePage(this));
+            TopHeader.Text = "Wijkagent - Home";
         }
 
         public void ShowUserList()
         {
             MainFrame.Navigate(new User_List(this));
+            TopHeader.Text = "Wijkagent - Gebruiker lijst";
         }
 
         public void ShowDelictenList()
         {
             MainFrame.Navigate(new delicten_list(this));
+            TopHeader.Text = "Wijkagent - Delicten lijst";
         }
 
         public void AddUser()
         {
             MainFrame.Navigate(new user_registratie(this));
+            TopHeader.Text = "Wijkagent - Gebruiker toevoegen";
         }
         public void ShowDelictenArchive()
         {
             MainFrame.Navigate(new delict_archive(this));
+            TopHeader.Text = "Wijkagent - Delicten Archive";
         }
 
         public void AddDelict()
         {
             MainFrame.Navigate(new add_delict(this));
+            TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
 
         public void Logout()
         {
             MainFrame.Navigate(new Login(this));
+            TopHeader.Text = "Wijkagent - Login";
         }
 
         public void ShowDelict(int delictID)
         {
             MainFrame.Navigate(new view_delict(this,delictID));
+            TopHeader.Text = "Wijkagent - Delict " + delictID;
         }
         public void EditDelict(int delictID)
         {
@@ -125,13 +162,15 @@ namespace WijkAgent2
                     case "LBGebruikers":
                         ShowUserList();
                         break;
+                    case "LBArchive":
+                        ShowDelictenArchive();
+                        break;
                     case "LBLogout":
                         Logout();
                         break;
                 }
                 
             }
-
             MenuToggleButton.IsChecked = false;
         }
 
