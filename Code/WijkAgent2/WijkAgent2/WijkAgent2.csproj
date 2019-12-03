@@ -82,14 +82,19 @@
     <Compile Include="Classes\Database_connection.cs" />
     <Compile Include="Classes\Database_queries.cs" />
     <Compile Include="Classes\Delict.cs" />
+    <Compile Include="Classes\functie.cs" />
     <Compile Include="Classes\Function.cs" />
+    <Compile Include="Classes\Eenheid.cs" />
+    <Compile Include="Classes\PasswordHandler.cs" />
     <Compile Include="Classes\Permissions.cs" />
     <Compile Include="Classes\Person.cs" />
+    <Compile Include="Classes\Kazerne.cs" />
     <Compile Include="Classes\Roles.cs" />
     <Compile Include="Classes\Unit.cs" />
     <Compile Include="Classes\uploader.cs" />
     <Compile Include="Classes\Uploads.cs" />
     <Compile Include="Classes\User.cs" />
+    <Compile Include="Database\Connection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -190,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\loader.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

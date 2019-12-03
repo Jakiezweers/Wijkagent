@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WijkAgent2.Classes;
+using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages
 {
@@ -45,13 +47,18 @@ namespace WijkAgent2.Pages
             }
 
             //Hier wordt de connectie met de database gemaakt waar hij kijkt voor users die overeenkomen met de ingevoerde gegevens.
-            SqlConnection connection = new SqlConnection("Data Source=141.138.137.63;Initial Catalog=Wijkagent;Persist Security Info=True;User ID=SA;Password=Student123!;");
-            string query = "SELECT * FROM [Wijkagent].[dbo].[user] WHERE user_id = '" + badgeId + "' AND password ='" + PasswordTextBox.Password.Trim() + "'";
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(query, connection);
-            DataTable dataTable = new DataTable();
-            sqlDataAdapter.Fill(dataTable);
+            Connection cn = new Connection();
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("SELECT * FROM [dbo].[user] WHERE badge_nr = '" + badgeId + "'");
+            string password_db = "";
+            while (sq.Read())
+            {
+                password_db = (string)sq["password"];
+            }
 
-            if (dataTable.Rows.Count == 1) //boolean die de lijst ophaalt van overeenkomende users met de ingevoerde user_id en password
+            Console.WriteLine(password_db);
+
+            if (PasswordHandler.Validate(PasswordTextBox.Password.ToString(), password_db)) //boolean die de lijst ophaalt van overeenkomende users met de ingevoerde user_id en password
             {
                 mw.LoadHomeScreen();
             }
@@ -62,7 +69,6 @@ namespace WijkAgent2.Pages
                 FoutLoginLabel.Visibility = Visibility.Visible;
 
             }
-            sqlDataAdapter.Dispose();
         }
 
         private void UsernameTextBox_Changed(object sender, TextChangedEventArgs e)
