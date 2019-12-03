@@ -164,7 +164,11 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
-        private void GetLatLon()
+        private void GetLat()
+        {
+
+        }
+        private void GetLong()
         {
 
         }

@@ -91,6 +91,10 @@ namespace WijkAgent2
         {
             MainFrame.Navigate(new view_delict(this,delictID));
         }
+        public void EditDelict(int delictID)
+        {
+            MainFrame.Navigate(new edit_delict(this, delictID));
+        }
 
         public void close()
         {

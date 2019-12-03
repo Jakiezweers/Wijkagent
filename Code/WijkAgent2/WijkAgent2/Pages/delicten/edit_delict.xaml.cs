@@ -18,16 +18,14 @@ using System.Windows.Shapes;
 namespace WijkAgent2.Pages.delicten
 {
     /// <summary>
-    /// Interaction logic for view_delict.xaml
+    /// Interaction logic for edit_delict.xaml
     /// </summary>
-    public partial class view_delict : Page
+    public partial class edit_delict : Page
     {
         MainWindow mw;
         bool redirect = true;
-        int delictID;
-        public view_delict(MainWindow MW, int delictID)
+        public edit_delict(MainWindow MW, int delictID)
         {
-            delictID = delictID;
             InitializeComponent();
             LoadDelict(delictID);
             mw = MW;
@@ -54,20 +52,20 @@ namespace WijkAgent2.Pages.delicten
                     while (dataReader.Read())
                     {
                         string status = "";
-                        if((int)dataReader["status"] == 1)
+                        if ((int)dataReader["status"] == 1)
                         {
                             status = "Actief";
                             redirect = true;
-                        } else
+                        }
+                        else
                         {
                             status = "Inactief";
                         }
-
-                        DelictPlaceLabel.Content += ": " + dataReader["place"];
+                        DelictPlaceLabel.Text = (string)dataReader["place"];
                         DelictIDLabel.Content += ": " + dataReader["delict_id"];
-                        DelictStreetLabel.Content += ": " + dataReader["street"];
-                        DelictStreetLabel.Content += ": " + dataReader["housenumber"];
-                        DelictZipcodeLabel.Content += ": " + dataReader["zipcode"];
+                        DelictStreetLabel.Text = (string)dataReader["street"];
+                        DelictStreetLabel.Text = (string)dataReader["housenumber"];
+                        DelictZipcodeLabel.Text = (string)dataReader["zipcode"];
                         DelictStatusLabel.Content += ": " + status;
                         DelictDescriptionTB.Text = (string)dataReader["description"];
                         DelictDateLabel.Content += ": " + dataReader["added_date"];
@@ -99,10 +97,6 @@ namespace WijkAgent2.Pages.delicten
                 mw.ShowDelictenList();
             }
             mw.ShowDelictenArchive();
-        }
-        private void EditDelict_Click(object sender, RoutedEventArgs e)
-        {
-            mw.EditDelict(115);
         }
     }
 }
