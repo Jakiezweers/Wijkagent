@@ -9,7 +9,7 @@
       Title="lijst">
 
     <Grid PreviewKeyDown="KeyDownEvent">
-        <DataGrid x:Name="Delicten" Margin="67,32,212,300" SelectionChanged="DataGrid_SelectionChanged">
+        <DataGrid x:Name="Delicten" Margin="67,32,458,300" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
                 <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="150"/>
@@ -36,6 +36,6 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Terug" Margin="0,0,39,38" Click="Button_Click" Height="32" HorizontalAlignment="Right" Width="75" VerticalAlignment="Bottom"/>
-        <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="100" Margin="67,61,0,0" VerticalAlignment="Top" Width="100"/>
+        <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="468" Margin="1493,32,0,0" VerticalAlignment="Top" Width="197"/>
     </Grid>
 </Page>

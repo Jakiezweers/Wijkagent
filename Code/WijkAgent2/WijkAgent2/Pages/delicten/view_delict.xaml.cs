@@ -23,17 +23,16 @@ namespace WijkAgent2.Pages.delicten
     public partial class view_delict : Page
     {
         MainWindow mw;
-        bool redirect = true;
-        int delictID;
+        int viewDelictID;
         public view_delict(MainWindow MW, int delictID)
         {
-            delictID = delictID;
+            viewDelictID = delictID;
             InitializeComponent();
             LoadDelict(delictID);
             mw = MW;
         }
 
-        private void LoadDelict(int delictID)
+        private void LoadDelict(int viewDelictID)
         {
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
@@ -47,7 +46,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + viewDelictID;
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -57,7 +56,6 @@ namespace WijkAgent2.Pages.delicten
                         if((int)dataReader["status"] == 1)
                         {
                             status = "Actief";
-                            redirect = true;
                         } else
                         {
                             status = "Inactief";
@@ -66,14 +64,14 @@ namespace WijkAgent2.Pages.delicten
                         DelictPlaceLabel.Content += ": " + dataReader["place"];
                         DelictIDLabel.Content += ": " + dataReader["delict_id"];
                         DelictStreetLabel.Content += ": " + dataReader["street"];
-                        DelictStreetLabel.Content += ": " + dataReader["housenumber"];
+                        DelictHouseNumberLabel.Content += ": " + dataReader["housenumber"];
                         DelictZipcodeLabel.Content += ": " + dataReader["zipcode"];
                         DelictStatusLabel.Content += ": " + status;
                         DelictDescriptionTB.Text = (string)dataReader["description"];
                         DelictDateLabel.Content += ": " + dataReader["added_date"];
                     }
                 }
-                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + viewDelictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
@@ -81,7 +79,7 @@ namespace WijkAgent2.Pages.delicten
                         CategoryListbox.Items.Add(dataReader["name"]);
                     }
                 }
-                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + viewDelictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
@@ -94,15 +92,11 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (redirect)
-            {
-                mw.ShowDelictenList();
-            }
-            mw.ShowDelictenArchive();
+            mw.ShowDelictenList();
         }
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-            mw.EditDelict(115);
+            mw.EditDelict(viewDelictID);
         }
     }
 }

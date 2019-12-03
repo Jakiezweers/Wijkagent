@@ -171,13 +171,13 @@ namespace WijkAgent2.Pages.delicten
                 connection.Open();
                 DbCommand command = factory.CreateCommand();
                 command.Connection = connection;
-                command.CommandText = "SELECT firstname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
+                command.CommandText = "SELECT firstname, lastname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
                 personnames.Items.Clear();
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
                     {
-                        personnames.Items.Add(dataReader["firstname"]);
+                        personnames.Items.Add(dataReader["firstname"] + " " + dataReader["lastname"]);
                     }
                 }
             }

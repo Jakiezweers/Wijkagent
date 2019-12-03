@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,15 +25,16 @@ namespace WijkAgent2.Pages.delicten
     public partial class edit_delict : Page
     {
         MainWindow mw;
-        bool redirect = true;
+        int currDelictID;
         public edit_delict(MainWindow MW, int delictID)
         {
             InitializeComponent();
-            LoadDelict(delictID);
             mw = MW;
+            currDelictID = delictID;
+            LoadDelict(currDelictID);
         }
 
-        private void LoadDelict(int delictID)
+        private void LoadDelict(int currDelictID)
         {
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
@@ -45,7 +48,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + currDelictID;
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -55,23 +58,22 @@ namespace WijkAgent2.Pages.delicten
                         if ((int)dataReader["status"] == 1)
                         {
                             status = "Actief";
-                            redirect = true;
                         }
                         else
                         {
                             status = "Inactief";
                         }
                         DelictPlaceLabel.Text = (string)dataReader["place"];
-                        DelictIDLabel.Content += ": " + dataReader["delict_id"];
+                        DelictIDLabel.Content += ": " + currDelictID;
                         DelictStreetLabel.Text = (string)dataReader["street"];
-                        DelictStreetLabel.Text = (string)dataReader["housenumber"];
+                        DelictHouseNumberLabel.Text = "" + dataReader["housenumber"];
                         DelictZipcodeLabel.Text = (string)dataReader["zipcode"];
                         DelictStatusLabel.Content += ": " + status;
                         DelictDescriptionTB.Text = (string)dataReader["description"];
                         DelictDateLabel.Content += ": " + dataReader["added_date"];
                     }
                 }
-                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + currDelictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
@@ -79,7 +81,7 @@ namespace WijkAgent2.Pages.delicten
                         CategoryListbox.Items.Add(dataReader["name"]);
                     }
                 }
-                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + delictID;
+                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
@@ -92,11 +94,39 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (redirect)
+            mw.ShowDelict(currDelictID);
+        }
+
+        private void SaveEditDelict_Click(object sender, RoutedEventArgs e)
+        {
+            string provider = ConfigurationManager.AppSettings["provider"];
+            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+            string sqlEditDelict = "UPDATE delict SET place = @placePara, street = @streetPara, zipcode = @zipcodePara, housenumber = @housenumberPara, description = @descriptionPara WHERE delict_id = " + currDelictID;
+
+            using (SqlConnection cnn = new SqlConnection(connectionstring))
             {
-                mw.ShowDelictenList();
+                try
+                {
+                    cnn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlEditDelict, cnn))
+                    {
+                        cmd.Parameters.Add("@placePara", SqlDbType.NVarChar).Value = DelictPlaceLabel.Text;
+                        cmd.Parameters.Add("@streetPara", SqlDbType.NVarChar).Value = DelictStreetLabel.Text;
+                        cmd.Parameters.Add("@zipcodePara", SqlDbType.NVarChar).Value = DelictZipcodeLabel.Text;
+                        cmd.Parameters.Add("@housenumberPara", SqlDbType.Int).Value = DelictHouseNumberLabel.Text;
+                        cmd.Parameters.Add("@descriptionPara", SqlDbType.NVarChar).Value = DelictDescriptionTB.Text;
+
+                        cmd.ExecuteScalar();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("ERROROR?:!" + ex.Message);
+                }
+                mw.ShowDelict(currDelictID);
+                mw.ShowMessage("Delict succesvol gewijzigd");
             }
-            mw.ShowDelictenArchive();
         }
     }
 }
