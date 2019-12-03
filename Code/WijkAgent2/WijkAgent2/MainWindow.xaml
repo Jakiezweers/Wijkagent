@@ -66,16 +66,16 @@
                                 <Label Margin="40,10,0,10" Content="Delicten"/>
                             </Grid>
                         </ListBoxItem>
-                        <ListBoxItem x:Name="LBGebruikers">
-                            <Grid>
-                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/users.png"/>
-                                <Label Margin="40,10,0,10" Content="Gebruikers"/>
-                            </Grid>
-                        </ListBoxItem>
                         <ListBoxItem x:Name="LBArchive">
                             <Grid>
                                 <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/archive.png"/>
                                 <Label Margin="40,10,0,10" Content="Archive"/>
+                            </Grid>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="LBGebruikers">
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/users.png"/>
+                                <Label Margin="40,10,0,10" Content="Gebruikers"/>
                             </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBLogout">
