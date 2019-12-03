@@ -351,3 +351,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+Code/Wijkagent/.vs/Wijkagent/v16/.suo
+*.ide

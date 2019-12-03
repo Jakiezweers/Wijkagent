@@ -21,6 +21,7 @@ using Wijkagent2.Classes;
 using WijkAgent2.Classes;
 using WijkAgent2.Pages;
 using WijkAgent2.Pages.delicten;
+using WijkAgent2.Pages.permissions;
 using WijkAgent2.Pages.User;
 
 namespace WijkAgent2
@@ -79,6 +80,13 @@ namespace WijkAgent2
                 MainSnackbar.MessageQueue.Enqueue(Message);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             Snackbar = this.MainSnackbar;
+        }
+
+        public void LoadPermissionPage()
+        {
+            MainFrame.Navigate(new permission_window(this));
+            TopHeader.Text = "Wijkagent - Permissions";
+
         }
 
         public void LoadHomeScreen()
