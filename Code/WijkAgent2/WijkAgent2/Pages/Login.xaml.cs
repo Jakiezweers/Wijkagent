@@ -57,17 +57,24 @@ namespace WijkAgent2.Pages
             }
 
             Console.WriteLine(password_db);
-
-            if (PasswordHandler.Validate(PasswordTextBox.Password.ToString(), password_db)) //boolean die de lijst ophaalt van overeenkomende users met de ingevoerde user_id en password
+            if (!password_db.Equals(""))
             {
-                mw.LoadHomeScreen();
+                if (PasswordHandler.Validate(PasswordTextBox.Password.ToString(), password_db)) //boolean die de lijst ophaalt van overeenkomende users met de ingevoerde user_id en password
+                {
+                    mw.LoadHomeScreen();
+                }
+                else
+                {
+                    //Een message op het scherm dat verteld dat de login incorrect was//
+                    Console.WriteLine("Fout Badge ID of wachtwoord!");
+                    FoutLoginLabel.Visibility = Visibility.Visible;
+                }
             }
             else
             {
                 //Een message op het scherm dat verteld dat de login incorrect was//
                 Console.WriteLine("Fout Badge ID of wachtwoord!");
                 FoutLoginLabel.Visibility = Visibility.Visible;
-
             }
         }
 

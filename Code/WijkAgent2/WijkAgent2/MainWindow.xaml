@@ -54,7 +54,7 @@
                         <ListBox.Resources>
                             <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
                         </ListBox.Resources>
-                        
+
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="domain:DemoItem">
                                 <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
@@ -69,6 +69,9 @@
                         <ListBoxItem x:Name="LBGebruikers">
                             <Label Content="Gebruikers"/>
                         </ListBoxItem>
+                        <ListBoxItem x:Name="LBArchive">
+                            <Label Content="Archive"/>
+                        </ListBoxItem>
                         <ListBoxItem x:Name="LBLogout">
                             <Label Content="Logout"/>
                         </ListBoxItem>
@@ -82,8 +85,8 @@
 
                         <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
                                         x:Name="MenuToggleButton"/>
-                        
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
+
+                        <TextBlock HorizontalAlignment="Center" x:Name="TopHeader" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <Grid>
@@ -99,7 +102,16 @@
                             <Frame  x:Name="MainFrame" Content="Frame"/>
                         </ContentControl>
                     </ScrollViewer>
-
+                    
+                    <materialDesign:DialogHost CloseOnClickAway="True" Identifier="MessageDialog" Grid.RowSpan="2" Margin="0,0,0,0">
+                        <materialDesign:DialogHost.DialogContentTemplate>
+                            <DataTemplate DataType="local:Message">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="{Binding message}" MinWidth="150" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </materialDesign:DialogHost.DialogContentTemplate>
+                    </materialDesign:DialogHost>
                     <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="MainSnackbar"
                                             Grid.Row="1" />
                 </Grid>

@@ -79,12 +79,11 @@
     </Compile>
     <Compile Include="Classes\Archive.cs" />
     <Compile Include="Classes\Base.cs" />
-    <Compile Include="Classes\Database_connection.cs" />
-    <Compile Include="Classes\Database_queries.cs" />
     <Compile Include="Classes\Delict.cs" />
     <Compile Include="Classes\functie.cs" />
     <Compile Include="Classes\Function.cs" />
     <Compile Include="Classes\Eenheid.cs" />
+    <Compile Include="Classes\Message.cs" />
     <Compile Include="Classes\PasswordHandler.cs" />
     <Compile Include="Classes\Permissions.cs" />
     <Compile Include="Classes\Person.cs" />

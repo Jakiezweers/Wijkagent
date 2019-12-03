@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -78,6 +79,9 @@ namespace WijkAgent2.Pages.User
         {
             if (Validate())
             {
+
+                this.sendFileAsync(Image_Uploaded);
+
                 string saveStaff = "INSERT into [dbo].[user]" +
                     "(rol_id,eenheid_id,functie_id,kazerne_id,upload_id,name,badge_nr,password,tel,status) " +
                     "VALUES (@rol_id,@eenheid_id,@functie_id,@kazerne_id,@upload_id,@name,@badge_nr,@password,@tel,@status)";
@@ -121,40 +125,47 @@ namespace WijkAgent2.Pages.User
         }
 
 
-        public async Task sendFileAsync(String file_data, string filename)
+        public async Task sendFileAsync( string filename)
         {
             Uploader upload = new Uploader();
-
-            String resp = await upload.SendFileAsync(file_data, filename, "icon/", DateTime.Now + ".png");
+            byte[] imageArray = System.IO.File.ReadAllBytes(filename);
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+            String resp = await upload.SendFileAsync(base64ImageRepresentation, filename, "icon/", DateTime.Now + ".png");
             this.Image_Uploaded = resp;
-            set_image(filename);
             Console.WriteLine(resp);
-            //LblResp.Content = resp;
         }
 
-        private void set_image(string file)
+        private async void set_image(string file)
         {
-            FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read);
-            var bitmapImage = new BitmapImage();
+            ImgHead.Source = null;
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.DecodePixelWidth = 100;
+            bi.CacheOption = BitmapCacheOption.OnLoad;
+            bi.UriSource = new Uri(file);
+            bi.EndInit();
+            bi.Freeze();
 
-            bitmapImage.BeginInit();
-            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-            bitmapImage.StreamSource = fs;
-            bitmapImage.EndInit();
-            bitmapImage.Freeze();
-
-            ImgHead.Source = bitmapImage;
+            await ImgHead.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate ()
+             {
+                 ImgHead.Source = bi;
+             });
         }
 
         private void BtnTakeImage_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            BtnTakeImage.Content = "Een moment geduld";
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                DereferenceLinks = false,
+            };
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                byte[] imageArray = System.IO.File.ReadAllBytes(openFileDialog.FileName);
-                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-                this.sendFileAsync(base64ImageRepresentation, openFileDialog.FileName);
+                set_image(openFileDialog.FileName);
+                Image_Uploaded = openFileDialog.FileName;
+                BtnTakeImage.Content = "Select";
             }
         }
 
@@ -222,13 +233,13 @@ namespace WijkAgent2.Pages.User
             }
             if (!validated)
             {
-                mw.ShowMessage("Niet alle velden zijn ingevoerd");
+                mw.ShowDialog("Niet alle velden zijn ingevoerd");
             }
             else
             {
                 if (Image_Uploaded.Equals(""))
                 {
-                    mw.ShowMessage("Please selecteer een image");
+                    mw.ShowDialog("Please selecteer een image");
                     return false;
                 }
             }
