@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WijkAgent2.Classes;
+using WijkAgent2.Modals;
 
 namespace WijkAgent2.Pages.delicten
 {
@@ -28,6 +29,9 @@ namespace WijkAgent2.Pages.delicten
         MainWindow mw;
         int currDelictID;
         List<CategoryList> categoryList = new List<CategoryList>();
+        List<int> personsbsn = new List<int>();
+        List<string> personstype = new List<string>();
+        List<int> person_id = new List<int>();
         public edit_delict(MainWindow MW, int delictID)
         {
             InitializeComponent();
@@ -103,13 +107,15 @@ namespace WijkAgent2.Pages.delicten
                 }
                 BindCategoryDropDown();
                 BindListBOX();
-                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID;
+                command.CommandText = "SELECT dp.person_id, p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID;
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
                     {
-                        string text = dataReader["type"] + " - " + dataReader["bsn"];
-                        PersonenListbox.Items.Add(text);
+                        person_id.Add((int)dataReader["person_id"]);
+                        personsbsn.Add((int)dataReader["bsn"]);
+                        personstype.Add((string)dataReader["type"]);
+                        RefreshPersonList();
                     }
                 }
             }
@@ -203,6 +209,26 @@ namespace WijkAgent2.Pages.delicten
                             }
                         }
                     }
+
+                    string sqlDeletePerson = "DELETE FROM delict_person WHERE delict_id =" + currDelictID;
+                    using (SqlCommand cmd = new SqlCommand(sqlDeletePerson, cnn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string sqlPersonInsert = "insert into delict_person (delict_id, person_id, type) values (@delictID, @personID,@type)";
+                    for (int i = 0; i < person_id.Count; i++)
+                            {
+                        using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
+                        {
+                                    MessageBox.Show("insertperson");
+                                    cmd.Parameters.Add("@delictID", SqlDbType.Int).Value = currDelictID;
+                                    cmd.Parameters.Add("@personID", SqlDbType.Int).Value = person_id[i];
+                                    cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
                 }
                 catch (Exception ex)
                 {
@@ -210,6 +236,26 @@ namespace WijkAgent2.Pages.delicten
                 }
                 mw.ShowDelict(currDelictID);
                 mw.ShowMessage("Delict succesvol gewijzigd");
+            }
+        }
+
+        private void AddPerson_Click(object sender, RoutedEventArgs e)
+        {
+            personentoevoegen addperson = new personentoevoegen(mw,personstype,personsbsn,person_id);
+            addperson.RefreshData();
+            addperson.ShowDialog();
+            personsbsn = addperson.bsnlist;
+            personstype = addperson.typelist;
+            person_id = addperson.person_idList;
+            RefreshPersonList();
+        }
+        private void RefreshPersonList()
+        {
+            PersonenListbox.Items.Clear();
+            for (int i = 0; i < person_id.Count; i++)
+            {
+                string text = personstype[i] + " - " + personsbsn[i];
+                PersonenListbox.Items.Add(text);
             }
         }
     }

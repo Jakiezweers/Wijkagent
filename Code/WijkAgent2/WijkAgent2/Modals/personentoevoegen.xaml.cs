@@ -38,6 +38,19 @@ namespace WijkAgent2.Modals
             base.Closing += this.CloseWindow;
             mw = MW;
         }
+        public personentoevoegen(MainWindow MW, List<string> _typelist, List<int> _bsnlist, List<int> _person_idList)
+        {
+            InitializeComponent();
+            AddPersonCategoryCB();
+            mw = MW;
+            base.Closing += this.CloseWindow;
+            bsnlist.Clear();
+            typelist.Clear();
+            person_idList.Clear();
+            bsnlist = _bsnlist;
+            typelist = _typelist;
+            person_idList = _person_idList;
+        }
 
         public void RefreshData()
         {
@@ -128,6 +141,7 @@ namespace WijkAgent2.Modals
         }
         private int CheckIfPersonExists(int personBSN)
         {
+            MessageBox.Show("" + personBSN);
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 

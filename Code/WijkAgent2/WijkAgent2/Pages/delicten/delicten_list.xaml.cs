@@ -44,7 +44,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.delict_person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date ";
+                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date ";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {

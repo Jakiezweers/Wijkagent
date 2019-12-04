@@ -18,9 +18,9 @@
         <Label FontSize="18" x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
         <TextBox FontSize="18" x:Name="DelictDescriptionTB" AcceptsReturn="True"  HorizontalAlignment="Left" Margin="-1,451,0,-3" TextWrapping="Wrap" Text="" Width="653" BorderThickness="1" BorderBrush="#89000000"/>
-        <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,190,0,0" VerticalAlignment="Top"/>
-        <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,224,0,0" VerticalAlignment="Top" Width="214"/>
-        <ComboBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="35" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="729,353,0,0">
+        <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
+        <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
+        <ComboBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="35" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="729,389,0,0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox FontSize="18" Width="220" Checked="AllCheckbocx_CheckedAndUnchecked" Unchecked="AllCheckbocx_CheckedAndUnchecked" Content="{Binding Category_Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Category_ID}">
@@ -35,5 +35,6 @@
         <Label FontSize="18" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="DelictZipcodeLabel" FontSize="18" HorizontalAlignment="Left" Height="34" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="116,190,0,0"/>
         <TextBox x:Name="DelictHouseNumberLabel" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="54" Margin="417,130,0,0"/>
+        <Button Content="Wijzig personen" HorizontalAlignment="Left" Margin="784,180,0,0" VerticalAlignment="Top" Width="155" Click="AddPerson_Click"/>
     </Grid>
 </Page>

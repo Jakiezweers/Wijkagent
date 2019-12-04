@@ -19,8 +19,8 @@
         <Border BorderBrush="Black" BorderThickness="1" Margin="0,452,0,0" Padding="5,5,5,5" HorizontalAlignment="Left" Width="658" Height="200" VerticalAlignment="Top">
             <TextBlock FontSize="18" x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,-6,-6,-3" TextWrapping="Wrap" Text="" Width="653"/>
         </Border>
-        <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,190,0,0" VerticalAlignment="Top"/>
-        <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,224,0,0" VerticalAlignment="Top" Width="214"/>
+        <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
+        <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
         <ListBox FontSize="18" x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="729,44,0,0" VerticalAlignment="Top" Width="214"/>
         <Label FontSize="18" Content="Personen:" HorizontalAlignment="Left" Margin="729,10,0,0" VerticalAlignment="Top"/>
         <Button FontSize="18" Content="Pas delict aan" Margin="0,0,191,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>

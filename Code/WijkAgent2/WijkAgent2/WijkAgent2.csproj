@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Classes\Archive.cs" />
     <Compile Include="Classes\Base.cs" />
+    <Compile Include="Classes\CategoryList.cs" />
     <Compile Include="Classes\Delict.cs" />
     <Compile Include="Classes\functie.cs" />
     <Compile Include="Classes\Function.cs" />
