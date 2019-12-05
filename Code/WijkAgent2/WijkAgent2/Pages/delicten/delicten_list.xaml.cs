@@ -119,8 +119,8 @@ namespace WijkAgent2.Pages.delicten
                                      "SET status = 0 " +
                                      "WHERE delict_id = @delictID";
                     //TODO add use id 
-                    string addToArchive = "INSERT INTO dbo.archive (delict_id, date_added) " +
-                                          "VALUES (@delictID, @Datetime)"; 
+                    string addToArchive = "INSERT INTO dbo.archive (delict_id,user_id, date_added) " +
+                                          "VALUES (@delictID,@userID, GETDATE())"; 
                     using (SqlConnection cnn = new SqlConnection(connectionstring))
                     {
                         try
@@ -134,7 +134,7 @@ namespace WijkAgent2.Pages.delicten
                             using (SqlCommand cmd = new SqlCommand(addToArchive, cnn))
                             {
                                 cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
-                                cmd.Parameters.Add("@Datetime", SqlDbType.DateTime).Value = DateTime.Today;
+                                cmd.Parameters.Add("@userID", SqlDbType.Int).Value = mw.GetUserID();
                                 cmd.ExecuteNonQuery();
                             }
 

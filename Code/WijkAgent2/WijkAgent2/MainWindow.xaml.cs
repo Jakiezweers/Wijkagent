@@ -46,7 +46,6 @@ namespace WijkAgent2
             MenuToggleButton.Visibility = Visibility.Hidden;
             MainFrame.Navigate(new Login(this));
         }
-
         public bool check_permission(string perrmission_on)
         {
             return validator.validate(perrmission_on);
@@ -56,6 +55,11 @@ namespace WijkAgent2
         {
             MenuToggleButton.Visibility = Visibility.Visible;
             validator.logged_in_user_id = user_id;
+        }
+
+        public int GetUserID()
+        {
+            return validator.logged_in_user_id;
         }
 
         public string select_file_dialog()
