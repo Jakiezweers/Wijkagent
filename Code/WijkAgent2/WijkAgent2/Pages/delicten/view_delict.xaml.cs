@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WijkAgent2.Classes;
+using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.delicten
 {
@@ -25,6 +27,7 @@ namespace WijkAgent2.Pages.delicten
     {
         MainWindow mw;
         int viewDelictID;
+        private Connection cn = new Connection();
         public view_delict(MainWindow MW, int delictID)
         {
             viewDelictID = delictID;
@@ -35,61 +38,51 @@ namespace WijkAgent2.Pages.delicten
 
         private void LoadDelict(int viewDelictID)
         {
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-            using (DbConnection connection = factory.CreateConnection())
+            cn.OpenConection();
+            SqlDataReader sqc = cn.DataReader("SELECT * FROM dbo.delict WHERE delict_id = " + viewDelictID);
+            while (sqc.Read())
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-
-                command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + viewDelictID;
-
-                using (DbDataReader dataReader = command.ExecuteReader())
+                string status;
+                if ((int)sqc["status"] == 1)
                 {
-                    while (dataReader.Read())
-                    {
-                        string status = "";
-                        if((int)dataReader["status"] == 1)
-                        {
-                            status = "Actief";
-                        } else
-                        {
-                            status = "Inactief";
-                        }
+                    status = "Actief";
+                }
+                else
+                {
+                    status = "Inactief";
+                }
 
-                        DelictPlaceLabel.Content += ": " + dataReader["place"];
-                        DelictIDLabel.Content += ": " + dataReader["delict_id"];
-                        DelictStreetLabel.Content += ": " + dataReader["street"];
-                        DelictHouseNumberLabel.Content += ": " + dataReader["housenumber"] + " " + dataReader["housenumberAddition"];
-                        DelictZipcodeLabel.Content += ": " + dataReader["zipcode"];
-                        DelictStatusLabel.Content += ": " + status;
-                        DelictDescriptionTB.Text = (string)dataReader["description"];
-                        DelictDateLabel.Content += ": " + dataReader["added_date"];
-                    }
-                }
-                command.CommandText = "SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + viewDelictID;
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        CategoryListbox.Items.Add(dataReader["name"]);
-                    }
-                }
-                command.CommandText = "SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + viewDelictID;
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        string text = dataReader["type"] + " - " + dataReader["bsn"];
-                        PersonenListbox.Items.Add(text);
-                    }
-                }
+                DelictPlaceLabel.Content += ": " + sqc["place"];
+                DelictIDLabel.Content += ": " + sqc["delict_id"];
+                DelictStreetLabel.Content += ": " + sqc["street"];
+                DelictHouseNumberLabel.Content += ": " + sqc["housenumber"] + " " + sqc["housenumberAddition"];
+                DelictZipcodeLabel.Content += ": " + sqc["zipcode"];
+                DelictStatusLabel.Content += ": " + status;
+                DelictDescriptionTB.Text = (string)sqc["description"];
+                DelictDateLabel.Content += ": " + sqc["added_date"];
             }
+
+            cn.CloseConnection();
+            cn.OpenConection();
+
+            SqlDataReader sqcd = cn.DataReader("SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + viewDelictID);
+
+            while (sqcd.Read())
+            {
+                CategoryListbox.Items.Add(sqcd["name"]);
+            }
+
+            cn.CloseConnection();
+            cn.OpenConection();
+
+            SqlDataReader sqp = cn.DataReader("SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + viewDelictID);
+
+            while (sqp.Read())
+            {
+                string text = sqp["type"] + " - " + sqp["bsn"];
+                PersonenListbox.Items.Add(text);
+            }
+            cn.CloseConnection();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {

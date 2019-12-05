@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
+using WijkAgent2.Database;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace WijkAgent2.Modals
