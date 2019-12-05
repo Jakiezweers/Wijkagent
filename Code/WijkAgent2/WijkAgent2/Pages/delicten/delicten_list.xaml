@@ -19,7 +19,7 @@
                     <DataGridTemplateColumn.CellTemplate>
 
                         <DataTemplate>
-                            <Button Click="Activate" Tag="{Binding id}" >Archiveren</Button>
+                            <Button Click="Archiveren" Tag="{Binding id}" >Archiveren</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
 

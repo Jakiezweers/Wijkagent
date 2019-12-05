@@ -152,7 +152,7 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Postcode, ";
                 errorBool = true;
             }
-            if (homeNumber.Length > 0)
+            if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length != 1)
             {
                 errorMessage += "Huisnummer, ";
                 errorBool = true;
@@ -163,9 +163,6 @@ namespace WijkAgent2.Pages.delicten
                 errorBool = true;
             }
 
-            int homeNumberNumber = int.Parse(homeNumbernum.ToString());
-            string homeNumberLetters = homeNumberLet.ToString().ToUpper();
-
             if (errorBool) //Hieronder alles wat gedaan moet worden als er iets fout gaat.
             {
                 string errorBoxText = errorMessage.Substring(0, errorMessage.Length - 2);
@@ -175,7 +172,7 @@ namespace WijkAgent2.Pages.delicten
             }
             else //Hieronder alles wat uitgevoerd moet worden als alles goed is. 
             {
-                SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), homeNumberNumber, homeNumberLetters, zipCode.ToUpper(), mw.FirstCharToUpper(street), description, longCoord, latCoord);
+                SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), int.Parse(homeNumbernum.ToString()), homeNumberLet.ToString().ToUpper(), zipCode.ToUpper(), mw.FirstCharToUpper(street), description, longCoord, latCoord);
                 mw.ShowMessage("Delict toegevoegd");
             }
         }

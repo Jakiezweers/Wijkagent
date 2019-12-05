@@ -96,7 +96,7 @@ namespace WijkAgent2.Pages.delicten
                 return returnString;
             }
         }
-        private void Activate(object sender, RoutedEventArgs e)
+        private void Archiveren(object sender, RoutedEventArgs e)
         {
             MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict archiveren?", "Archiveren", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
@@ -146,6 +146,8 @@ namespace WijkAgent2.Pages.delicten
                         Console.WriteLine("ID: " + myValue);
                     }
                 }
+                var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
+                Delicten.Items.RemoveAt(currentRowIndex);
             }
             else if (dialogResult == MessageBoxResult.No)
             {
@@ -168,24 +170,26 @@ namespace WijkAgent2.Pages.delicten
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
             var iddelict = Delicten.SelectedItem as Delict;
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
+            if(iddelict != null)
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                command.Connection = connection;
-                command.CommandText = "SELECT firstname, lastname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
-                personnames.Items.Clear();
-                using (DbDataReader dataReader = command.ExecuteReader())
+                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+                using (DbConnection connection = factory.CreateConnection())
                 {
-                    while (dataReader.Read())
+                    connection.ConnectionString = connectionstring;
+                    connection.Open();
+                    DbCommand command = factory.CreateCommand();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT firstname, lastname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
+                    personnames.Items.Clear();
+                    using (DbDataReader dataReader = command.ExecuteReader())
                     {
-                        personnames.Items.Add(dataReader["firstname"] + " " + dataReader["lastname"]);
+                        while (dataReader.Read())
+                        {
+                            personnames.Items.Add(dataReader["firstname"] + " " + dataReader["lastname"]);
+                        }
                     }
                 }
             }
-
         }
         private void KeyDownEvent(object sender, KeyEventArgs e)
         {
