@@ -97,6 +97,11 @@ namespace WijkAgent2.Modals
                 MessageBox.Show("Er is iets foutgegaan!");
                 return;
             }
+            if(person_id == 1)
+            {
+                MessageBox.Show("Persoons gegevens kloppen niet!");
+                return;
+            }
             foreach (var item in bsnlist)
             {
                 if(item == BSNNumber)
@@ -226,6 +231,10 @@ namespace WijkAgent2.Modals
             {
                 string firstName = NameTextBox.Text;
                 string lastName = SurNameTextBox.Text;
+                if(firstName == "" || lastName == "" || firstName.Length > 1 || lastName.Length > 1)
+                {
+                    return 1;
+                }
                 DateTime birthDate = BirthDateTextBox.Value;
                 Prompt promptclass = new Prompt();
                 int person_id = promptclass.AddPersonToDatabase(firstName, lastName, birthDate, bsnNumber);
