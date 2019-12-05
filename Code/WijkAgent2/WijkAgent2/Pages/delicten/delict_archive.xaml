@@ -13,7 +13,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
                 <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="150"/>
-                <DataGridTextColumn Header="Aanmaakdatum" Binding="{Binding createtime}"/>
+                <DataGridTextColumn Header="Archiveringsdatum" Binding="{Binding addedDate}"/>
+                <DataGridTextColumn Header="Gearchiveerd door" Binding="{Binding changedBy}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
 

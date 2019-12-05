@@ -6,13 +6,15 @@
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1700"
-      Title="lijst">
+      Title="lijst"
+      PreviewKeyDown="KeyDownEvent"
+      >
 
-    <Grid PreviewKeyDown="KeyDownEvent">
-        <DataGrid x:Name="Delicten" Margin="67,32,458,300" SelectionChanged="DataGrid_SelectionChanged">
+    <Grid>
+        <DataGrid x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
-                <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="150"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="400"/>
                 <DataGridTextColumn Header="Aanmaakdatum" Binding="{Binding createtime}"/>
                 <DataGridTextColumn Header="Personen" Binding="{Binding firstnamecount}"/>
                 <DataGridTemplateColumn>
@@ -35,7 +37,20 @@
 
             </DataGrid.Columns>
         </DataGrid>
+        <ComboBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="35" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="1247,32,0,0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox FontSize="18" Width="220" Checked="AllCheckbocx_CheckedAndUnchecked" Unchecked="AllCheckbocx_CheckedAndUnchecked" Content="{Binding Category_Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Category_ID}">
+                    </CheckBox>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="590" Margin="1242,72,0,0" VerticalAlignment="Top" Width="210" />
         <Button Content="Terug" Margin="0,0,39,38" Click="Button_Click" Height="32" HorizontalAlignment="Right" Width="75" VerticalAlignment="Bottom"/>
         <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="468" Margin="1493,32,0,0" VerticalAlignment="Top" Width="197"/>
+        <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="291,409,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
+        <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="72,409,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
+        <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="198,409,0,0" VerticalAlignment="Top" Height="32" Width="61"/>
+        <Label x:Name="DelictCountLabel" Content="Resultaten: 0" HorizontalAlignment="Left" Margin="1107,0,0,0" VerticalAlignment="Top" Height="32" Width="140"/>
     </Grid>
 </Page>

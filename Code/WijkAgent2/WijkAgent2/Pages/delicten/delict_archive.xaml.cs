@@ -55,10 +55,7 @@ namespace WijkAgent2.Pages.delicten
                 }
 
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.archive as a " +
-                                                      "JOIN dbo.delict as d ON a.delict_id = d.delict_id " +
-                                                      "WHERE d.status = 0 " +
-                                                      "ORDER BY a.delict_id";
+                command.CommandText = "SELECT d.delict_id, u.user_id, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id";
 
 
                 using (DbDataReader dataReader = command.ExecuteReader())
@@ -69,8 +66,8 @@ namespace WijkAgent2.Pages.delicten
                         Delict d1 = new Delict();
                         d1.id = id;
                         d1.street = GetDelictCategory(id);
-                        d1.createtime = (DateTime)dataReader["added_date"];
-                        Console.WriteLine($"{dataReader["street"]}");
+                        d1.changedBy = (int)dataReader["user_id"];
+                        d1.addedDate = (DateTime)dataReader["date_added"];
                         Delicten.Items.Add(d1);
                     }
                 }
