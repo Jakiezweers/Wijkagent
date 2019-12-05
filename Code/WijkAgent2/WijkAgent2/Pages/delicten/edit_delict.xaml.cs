@@ -221,7 +221,6 @@ namespace WijkAgent2.Pages.delicten
                             {
                         using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
                         {
-                                    MessageBox.Show("insertperson");
                                     cmd.Parameters.Add("@delictID", SqlDbType.Int).Value = currDelictID;
                                     cmd.Parameters.Add("@personID", SqlDbType.Int).Value = person_id[i];
                                     cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];

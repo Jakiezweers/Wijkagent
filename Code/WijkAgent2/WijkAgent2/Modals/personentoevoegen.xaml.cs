@@ -44,7 +44,7 @@ namespace WijkAgent2.Modals
             AddPersonCategoryCB();
             mw = MW;
             base.Closing += this.CloseWindow;
-            bsnlist.Clear();
+                       bsnlist.Clear();
             typelist.Clear();
             person_idList.Clear();
             bsnlist = _bsnlist;
@@ -114,6 +114,16 @@ namespace WijkAgent2.Modals
 
         private void Personen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+        }
+        private void RemovePerson(object sender, RoutedEventArgs e)
+        {
+            var RemoveBSN = (int)((System.Windows.Controls.Button)sender).Tag;
+            int index = bsnlist.IndexOf(RemoveBSN);
+            bsnlist.RemoveAt(index);
+            typelist.RemoveAt(index);
+            person_idList.RemoveAt(index);
+            RefreshData();
 
         }
 
