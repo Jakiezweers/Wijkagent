@@ -152,7 +152,7 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Postcode, ";
                 errorBool = true;
             }
-            if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length != 1)
+            if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1)
             {
                 errorMessage += "Huisnummer, ";
                 errorBool = true;

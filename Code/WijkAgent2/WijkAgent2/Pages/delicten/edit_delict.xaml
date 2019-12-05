@@ -34,7 +34,7 @@
         <TextBox x:Name="DelictStreetLabel" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="83,130,0,0"/>
         <Label FontSize="18" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="DelictZipcodeLabel" FontSize="18" HorizontalAlignment="Left" Height="34" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="116,190,0,0"/>
-        <TextBox x:Name="DelictHouseNumberLabel" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="54" Margin="417,130,0,0"/>
+        <TextBox x:Name="DelictHouseNumberLabel" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="71" Margin="417,130,0,0"/>
         <Button Content="Wijzig personen" HorizontalAlignment="Left" Margin="784,180,0,0" VerticalAlignment="Top" Width="155" Click="AddPerson_Click"/>
     </Grid>
 </Page>

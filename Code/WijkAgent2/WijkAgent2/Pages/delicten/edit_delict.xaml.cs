@@ -171,7 +171,7 @@ namespace WijkAgent2.Pages.delicten
         }
         private void SaveEditDelict_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict archiveren?", "Archiveren", MessageBoxButton.YesNo);
+            MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict wijzigen?", "Opslaan", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
             {
 
@@ -201,8 +201,19 @@ namespace WijkAgent2.Pages.delicten
                         homeNumberLet.Append(homeNumber[i]);
                 }
 
-                int homeNumberNumber = int.Parse(homeNumbernum.ToString());
-                string homeNumberLetters = homeNumberLet.ToString().ToUpper();
+                StringBuilder zipCodeNum = new StringBuilder();
+                StringBuilder zipCodeLet = new StringBuilder();
+
+                for (int i = 0; i < zipCode.Length; i++)
+                {
+                    if (Char.IsDigit(zipCode[i]))
+                        zipCodeNum.Append(zipCode[i]);
+                    else if ((zipCode[i] >= 'A' &&
+                             zipCode[i] <= 'Z') ||
+                             (zipCode[i] >= 'a' &&
+                              zipCode[i] <= 'z'))
+                        zipCodeLet.Append(zipCode[i]);
+                }
 
                 if (!CheckCategorie())
                 {
@@ -219,12 +230,12 @@ namespace WijkAgent2.Pages.delicten
                     errorMessage += "Plaats, ";
                     errorBool = true;
                 }
-                if (zipCode == "" || zipCode.Length != 6)
+                if (zipCode == "" || zipCode.Length != 6 || zipCodeLet.Length != 2 || zipCodeNum.Length != 4)
                 {
                     errorMessage += "Postcode, ";
                     errorBool = true;
                 }
-                if (homeNumberNumber == 0 || homeNumberLetters.Length > 1)
+                if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1 )
                 {
                     errorMessage += "Huisnummer, ";
                     errorBool = true;
@@ -235,16 +246,17 @@ namespace WijkAgent2.Pages.delicten
                     errorBool = true;
                 }
 
-                if (errorBool == false) //Hieronder alles wat uitgevoerd moet worden als alles goed is.
-                {
-                    UploadToDatabase(mw.FirstCharToUpper(placeName), homeNumberNumber, homeNumberLetters, zipCode, mw.FirstCharToUpper(street), description);
-                }
-                else //Hieronder alles wat gedaan moet worden als er iets fout gaat.
+                if (errorBool) //Hieronder alles wat gedaan moet worden als er iets fout gaat.
                 {
                     string errorBoxText = errorMessage.Substring(0, errorMessage.Length - 2);
-                    string errorCaption = "Delict toevoegen mislukt.";
+                    string errorCaption = "Delict wijzigen mislukt.";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBox.Show(errorBoxText, errorCaption, button);
+                }
+                else //Hieronder alles wat uitgevoerd moet worden als alles goed is. 
+                {
+                    UploadToDatabase(mw.FirstCharToUpper(placeName), int.Parse(homeNumbernum.ToString()), homeNumberLet.ToString().ToUpper(), zipCode.ToUpper(), mw.FirstCharToUpper(street), description);
+                    mw.ShowMessage("Delict gewijzigd");
                 }
             }
             else if (dialogResult == MessageBoxResult.No)
