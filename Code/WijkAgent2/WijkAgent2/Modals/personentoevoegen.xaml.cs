@@ -151,7 +151,6 @@ namespace WijkAgent2.Modals
         }
         private int CheckIfPersonExists(int personBSN)
         {
-            MessageBox.Show("" + personBSN);
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
