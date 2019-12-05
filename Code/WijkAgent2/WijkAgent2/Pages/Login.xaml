@@ -8,38 +8,30 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Login">
 
-    <Grid Margin="0,0,-0.4,0" Background="Black">
-        <Grid HorizontalAlignment="Left" Background="White" Height="400" Margin="545,10,0,0" VerticalAlignment="Top" Width="260">
-            <Grid HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="252">
-                <Label Content="Inloggen" FontSize="30" FontWeight="Bold" FontStretch="UltraExpanded" HorizontalAlignment="Right" VerticalAlignment="Top" Height="50" Width="145"/>
-            </Grid>
-            <Grid HorizontalAlignment="Left" Height="80" Margin="0,50,0,0" VerticalAlignment="Top" Width="260">
-                <Grid HorizontalAlignment="Left" Height="40" Margin="0,40,0,0" VerticalAlignment="Top" Width="252">
-                    <TextBox Name="UsernameTextBox"  HorizontalAlignment="Left" Height="35" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0" KeyDown="UsernameTextBox_KeyDown"/>
-                </Grid>
-                <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
-                    <Label x:Name="UsernameLabel" Content="Badge ID" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,-1" VerticalAlignment="Top" Height="26" Width="72"/>
-                </Grid>
-            </Grid>
-            <Grid HorizontalAlignment="Left" Height="80" Margin="0,130,0,0" VerticalAlignment="Top" Width="260">
-                <PasswordBox x:Name="PasswordTextBox" MaxLength="512" HorizontalAlignment="Left" Height="35" PasswordChar="•" VerticalAlignment="Bottom" Width="232" Margin="10,-5,0,10" KeyDown="PasswordBox_KeyDown"/>
+    <Viewbox Stretch="Fill">
+        <Grid Margin="0,0,-0.4,0" Background="White">
+            <Grid HorizontalAlignment="Left" Background="White" Height="440" Margin="545,10,0,-0.4" VerticalAlignment="Top" Width="255">
+                <Label Content="Inloggen" FontFamily="Bahnschrift SemiLight" FontSize="30" FontWeight="Bold" FontStretch="UltraExpanded" HorizontalAlignment="Right" VerticalAlignment="Top" Height="55" Width="130"/>
 
-                <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
-                    <Label x:Name="PasswordLabel" Content="Wachtwoord" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="25" Width="82"/>
-                </Grid>
+                <Border BorderBrush="Blue" BorderThickness="1" HorizontalAlignment="Left" Height="26" Margin="9,81,0,0" VerticalAlignment="Top" Width="236"/>
+                <TextBox Name="UsernameTextBox"  HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="235" Margin="10,81,0,0" KeyDown="UsernameTextBox_KeyDown" />
+                <Label x:Name="UsernameLabel" Content="Badge ID" FontFamily="Bahnschrift" FontSize="12" HorizontalAlignment="Left" Margin="187,55,0,0" VerticalAlignment="Top" Height="26" Width="58"/>
+                
+
+                <Border BorderBrush="Blue" BorderThickness="1" HorizontalAlignment="Left" Height="26" Margin="10,146,0,0" VerticalAlignment="Top" Width="235"/>
+                <PasswordBox x:Name="PasswordTextBox" MaxLength="512" HorizontalAlignment="Left" Height="27" PasswordChar="•" VerticalAlignment="Bottom" Width="235" Margin="10,0,0,268" KeyDown="PasswordBox_KeyDown"/>
+                <Label x:Name="PasswordLabel" Content="Wachtwoord" FontFamily="Bahnschrift" FontSize="12" HorizontalAlignment="Left" Margin="168,120,0,0" VerticalAlignment="Top" Height="25" Width="77"/>
+
+                <Button x:Name="LogInButton" Content="Log in" HorizontalAlignment="Left" Margin="145,0,0,209" Width="100" Click="LogInButton_Click" Height="40" VerticalAlignment="Bottom"/>
+
+                <Label Name="FoutLoginLabel" Content="Verkeerd badge ID of wachtwoord" FontStretch="Expanded" FontWeight="SemiBold"  Foreground="Red" HorizontalAlignment="Left" Margin="48,244,0,0" VerticalAlignment="Top" Height="36" Width="197" Visibility="Hidden"/>
             </Grid>
-            <Grid HorizontalAlignment="Left" Height="173" Margin="10,215,0,0" VerticalAlignment="Top" Width="250">
-                <Grid HorizontalAlignment="Left" Height="50" Margin="111,0,0,0" VerticalAlignment="Top" Width="129">
-                    <Button x:Name="LogInButton" Content="Log in" HorizontalAlignment="Left" Margin="10,0,0,10" Width="109" Click="LogInButton_Click" Height="40" VerticalAlignment="Bottom"/>
-                </Grid>
-            </Grid>
-            <Label Name="FoutLoginLabel" Content="Verkeerd badge ID of wachtwoord." Foreground="Red" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Height="36" Width="242" Visibility="Hidden"/>
-        </Grid>
-        <Grid HorizontalAlignment="Left" Height="400" Background="White" Margin="10,10,0,0" VerticalAlignment="Top" Width="530">
-            <Grid HorizontalAlignment="Left" Height="250" Margin="10,10,0,0" VerticalAlignment="Top" Width="250">
-                <Image x:Name="PolitieLogoImage" HorizontalAlignment="Left" Source="https://www.ondernemerskringheerenveen.nl/wp-content/uploads/2019/07/politie-logo.png" Height="250" VerticalAlignment="Top" Width="250"/>
+
+            <Grid HorizontalAlignment="Left" Height="450" Background="DarkBlue" Margin="0,0,0,-0.4" VerticalAlignment="Top" Width="540">
+                <Image x:Name="WijkagentCover" HorizontalAlignment="Left" Source="/WijkAgent2;component/Images/wijkagentcover.png" Height="450" VerticalAlignment="Top" Width="540"/>
+                <Image x:Name="PolitieLogoImage" HorizontalAlignment="Left" Source="/WijkAgent2;component/Images/wijkagentlogo.png" Height="150" VerticalAlignment="Top" Width="150"/>
             </Grid>
         </Grid>
-
-    </Grid>
+    </Viewbox>
 </Page>
+    

@@ -210,5 +210,11 @@
   <ItemGroup>
     <Resource Include="Images\home.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wijkagentlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wijkagentcover.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

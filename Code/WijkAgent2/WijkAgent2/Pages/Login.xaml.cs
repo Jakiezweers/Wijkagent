@@ -83,14 +83,6 @@ namespace WijkAgent2.Pages
             }
         }
 
-        private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                LogInButton_Click(this, new RoutedEventArgs());
-            }
-        }
-
         private void UsernameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -98,5 +90,13 @@ namespace WijkAgent2.Pages
                 LogInButton_Click(this, new RoutedEventArgs());
             }
         }
+
+        private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LogInButton_Click(this, new RoutedEventArgs());
+            }
+        }       
     }
 }
