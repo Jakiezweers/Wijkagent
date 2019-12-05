@@ -117,6 +117,27 @@ namespace WijkAgent2.Pages.delicten
             double longCoord = 0.0000;
             double latCoord = 0.0000;
 
+            StringBuilder homeNumbernum =
+                  new StringBuilder();
+            StringBuilder homeNumberLet =
+                     new StringBuilder();
+            StringBuilder special =
+                     new StringBuilder();
+
+            for (int i = 0; i < homeNumber.Length; i++)
+            {
+                if (Char.IsDigit(homeNumber[i]))
+                    homeNumbernum.Append(homeNumber[i]);
+                else if ((homeNumber[i] >= 'A' &&
+                         homeNumber[i] <= 'Z') ||
+                         (homeNumber[i] >= 'a' &&
+                          homeNumber[i] <= 'z'))
+                    homeNumberLet.Append(homeNumber[i]);
+            }
+
+            int homeNumberNumber = int.Parse(homeNumbernum.ToString());
+            string homeNumberLetters = homeNumberLet.ToString().ToUpper();
+
             if (!CheckCategorie())
             {
                 errorMessage += "Categorie, ";
@@ -137,7 +158,7 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Postcode, ";
                 errorBool = true;
             }
-            if (homeNumber == "")
+            if (homeNumberNumber == 0 || homeNumberLetters.Length > 1)
             {
                 errorMessage += "Huisnummer, ";
                 errorBool = true;
@@ -150,7 +171,7 @@ namespace WijkAgent2.Pages.delicten
 
             if (errorBool == false) //Hieronder alles wat uitgevoerd moet worden als alles goed is.
             {
-                SendDelictToDatabase(date, placeName, homeNumber, zipCode, street, description, longCoord, latCoord);
+                SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), homeNumberNumber,homeNumberLetters, zipCode, mw.FirstCharToUpper(street), description, longCoord, latCoord);
                 mw.ShowMessage("Delict toegevoegd");
             }
             else //Hieronder alles wat gedaan moet worden als er iets fout gaat.
@@ -176,12 +197,12 @@ namespace WijkAgent2.Pages.delicten
             categoryCB.SelectedIndex = -1;
         }
 
-        private void SendDelictToDatabase(string date, string placeName, string homeNumber, string zipCode, string street, string description, double longCoord, double latCoord)
+        private void SendDelictToDatabase(string date, string placeName, int homeNumberNumber,string homeNumberLetters, string zipCode, string street, string description, double longCoord, double latCoord)
         {
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
-            string sqlDelictInsert = "insert into dbo.delict (date, place, housenumber, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.delict_id values(@first,@second,@third,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
+            string sqlDelictInsert = "insert into dbo.delict (date, place, housenumber,housenumberAddition, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.delict_id values(@first,@second,@third,@thirdAddition,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
             string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
 
             int id = 0;
@@ -194,7 +215,8 @@ namespace WijkAgent2.Pages.delicten
                     {
                         cmd.Parameters.Add("@first", SqlDbType.DateTime).Value = date;
                         cmd.Parameters.Add("@second", SqlDbType.NVarChar).Value = placeName;
-                        cmd.Parameters.Add("@third", SqlDbType.NVarChar).Value = homeNumber;
+                        cmd.Parameters.Add("@third", SqlDbType.Int).Value = homeNumberNumber;
+                        cmd.Parameters.Add("@thirdAddition", SqlDbType.NVarChar).Value = homeNumberLetters;
                         cmd.Parameters.Add("@fourth", SqlDbType.NVarChar).Value = zipCode;
                         cmd.Parameters.Add("@fifth", SqlDbType.NVarChar).Value = street;
                         cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;

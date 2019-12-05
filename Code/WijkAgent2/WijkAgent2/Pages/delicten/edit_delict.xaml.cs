@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -72,7 +73,7 @@ namespace WijkAgent2.Pages.delicten
                         DelictPlaceLabel.Text = (string)dataReader["place"];
                         DelictIDLabel.Content += ": " + currDelictID;
                         DelictStreetLabel.Text = (string)dataReader["street"];
-                        DelictHouseNumberLabel.Text = "" + dataReader["housenumber"];
+                        DelictHouseNumberLabel.Text = "" + dataReader["housenumber"] + " " + dataReader["housenumberAddition"];
                         DelictZipcodeLabel.Text = (string)dataReader["zipcode"];
                         DelictStatusLabel.Content += ": " + status;
                         DelictDescriptionTB.Text = (string)dataReader["description"];
@@ -170,6 +171,82 @@ namespace WijkAgent2.Pages.delicten
         }
         private void SaveEditDelict_Click(object sender, RoutedEventArgs e)
         {
+            string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
+            bool errorBool = false;
+            string placeName = DelictPlaceLabel.Text;
+            string zipCode = Regex.Replace(DelictZipcodeLabel.Text, @" ", "");
+            string homeNumber = DelictHouseNumberLabel.Text;
+            string street = DelictStreetLabel.Text;
+            string description = DelictDescriptionTB.Text;
+
+            StringBuilder homeNumbernum =
+      new StringBuilder();
+            StringBuilder homeNumberLet =
+                     new StringBuilder();
+            StringBuilder special =
+                     new StringBuilder();
+
+            for (int i = 0; i < homeNumber.Length; i++)
+            {
+                if (Char.IsDigit(homeNumber[i]))
+                    homeNumbernum.Append(homeNumber[i]);
+                else if ((homeNumber[i] >= 'A' &&
+                         homeNumber[i] <= 'Z') ||
+                         (homeNumber[i] >= 'a' &&
+                          homeNumber[i] <= 'z'))
+                    homeNumberLet.Append(homeNumber[i]);
+            }
+
+            int homeNumberNumber = int.Parse(homeNumbernum.ToString());
+            string homeNumberLetters = homeNumberLet.ToString().ToUpper();
+
+            if (!CheckCategorie())
+            {
+                errorMessage += "Categorie, ";
+                errorBool = true;
+            }
+            if (description == "")
+            {
+                errorMessage += "Beschrijving, ";
+                errorBool = true;
+            }
+            if (placeName == "")
+            {
+                errorMessage += "Plaats, ";
+                errorBool = true;
+            }
+            if (zipCode == "" || zipCode.Length != 6)
+            {
+                errorMessage += "Postcode, ";
+                errorBool = true;
+            }
+            if (homeNumberNumber == 0 || homeNumberLetters.Length > 1)
+            {
+                errorMessage += "Huisnummer, ";
+                errorBool = true;
+            }
+            if (street == "")
+            {
+                errorMessage += "Straat, ";
+                errorBool = true;
+            }
+
+            if (errorBool == false) //Hieronder alles wat uitgevoerd moet worden als alles goed is.
+            {
+                UploadToDatabase(mw.FirstCharToUpper(placeName), homeNumberNumber, homeNumberLetters, zipCode, mw.FirstCharToUpper(street), description);
+                mw.ShowMessage("Delict toegevoegd");
+            }
+            else //Hieronder alles wat gedaan moet worden als er iets fout gaat.
+            {
+                string errorBoxText = errorMessage.Substring(0, errorMessage.Length - 2);
+                string errorCaption = "Delict toevoegen mislukt.";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBox.Show(errorBoxText, errorCaption, button);
+            }
+        }
+
+        private void UploadToDatabase(string placeName, int homeNumberNumber, string homeNumberLetters, string zipCode, string street, string description)
+        {
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
@@ -178,14 +255,15 @@ namespace WijkAgent2.Pages.delicten
                 try
                 {
                     cnn.Open();
-                    string sqlEditDelict = "UPDATE delict SET place = @placePara, street = @streetPara, zipcode = @zipcodePara, housenumber = @housenumberPara, description = @descriptionPara WHERE delict_id = " + currDelictID;
+                    string sqlEditDelict = "UPDATE delict SET place = @placePara, street = @streetPara, zipcode = @zipcodePara, housenumber = @housenumberPara,housenumberAddition = @housenumberAdditionPara, description = @descriptionPara WHERE delict_id = " + currDelictID;
                     using (SqlCommand cmd = new SqlCommand(sqlEditDelict, cnn))
                     {
-                        cmd.Parameters.Add("@streetPara", SqlDbType.NVarChar).Value = DelictStreetLabel.Text;
-                        cmd.Parameters.Add("@placePara", SqlDbType.NVarChar).Value = DelictPlaceLabel.Text;
-                        cmd.Parameters.Add("@zipcodePara", SqlDbType.NVarChar).Value = DelictZipcodeLabel.Text;
-                        cmd.Parameters.Add("@housenumberPara", SqlDbType.Int).Value = DelictHouseNumberLabel.Text;
-                        cmd.Parameters.Add("@descriptionPara", SqlDbType.NVarChar).Value = DelictDescriptionTB.Text;
+                        cmd.Parameters.Add("@streetPara", SqlDbType.NVarChar).Value = street;
+                        cmd.Parameters.Add("@placePara", SqlDbType.NVarChar).Value = placeName;
+                        cmd.Parameters.Add("@zipcodePara", SqlDbType.NVarChar).Value = zipCode;
+                        cmd.Parameters.Add("@housenumberPara", SqlDbType.Int).Value = homeNumberNumber;
+                        cmd.Parameters.Add("@housenumberAdditionPara", SqlDbType.NVarChar).Value = homeNumberLetters;
+                        cmd.Parameters.Add("@descriptionPara", SqlDbType.NVarChar).Value = description;
 
                         cmd.ExecuteNonQuery();
                     }
@@ -218,16 +296,16 @@ namespace WijkAgent2.Pages.delicten
 
                     string sqlPersonInsert = "insert into delict_person (delict_id, person_id, type) values (@delictID, @personID,@type)";
                     for (int i = 0; i < person_id.Count; i++)
-                            {
+                    {
                         using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
                         {
-                                    cmd.Parameters.Add("@delictID", SqlDbType.Int).Value = currDelictID;
-                                    cmd.Parameters.Add("@personID", SqlDbType.Int).Value = person_id[i];
-                                    cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
+                            cmd.Parameters.Add("@delictID", SqlDbType.Int).Value = currDelictID;
+                            cmd.Parameters.Add("@personID", SqlDbType.Int).Value = person_id[i];
+                            cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
 
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

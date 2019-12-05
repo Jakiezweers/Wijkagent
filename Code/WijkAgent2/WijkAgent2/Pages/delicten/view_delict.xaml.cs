@@ -65,7 +65,7 @@ namespace WijkAgent2.Pages.delicten
                         DelictPlaceLabel.Content += ": " + dataReader["place"];
                         DelictIDLabel.Content += ": " + dataReader["delict_id"];
                         DelictStreetLabel.Content += ": " + dataReader["street"];
-                        DelictHouseNumberLabel.Content += ": " + dataReader["housenumber"];
+                        DelictHouseNumberLabel.Content += ": " + dataReader["housenumber"] + " " + dataReader["housenumberAddition"];
                         DelictZipcodeLabel.Content += ": " + dataReader["zipcode"];
                         DelictStatusLabel.Content += ": " + status;
                         DelictDescriptionTB.Text = (string)dataReader["description"];

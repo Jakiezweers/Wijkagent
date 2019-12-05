@@ -97,7 +97,7 @@ namespace WijkAgent2.Modals
                 MessageBox.Show("Er is iets foutgegaan!");
                 return;
             }
-            if(person_id == 1)
+            if(person_id == 00)
             {
                 MessageBox.Show("Persoons gegevens kloppen niet!");
                 return;
@@ -233,7 +233,7 @@ namespace WijkAgent2.Modals
                 string lastName = SurNameTextBox.Text;
                 if(firstName == "" || lastName == "" || firstName.Length > 1 || lastName.Length > 1)
                 {
-                    return 1;
+                    return 00;
                 }
                 DateTime birthDate = BirthDateTextBox.Value;
                 Prompt promptclass = new Prompt();
