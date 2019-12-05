@@ -94,6 +94,7 @@
     <Compile Include="Classes\uploader.cs" />
     <Compile Include="Classes\Uploads.cs" />
     <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\Validator.cs" />
     <Compile Include="Database\Connection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -223,6 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wijkagentlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wijkagentcover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

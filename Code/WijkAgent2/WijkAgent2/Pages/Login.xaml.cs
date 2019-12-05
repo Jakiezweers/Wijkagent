@@ -51,16 +51,21 @@ namespace WijkAgent2.Pages
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("SELECT * FROM [dbo].[user] WHERE badge_nr = '" + badgeId + "'");
             string password_db = "";
+            int user_id = -1;
+            string name = "";
             while (sq.Read())
             {
                 password_db = (string)sq["password"];
+                name = (string)sq["name"];
+                user_id = Convert.ToInt32(sq["user_id"]);
             }
 
-            Console.WriteLine(password_db);
-            if (!password_db.Equals(""))
+            if (!password_db.Equals("") && user_id != -1 && !name.Equals(""))
             {
                 if (PasswordHandler.Validate(PasswordTextBox.Password.ToString(), password_db)) //boolean die de lijst ophaalt van overeenkomende users met de ingevoerde user_id en password
                 {
+                    mw.set_loggedin_user_id(user_id);
+                    mw.ShowMessage("Welcome " + name);
                     mw.LoadHomeScreen();
                 }
                 else
@@ -78,14 +83,12 @@ namespace WijkAgent2.Pages
             }
         }
 
-        private void UsernameTextBox_Changed(object sender, TextChangedEventArgs e)
+        private void UsernameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-
-        }
-
-        private void PasswordBox_Changed(object sender, RoutedEventArgs e)
-        {
-
+            if (e.Key == Key.Enter)
+            {
+                LogInButton_Click(this, new RoutedEventArgs());
+            }
         }
 
         private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
@@ -94,14 +97,6 @@ namespace WijkAgent2.Pages
             {
                 LogInButton_Click(this, new RoutedEventArgs());
             }
-        }
-
-        private void UsernameTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                LogInButton_Click(this, new RoutedEventArgs());
-            }
-        }
+        }       
     }
 }
