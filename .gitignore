@@ -353,3 +353,5 @@ MigrationBackup/
 .ionide/
 Code/Wijkagent/.vs/Wijkagent/v16/.suo
 *.ide
+Code/Wijkagent/.vs/Wijkagent/v16/.suo
+Code/Wijkagent/.vs/Wijkagent/v16/Server/sqlite3/storage.ide

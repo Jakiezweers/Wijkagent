@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -78,8 +79,14 @@ namespace WijkAgent2.Pages.permissions
             comboBox.ItemsSource = role;
         }
         public string val;
+        public object Sender;
+        public SelectionChangedEventArgs E;
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Sender = sender;
+            E = e;
+            Console.WriteLine(sender);
+            Console.WriteLine(e);
             val = comboBox.SelectedValue.ToString();
             LBPermissions.Items.Clear();
             PermissionList.Clear();
@@ -222,16 +229,16 @@ namespace WijkAgent2.Pages.permissions
 
                 foreach (Permission permission in LBPermissions.Items)
                 {
-                    if (permission.Checked) {
+                    if (permission.Checked)
+                    {
 
                         CN.OpenConection();
                         CN.ExecuteQueries("INSERT INTO [Wijkagent].[dbo].[permission_rol](permission_id, rol_id)" +
                                 " VALUES (" + permission.Permission_id + "," + role_id + ");");
                         CN.CloseConnection();
                     }
-                    /*
-                    */
                 }
+                mw.ShowDialog("wijzigingen zijn opgeslagen");
             }
         }
 
