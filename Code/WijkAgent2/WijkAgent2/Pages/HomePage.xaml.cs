@@ -53,6 +53,10 @@ namespace WijkAgent2.Pages
             mw.AddUser();
         }
 
+        private void Permission_button_Click(object sender, RoutedEventArgs e)
+        {
+            mw.LoadPermissionPage();
+        }
     }
 
 }
