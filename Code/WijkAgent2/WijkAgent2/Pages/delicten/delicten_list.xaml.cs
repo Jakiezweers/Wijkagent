@@ -17,6 +17,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
+using System.Linq;
+using WijkAgent2.Classes;
+using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.delicten
 {
@@ -28,10 +31,29 @@ namespace WijkAgent2.Pages.delicten
         MainWindow mw;
         int i;
         int j;
+        List<Delict> delictenlist = new List<Delict>();
+        List<Delict> delictenlistCheck = new List<Delict>();
+
+        List<CategoryList> categoryList = new List<CategoryList>();
+        static int pageCounter = 1;
+        decimal delictsPerPage = 5;
+
+        private Connection cn = new Connection();
         public delicten_list(MainWindow MW)
         {
             mw = MW;
             InitializeComponent();
+
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("Select * from dbo.category");
+            while (sq.Read())
+            {
+                CategoryList obj = new CategoryList((int)sq["category_id"], (string)(sq["name"]));
+                categoryList.Add(obj);
+            }
+            cn.CloseConnection();
+            BindCategroryDropDown();
+
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
@@ -44,7 +66,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.delict_person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date";
+                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date ";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -54,17 +76,101 @@ namespace WijkAgent2.Pages.delicten
                         int count = Convert.ToInt32(dataReader["firstname"]);
                         Delict d1 = new Delict();
                         d1.id = id;
-                        d1.street = (string)dataReader["street"];
+                        d1.street = GetDelictCategory(id);
                         d1.createtime = (DateTime)dataReader["added_date"];
 
                         d1.firstnamecount = count;
                         Console.WriteLine($"{dataReader["street"]}");
-                        Delicten.Items.Add(d1);
+                        delictenlist.Add(d1);
                     }
                 }
+                foreach (var item in delictenlist)
+                {
+                    delictenlistCheck.Add(item);
+                }
+                ShowDelicts();
             }
         }
-        private void Activate(object sender, RoutedEventArgs e)
+
+        public void ShowDelicts()
+        {
+            Delicten.Items.Clear();
+            DelictCountLabel.Content = "Resultaten: " + delictenlistCheck.Count();
+            int counter = pageCounter * 5;
+            decimal delictCount = delictenlistCheck.Count();
+            for (int i = counter - 5; i < counter; i++)
+            {
+                if (delictenlistCheck.ElementAtOrDefault(i) != null)
+                {
+                    Delicten.Items.Add(delictenlistCheck[i]);
+                }
+            }
+
+            if(pageCounter == 1)
+            {
+                PreviousButton.IsEnabled = false;
+            }
+            else
+            {
+                PreviousButton.IsEnabled = true;
+            }
+            if (pageCounter >= Math.Ceiling(delictCount / delictsPerPage)){
+                NextButton.IsEnabled = false;
+            }
+            else
+            {
+                NextButton.IsEnabled = true;
+            }
+        }
+
+        private void NextDelictsPage(object sender, RoutedEventArgs e) //next
+        {
+            pageCounter++;
+            ShowDelicts();
+            PageLabel.Content = "Pagina: " + pageCounter;
+        }
+
+        private void PreviousDelictsPage(object sender, RoutedEventArgs e) //previous
+        {
+            pageCounter--;
+            ShowDelicts();
+            PageLabel.Content = "Pagina: " + pageCounter;
+        }
+
+
+
+        private string GetDelictCategory(int delictID)
+        {
+            string returnString = "";
+            string provider = ConfigurationManager.AppSettings["provider"];
+            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+            using (DbConnection connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionstring;
+                connection.Open();
+                DbCommand command = factory.CreateCommand();
+
+                command.Connection = connection;
+                command.CommandText = "SELECT name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        returnString += dataReader["name"];
+                        returnString += ", ";
+                    }
+                }
+                if (returnString.Length > 2)
+                {
+                    return returnString.Substring(0, returnString.Length - 2);
+                }
+                return returnString;
+            }
+        }
+        private void Archiveren(object sender, RoutedEventArgs e)
         {
             MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict archiveren?", "Archiveren", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
@@ -87,8 +193,8 @@ namespace WijkAgent2.Pages.delicten
                                      "SET status = 0 " +
                                      "WHERE delict_id = @delictID";
                     //TODO add use id 
-                    string addToArchive = "INSERT INTO dbo.archive (delict_id, date_added) " +
-                                          "VALUES (@delictID, @Datetime)"; 
+                    string addToArchive = "INSERT INTO dbo.archive (delict_id,user_id, date_added) " +
+                                          "VALUES (@delictID,@userID, GETDATE())";
                     using (SqlConnection cnn = new SqlConnection(connectionstring))
                     {
                         try
@@ -102,7 +208,7 @@ namespace WijkAgent2.Pages.delicten
                             using (SqlCommand cmd = new SqlCommand(addToArchive, cnn))
                             {
                                 cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
-                                cmd.Parameters.Add("@Datetime", SqlDbType.DateTime).Value = DateTime.Today;
+                                cmd.Parameters.Add("@userID", SqlDbType.Int).Value = mw.GetUserID();
                                 cmd.ExecuteNonQuery();
                             }
 
@@ -114,6 +220,9 @@ namespace WijkAgent2.Pages.delicten
                         Console.WriteLine("ID: " + myValue);
                     }
                 }
+                var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
+                delictenlistCheck.RemoveAt(currentRowIndex);
+                ShowDelicts();
             }
             else if (dialogResult == MessageBoxResult.No)
             {
@@ -136,62 +245,94 @@ namespace WijkAgent2.Pages.delicten
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
             var iddelict = Delicten.SelectedItem as Delict;
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-            using (DbConnection connection = factory.CreateConnection())
+            if (iddelict != null)
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-                command.Connection = connection;
-                command.CommandText = "SELECT firstname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
-                personnames.Items.Clear();
-                using (DbDataReader dataReader = command.ExecuteReader())
+                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+                using (DbConnection connection = factory.CreateConnection())
                 {
-                    while (dataReader.Read())
+                    connection.ConnectionString = connectionstring;
+                    connection.Open();
+                    DbCommand command = factory.CreateCommand();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT firstname, lastname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
+                    personnames.Items.Clear();
+                    using (DbDataReader dataReader = command.ExecuteReader())
                     {
-                        personnames.Items.Add(dataReader["firstname"]);
+                        while (dataReader.Read())
+                        {
+                            personnames.Items.Add(dataReader["firstname"] + " " + dataReader["lastname"]);
+                        }
                     }
                 }
             }
-
         }
         private void KeyDownEvent(object sender, KeyEventArgs e)
         {
-            i = Delicten.SelectedIndex;
             if (e.Key == Key.Right)
             {
-                if (Delicten.SelectedIndex + 10 < Delicten.Items.Count)
-                {
-                    i = i + 10;
-                    Delicten.SelectedItem = Delicten.Items[i];
-                    Delicten.ScrollIntoView(Delicten.SelectedItem);
-                    Delicten.Focus();
-                    Console.WriteLine(Delicten.SelectedIndex.ToString());
-                }
-                else
-                {
-                    Delicten.SelectedItem = Delicten.Items[Delicten.Items.Count - 1];
-                    Delicten.ScrollIntoView(Delicten.SelectedItem);
-                    Delicten.Focus();
-                }
+                NextDelictsPage(sender, e);
             }
 
             if (e.Key == Key.Left)
             {
-                if (Delicten.SelectedIndex - 10 > 0)
+                PreviousDelictsPage(sender, e);
+            }
+        }
+
+        //Combobox
+        private void BindCategroryDropDown()
+        {
+            categoryCB.ItemsSource = categoryList;
+        }
+
+        private void category_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!categoryCB.IsDropDownOpen)
+            {
+                categoryCB.IsDropDownOpen = true;
+            }
+            var t = categoryCB.SelectedIndex;
+            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
+        }
+
+        private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
+        {
+            BindListBOX();
+        }
+
+        private void BindListBOX()
+        {
+            testListbox.Items.Clear();
+            delictenlistCheck.Clear();
+            foreach (var category in categoryList)
+            {
+                if (category.Check_Status == true)
                 {
-                    i = i - 10;
-                    Delicten.SelectedItem = Delicten.Items[i];
-                    Delicten.ScrollIntoView(Delicten.SelectedItem);
-                    Delicten.Focus();
-                }
-                else
-                {
-                    Delicten.SelectedItem = Delicten.Items[0];
-                    Delicten.ScrollIntoView(Delicten.SelectedItem);
-                    Delicten.Focus();
+                    testListbox.Items.Add(category.Category_Name);
+                    categoryCB.Text = "";
+                    foreach(var item in delictenlist)
+                    {
+                        bool alreadyExists = delictenlistCheck.Any(x => x.id == item.id);
+                        if (item.street.Contains(category.Category_Name) && !alreadyExists)
+                        {
+                            delictenlistCheck.Add(item);
+                        }
+                    }
                 }
             }
+            if (testListbox.Items.Count == 0)
+            {
+                foreach (var item in delictenlist)
+                {
+                    delictenlistCheck.Add(item);
+                }
+            }
+
+            ShowDelicts();
+        }
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            categoryCB.SelectedIndex = -1;
         }
     }
 }

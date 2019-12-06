@@ -79,8 +79,23 @@ namespace WijkAgent2.Pages.User
         {
             if (Validate())
             {
+                //Image_Uploaded
+                Int32 upload_id;
+                string SaveImage = "INSERT into [dbo].[uploads]" +
+                    "(upload_path)" +
+                    "OUTPUT INSERTED.upload_id " +
+                    "VALUES (@upload_path)";
 
-                this.sendFileAsync(Image_Uploaded);
+                using (SqlCommand querySaveStaff = new SqlCommand(SaveImage))
+                {
+                    cn.OpenConection();
+                    querySaveStaff.Connection = cn.GetConnection();
+                    querySaveStaff.Parameters.Add("@upload_path", SqlDbType.VarChar, 64).Value = Image_Uploaded.ToString().Trim();
+
+                    upload_id = (Int32)querySaveStaff.ExecuteScalar();
+                    cn.CloseConnection();
+                }
+
 
                 string saveStaff = "INSERT into [dbo].[user]" +
                     "(rol_id,eenheid_id,functie_id,kazerne_id,upload_id,name,badge_nr,password,tel,status) " +
@@ -102,7 +117,7 @@ namespace WijkAgent2.Pages.User
                     querySaveStaff.Parameters.Add("@eenheid_id", SqlDbType.Int, 11).Value = EH.eenheid_id;
                     querySaveStaff.Parameters.Add("@functie_id", SqlDbType.Int, 11).Value = FU.functie_id;
                     querySaveStaff.Parameters.Add("@kazerne_id", SqlDbType.Int, 11).Value = KA.kazerne_id;
-                    querySaveStaff.Parameters.Add("@upload_id", SqlDbType.Int, 11).Value = 1;
+                    querySaveStaff.Parameters.Add("@upload_id", SqlDbType.Int, 11).Value = upload_id;
 
 
                     querySaveStaff.Parameters.Add("@name", SqlDbType.VarChar, 64).Value = TxtName.Text.ToString().Trim();
@@ -112,16 +127,12 @@ namespace WijkAgent2.Pages.User
 
                     querySaveStaff.Parameters.Add("@password", SqlDbType.VarChar, 512).Value = PasswordHandler.CreatePasswordHash(TxtPassword.Password.ToString());
                     querySaveStaff.Parameters.Add("@status", SqlDbType.Int, 11).Value = 1;
-
-
-
                     querySaveStaff.ExecuteNonQuery();
                 }
 
                 mw.ShowMessage("Gebruiker is toegevoegd.");
                 mw.ShowUserList();
             }
-            
         }
 
 
@@ -130,7 +141,9 @@ namespace WijkAgent2.Pages.User
             Uploader upload = new Uploader();
             byte[] imageArray = System.IO.File.ReadAllBytes(filename);
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-            String resp = await upload.SendFileAsync(base64ImageRepresentation, filename, "icon/", DateTime.Now + ".png");
+            Array l = filename.Split('.');
+            Random r = new Random();
+            String resp = await upload.SendFileAsync(base64ImageRepresentation, filename, "icon/", DateTime.UtcNow.Ticks + "_" + r.Next(1000,999999) + "." + l.GetValue(l.Length - 1));
             this.Image_Uploaded = resp;
             Console.WriteLine(resp);
         }
@@ -158,7 +171,7 @@ namespace WijkAgent2.Pages.User
             if(file != "")
             {
                 set_image(file);
-                Image_Uploaded = file;
+                sendFileAsync(file);
             }
             BtnTakeImage.Content = "Select";
         }
@@ -234,8 +247,26 @@ namespace WijkAgent2.Pages.User
                 if (Image_Uploaded.Equals(""))
                 {
                     mw.ShowDialog("Please selecteer een image");
-                    return false;
+                    validated = false;
                 }
+            }
+            if (validated)
+            {
+                cn.OpenConection();
+                SqlDataReader SDR = cn.DataReader("select * from[dbo].[User] where badge_nr = '" + TxtBadgeNr.Text.ToString().Trim() + "'");
+                if (SDR.HasRows)
+                {
+                    mw.ShowDialog("Deze Badge NR bestaat al");
+                    validated = false;
+                }
+                else
+                {
+                    if (!TxtPassword.Password.ToString().Trim().Equals(TxtPasswordRepeat.Password.ToString().Trim())){
+                        mw.ShowDialog("Wachtwoorden komen niet overeen");
+                        validated = false;
+                    }
+                }
+                cn.CloseConnection();
             }
             return validated;
 

@@ -4,24 +4,26 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="view_delict" Background="#FFEAE1E1">
+      mc:Ignorable="d"
+      Title="view_delict" Width="1041.619"
+      >
 
-    <Grid>
-        <Button Content="Terug" HorizontalAlignment="Left" Margin="689,406,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Label Content="Delict ID" x:Name="DelictIDLabel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="DelictStreetLabel" Content="Straat" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="DelictPlaceLabel" Content="Plaats" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="DelictZipcodeLabel" Content="Postcode" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="175"/>
-        <Label x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="10,0,0,15" Padding="5,5,5,5" Height="200" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="658">
-            <TextBlock x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,0,-6,-9" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Height="197" Width="653"/>
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Width="1032" Height="662">
+        <Button FontSize="18" Content="Terug" Margin="0,0,39,10" Click="Button_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
+        <Label FontSize="18" Content="Delict ID" x:Name="DelictIDLabel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" x:Name="DelictPlaceLabel" Content="Plaats" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" x:Name="DelictStreetLabel" Content="Straat" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" x:Name="DelictZipcodeLabel" Content="Postcode" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
+        <Border BorderBrush="Black" BorderThickness="1" Margin="0,452,0,0" Padding="5,5,5,5" HorizontalAlignment="Left" Width="658" Height="200" VerticalAlignment="Top">
+            <TextBlock FontSize="18" x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,-6,-6,-3" TextWrapping="Wrap" Text="" Width="653"/>
         </Border>
-        <Label Content="Categorieen:" HorizontalAlignment="Left" Margin="260,10,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="260,36,0,0" VerticalAlignment="Top" Width="214"/>
-        <ListBox x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="518,36,0,0" VerticalAlignment="Top" Width="214"/>
-        <Label Content="Personen:" HorizontalAlignment="Left" Margin="518,10,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
+        <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
+        <ListBox FontSize="18" x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="729,44,0,0" VerticalAlignment="Top" Width="214"/>
+        <Label FontSize="18" Content="Personen:" HorizontalAlignment="Left" Margin="729,10,0,0" VerticalAlignment="Top"/>
+        <Button FontSize="18" Content="Pas delict aan" Margin="0,0,191,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>
+        <Label FontSize="18" x:Name="DelictHouseNumberLabel" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>

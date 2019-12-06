@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,16 +35,33 @@ namespace WijkAgent2
         public static Snackbar Snackbar;
         private User user;
 
+        Validator validator;
+
         public MainWindow()
         {
             user = new User();
+            validator = new Validator();
             InitializeComponent();
-            ShowMessage("Werlcome");
             TopHeader.Text = "Wijkagent - Login";
             MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            MenuToggleButton.Visibility = Visibility.Hidden;
             MainFrame.Navigate(new Login(this));
         }
+        public bool check_permission(string perrmission_on)
+        {
+            return validator.validate(perrmission_on);
+        }
 
+        public void set_loggedin_user_id(int user_id)
+        {
+            MenuToggleButton.Visibility = Visibility.Visible;
+            validator.logged_in_user_id = user_id;
+        }
+
+        public int GetUserID()
+        {
+            return validator.logged_in_user_id;
+        }
 
         public string select_file_dialog()
         {
@@ -80,6 +98,17 @@ namespace WijkAgent2
                 MainSnackbar.MessageQueue.Enqueue(Message);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             Snackbar = this.MainSnackbar;
+        }
+        public string FirstCharToUpper(string source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return string.Empty;
+            // convert to char array of the string
+            char[] letters = source.ToCharArray();
+            // upper case the first char
+            letters[0] = char.ToUpper(letters[0]);
+            // return the array made of the new char array
+            return new string(letters);
         }
 
         public void LoadPermissionPage()
@@ -127,6 +156,7 @@ namespace WijkAgent2
         public void Logout()
         {
             MainFrame.Navigate(new Login(this));
+            MenuToggleButton.Visibility = Visibility.Hidden;
             TopHeader.Text = "Wijkagent - Login";
         }
 
@@ -134,6 +164,10 @@ namespace WijkAgent2
         {
             MainFrame.Navigate(new view_delict(this,delictID));
             TopHeader.Text = "Wijkagent - Delict " + delictID;
+        }
+        public void EditDelict(int delictID)
+        {
+            MainFrame.Navigate(new edit_delict(this, delictID));
         }
 
         public void close()
@@ -174,7 +208,6 @@ namespace WijkAgent2
                 }
                 
             }
-            
             MenuToggleButton.IsChecked = false;
         }
 

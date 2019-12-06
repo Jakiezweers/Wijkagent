@@ -33,7 +33,9 @@ namespace WijkAgent2.Pages.User
 
             Connection cn = new Connection();
             cn.OpenConection();
-            SqlDataReader sq = cn.DataReader("SELECT * FROM [dbo].[user]");
+            SqlDataReader sq = cn.DataReader("select us.*, up.upload_path " +
+                "from[dbo].[User] us " +
+                "join[dbo].[uploads] up on us.upload_id = up.upload_id");
 
             while (sq.Read())
             {
@@ -42,7 +44,8 @@ namespace WijkAgent2.Pages.User
                 user.UserId = id;
                 user.Name = (string)sq["name"];
                 user.BadgeId = Convert.ToInt32(sq["badge_nr"]);
-                user.PhoneNumber = Convert.ToInt32(sq["tel"]);
+                user.PhoneNumber = (string)sq["tel"];
+                user.ProfilePicture = new Uploads(Convert.ToInt32(sq["upload_id"]), (string)sq["upload_path"]);
                 UserList.Items.Add(user);
             }
         }

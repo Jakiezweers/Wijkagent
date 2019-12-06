@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Classes\Archive.cs" />
     <Compile Include="Classes\Base.cs" />
+    <Compile Include="Classes\CategoryList.cs" />
     <Compile Include="Classes\Delict.cs" />
     <Compile Include="Classes\functie.cs" />
     <Compile Include="Classes\Function.cs" />
@@ -93,11 +94,16 @@
     <Compile Include="Classes\uploader.cs" />
     <Compile Include="Classes\Uploads.cs" />
     <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\Validator.cs" />
     <Compile Include="Database\Connection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Modals\AddNewPerson.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Modals\personentoevoegen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,6 +119,10 @@
     <Page Include="Pages\delicten\delict_archive.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\delicten\edit_delict.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\delicten\view_delict.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +150,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManagementBaseObject.cs" />
+    <Compile Include="ManagementClass.cs" />
+    <Compile Include="Modals\AddNewPerson.xaml.cs">
+      <DependentUpon>AddNewPerson.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modals\personentoevoegen.xaml.cs">
       <DependentUpon>personentoevoegen.xaml</DependentUpon>
     </Compile>
@@ -151,6 +166,9 @@
     </Compile>
     <Compile Include="Pages\delicten\delict_archive.xaml.cs">
       <DependentUpon>delict_archive.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\delicten\edit_delict.xaml.cs">
+      <DependentUpon>edit_delict.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\delicten\view_delict.xaml.cs">
       <DependentUpon>view_delict.xaml</DependentUpon>
@@ -213,6 +231,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wijkagentlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wijkagentcover.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
