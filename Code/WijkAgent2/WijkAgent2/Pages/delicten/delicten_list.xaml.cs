@@ -36,7 +36,7 @@ namespace WijkAgent2.Pages.delicten
 
         List<CategoryList> categoryList = new List<CategoryList>();
         static int pageCounter = 1;
-        decimal delictsPerPage = 5;
+        decimal delictsPerPage = 10;
 
         private Connection cn = new Connection();
         public delicten_list(MainWindow MW)
@@ -96,9 +96,9 @@ namespace WijkAgent2.Pages.delicten
         {
             Delicten.Items.Clear();
             DelictCountLabel.Content = "Resultaten: " + delictenlistCheck.Count();
-            int counter = pageCounter * 5;
+            int counter = pageCounter * 10;
             decimal delictCount = delictenlistCheck.Count();
-            for (int i = counter - 5; i < counter; i++)
+            for (int i = counter - 10; i < counter; i++)
             {
                 if (delictenlistCheck.ElementAtOrDefault(i) != null)
                 {
@@ -268,12 +268,12 @@ namespace WijkAgent2.Pages.delicten
         }
         private void KeyDownEvent(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
+            if (e.Key == Key.Right && NextButton.IsEnabled == true)
             {
                 NextDelictsPage(sender, e);
             }
 
-            if (e.Key == Key.Left)
+            if (e.Key == Key.Left && PreviousButton.IsEnabled == true)
             {
                 PreviousDelictsPage(sender, e);
             }

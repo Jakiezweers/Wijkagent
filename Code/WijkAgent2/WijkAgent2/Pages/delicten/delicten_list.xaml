@@ -11,7 +11,7 @@
       >
 
     <Grid>
-        <DataGrid x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
+        <DataGrid SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="AliceBlue" AlternationCount="2" x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
                 <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="400"/>
@@ -46,11 +46,12 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="590" Margin="1242,72,0,0" VerticalAlignment="Top" Width="210" />
-        <Button Content="Terug" Margin="0,0,39,38" Click="Button_Click" Height="32" HorizontalAlignment="Right" Width="75" VerticalAlignment="Bottom"/>
+        <Button Content="Terug" Margin="0,0,45,141" Click="Button_Click" Height="32" HorizontalAlignment="Right" Width="75" VerticalAlignment="Bottom"/>
         <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="468" Margin="1493,32,0,0" VerticalAlignment="Top" Width="197"/>
-        <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="291,409,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
-        <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="72,409,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
-        <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="198,409,0,0" VerticalAlignment="Top" Height="32" Width="61"/>
-        <Label x:Name="DelictCountLabel" Content="Resultaten: 0" HorizontalAlignment="Left" Margin="1107,0,0,0" VerticalAlignment="Top" Height="32" Width="140"/>
+        <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="297,630,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
+        <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="78,630,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
+        <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="204,630,0,0" VerticalAlignment="Top" Height="32" Width="61"/>
+        <Label x:Name="DelictCountLabel" HorizontalAlignment="Left" Margin="1107,0,0,0" VerticalAlignment="Top" Height="32" Width="140"/>
+        <Label Content="Filter op categorie" HorizontalAlignment="Left" Margin="1252,0,0,0" VerticalAlignment="Top" Height="27" Width="200"/>
     </Grid>
 </Page>
