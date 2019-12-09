@@ -33,11 +33,6 @@ namespace WijkAgent2.Pages
             mw.Logout();
         }
 
-        private void AddDelict_Click(object sender, RoutedEventArgs e)
-        {
-            mw.AddDelict();
-        }
-
         private void DelictList_Click(object sender, RoutedEventArgs e)
         {
             mw.ShowDelictenList();

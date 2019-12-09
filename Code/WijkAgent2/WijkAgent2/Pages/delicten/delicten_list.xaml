@@ -4,8 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
-      mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="1700"
+      mc:Ignorable="d" d:DesignWidth="1700"
       Title="lijst"
       PreviewKeyDown="KeyDownEvent"
       >
@@ -46,12 +45,13 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="590" Margin="1242,72,0,0" VerticalAlignment="Top" Width="210" />
-        <Button Content="Terug" Margin="0,0,45,141" Click="Button_Click" Height="32" HorizontalAlignment="Right" Width="75" VerticalAlignment="Bottom"/>
+        <Button Content="Terug" Margin="1580,620,0,0" Click="Button_Click" Height="32" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top"/>
         <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="468" Margin="1493,32,0,0" VerticalAlignment="Top" Width="197"/>
         <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="297,630,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
         <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="78,630,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
-        <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="204,630,0,0" VerticalAlignment="Top" Height="32" Width="61"/>
+        <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="193,630,0,0" VerticalAlignment="Top" Height="32" Width="87"/>
         <Label x:Name="DelictCountLabel" HorizontalAlignment="Left" Margin="1107,0,0,0" VerticalAlignment="Top" Height="32" Width="140"/>
         <Label Content="Filter op categorie" HorizontalAlignment="Left" Margin="1252,0,0,0" VerticalAlignment="Top" Height="27" Width="200"/>
+        <Button x:Name="AddDelictBtn" Content="Nieuw delict aanmaken" HorizontalAlignment="Left" Margin="1580,32,-94,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddDelict_Click"/>
     </Grid>
 </Page>

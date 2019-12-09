@@ -278,6 +278,10 @@ namespace WijkAgent2.Pages.delicten
                 PreviousDelictsPage(sender, e);
             }
         }
+        private void AddDelict_Click(object sender, RoutedEventArgs e)
+        {
+            mw.AddDelict();
+        }
 
         //Combobox
         private void BindCategroryDropDown()
