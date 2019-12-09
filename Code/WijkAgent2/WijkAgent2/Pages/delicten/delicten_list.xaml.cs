@@ -17,15 +17,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
-using System.Linq;
 using WijkAgent2.Classes;
 using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.delicten
 {
-    /// <summary>
-    /// Interaction logic for lijst.xaml
-    /// </summary>
     public partial class delicten_list : Page
     {
         MainWindow mw;
@@ -121,20 +117,19 @@ namespace WijkAgent2.Pages.delicten
             {
                 NextButton.IsEnabled = true;
             }
+            PageLabel.Content = "Pagina: " + pageCounter + " / " + Math.Ceiling(delictenlistCheck.Count() / delictsPerPage);
         }
 
         private void NextDelictsPage(object sender, RoutedEventArgs e) //next
         {
             pageCounter++;
             ShowDelicts();
-            PageLabel.Content = "Pagina: " + pageCounter;
         }
 
         private void PreviousDelictsPage(object sender, RoutedEventArgs e) //previous
         {
             pageCounter--;
             ShowDelicts();
-            PageLabel.Content = "Pagina: " + pageCounter;
         }
 
 
