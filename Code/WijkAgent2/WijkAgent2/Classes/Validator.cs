@@ -25,7 +25,9 @@ namespace WijkAgent2.Classes
             bool found = false;
             while (sq.Read())
             {
-                if ((string)sq["act"] == permission)
+                string t = (string)sq["act"];
+
+                if (t.Trim().Equals(permission))
                 {
                     found = true;
                 }

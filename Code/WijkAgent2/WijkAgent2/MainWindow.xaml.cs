@@ -45,6 +45,7 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Login";
             MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
             MenuToggleButton.Visibility = Visibility.Hidden;
+            UserInfo.Visibility = Visibility.Hidden;
             MainFrame.Navigate(new Login(this));
         }
         public bool check_permission(string perrmission_on)
@@ -52,10 +53,18 @@ namespace WijkAgent2
             return validator.validate(perrmission_on);
         }
 
-        public void set_loggedin_user_id(int user_id)
+        public void set_loggedin_user_id(int user_id, string name, string Image_Url)
         {
-            MenuToggleButton.Visibility = Visibility.Visible;
             validator.logged_in_user_id = user_id;
+            MenuToggleButton.Visibility = Visibility.Visible;
+
+            if (validator.validate("test")) { LBDelicten.Visibility = Visibility.Visible; } else { LBDelicten.Visibility = Visibility.Collapsed; }
+            if (validator.validate("test")) { LBArchive.Visibility = Visibility.Visible; } else { LBArchive.Visibility = Visibility.Collapsed; }
+            if (validator.validate("test")) { LBGebruikers.Visibility = Visibility.Visible; } else { LBGebruikers.Visibility = Visibility.Collapsed; }
+            if (validator.validate("test")) { LBDelicten.Visibility = Visibility.Visible; } else { LBDelicten.Visibility = Visibility.Collapsed; }
+            NameHeader.Text = name;
+            UserInfo.Visibility = Visibility.Visible;
+            UserImage.Source = new BitmapImage(new Uri(Image_Url, UriKind.RelativeOrAbsolute));
         }
 
         public int GetUserID()
@@ -157,6 +166,8 @@ namespace WijkAgent2
         {
             MainFrame.Navigate(new Login(this));
             MenuToggleButton.Visibility = Visibility.Hidden;
+            NameHeader.Text = "";
+            UserInfo.Visibility = Visibility.Hidden;
             TopHeader.Text = "Wijkagent - Login";
         }
 
