@@ -96,7 +96,13 @@
                         <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
                                         x:Name="MenuToggleButton"/>
 
-                        <TextBlock HorizontalAlignment="Center" x:Name="TopHeader" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Center" x:Name="TopHeader" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
+                            <Grid x:Name="UserInfo" HorizontalAlignment="Right">
+                                <Image MaxHeight="50px" MaxWidth="50px" x:Name="UserImage" Source="Images/no_user.png" HorizontalAlignment="Left" Width="57" />
+                                <TextBlock x:Name="NameHeader" VerticalAlignment="Center" FontSize="22" Margin="60,12,0,12">AAAA</TextBlock>
+                            </Grid>
+                        </Grid>
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <Grid>
@@ -112,7 +118,7 @@
                             <Frame  x:Name="MainFrame" Content="Frame"/>
                         </ContentControl>
                     </ScrollViewer>
-                    
+
                     <materialDesign:DialogHost CloseOnClickAway="True" Identifier="MessageDialog" Grid.RowSpan="2" Margin="0,0,0,0">
                         <materialDesign:DialogHost.DialogContentTemplate>
                             <DataTemplate DataType="local:Message">
