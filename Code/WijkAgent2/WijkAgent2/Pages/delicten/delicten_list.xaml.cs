@@ -17,15 +17,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
-using System.Linq;
 using WijkAgent2.Classes;
 using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.delicten
 {
-    /// <summary>
-    /// Interaction logic for lijst.xaml
-    /// </summary>
     public partial class delicten_list : Page
     {
         MainWindow mw;
@@ -36,7 +32,7 @@ namespace WijkAgent2.Pages.delicten
 
         List<CategoryList> categoryList = new List<CategoryList>();
         static int pageCounter = 1;
-        decimal delictsPerPage = 5;
+        decimal delictsPerPage = 10;
 
         private Connection cn = new Connection();
         public delicten_list(MainWindow MW)
@@ -96,9 +92,9 @@ namespace WijkAgent2.Pages.delicten
         {
             Delicten.Items.Clear();
             DelictCountLabel.Content = "Resultaten: " + delictenlistCheck.Count();
-            int counter = pageCounter * 5;
+            int counter = pageCounter * 10;
             decimal delictCount = delictenlistCheck.Count();
-            for (int i = counter - 5; i < counter; i++)
+            for (int i = counter - 10; i < counter; i++)
             {
                 if (delictenlistCheck.ElementAtOrDefault(i) != null)
                 {
@@ -121,20 +117,19 @@ namespace WijkAgent2.Pages.delicten
             {
                 NextButton.IsEnabled = true;
             }
+            PageLabel.Content = "Pagina: " + pageCounter + " / " + Math.Ceiling(delictenlistCheck.Count() / delictsPerPage);
         }
 
         private void NextDelictsPage(object sender, RoutedEventArgs e) //next
         {
             pageCounter++;
             ShowDelicts();
-            PageLabel.Content = "Pagina: " + pageCounter;
         }
 
         private void PreviousDelictsPage(object sender, RoutedEventArgs e) //previous
         {
             pageCounter--;
             ShowDelicts();
-            PageLabel.Content = "Pagina: " + pageCounter;
         }
 
 
@@ -268,15 +263,19 @@ namespace WijkAgent2.Pages.delicten
         }
         private void KeyDownEvent(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
+            if (e.Key == Key.Right && NextButton.IsEnabled == true)
             {
                 NextDelictsPage(sender, e);
             }
 
-            if (e.Key == Key.Left)
+            if (e.Key == Key.Left && PreviousButton.IsEnabled == true)
             {
                 PreviousDelictsPage(sender, e);
             }
+        }
+        private void AddDelict_Click(object sender, RoutedEventArgs e)
+        {
+            mw.AddDelict();
         }
 
         //Combobox
