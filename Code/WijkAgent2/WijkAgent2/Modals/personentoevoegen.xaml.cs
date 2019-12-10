@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
+using WijkAgent2.Database;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace WijkAgent2.Modals
@@ -29,12 +30,27 @@ namespace WijkAgent2.Modals
         public List<int> bsnlist = new List<int>();
         public List<string> typelist = new List<string>();
         public List<int> person_idList = new List<int>();
+        private MainWindow mw;
 
-        public personentoevoegen()
+        public personentoevoegen(MainWindow MW)
         {
             InitializeComponent();
             AddPersonCategoryCB();
             base.Closing += this.CloseWindow;
+            mw = MW;
+        }
+        public personentoevoegen(MainWindow MW, List<string> _typelist, List<int> _bsnlist, List<int> _person_idList)
+        {
+            InitializeComponent();
+            AddPersonCategoryCB();
+            mw = MW;
+            base.Closing += this.CloseWindow;
+                       bsnlist.Clear();
+            typelist.Clear();
+            person_idList.Clear();
+            bsnlist = _bsnlist;
+            typelist = _typelist;
+            person_idList = _person_idList;
         }
 
         public void RefreshData()
@@ -59,14 +75,19 @@ namespace WijkAgent2.Modals
             if (bsnTextField.Length == 9 && int.TryParse(bsnTextField, out value))
             {
                 BSNNumber = value;
-            } 
+            }
             else
             {
                 errorMessage += "BSN is niet correct ingevoegd.\n";
                 error = true;
                 BSNNumber = 0;
             }
-            if(error == true)
+            if(CategoryCB.Text == "")
+            {
+                errorMessage += "Categorie is leeg.";
+                error = true;
+            }
+            if(error)
             {
                 CheckErrorMessage(errorMessage);
                 return;
@@ -75,6 +96,11 @@ namespace WijkAgent2.Modals
             if(person_id == 0)
             {
                 MessageBox.Show("Er is iets foutgegaan!");
+                return;
+            }
+            if(person_id == 00)
+            {
+                MessageBox.Show("Persoons gegevens kloppen niet!");
                 return;
             }
             foreach (var item in bsnlist)
@@ -94,6 +120,16 @@ namespace WijkAgent2.Modals
 
         private void Personen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+        }
+        private void RemovePerson(object sender, RoutedEventArgs e)
+        {
+            var RemoveBSN = (int)((System.Windows.Controls.Button)sender).Tag;
+            int index = bsnlist.IndexOf(RemoveBSN);
+            bsnlist.RemoveAt(index);
+            typelist.RemoveAt(index);
+            person_idList.RemoveAt(index);
+            RefreshData();
 
         }
 
@@ -155,12 +191,13 @@ namespace WijkAgent2.Modals
 
         private void AddPersonCategoryCB()
         {
+            CategoryCB.Items.Add("Verdachte");
             CategoryCB.Items.Add("Getuige");
             CategoryCB.Items.Add("Dader");
             CategoryCB.Items.Add("Slachtoffer");
         }
     }
-    public class Prompt
+    public class Prompt : Page
     {
         public static int ShowDialog(int bsnNumber)
         {
@@ -179,6 +216,7 @@ namespace WijkAgent2.Modals
             System.Windows.Forms.TextBox SurNameTextBox = new System.Windows.Forms.TextBox() { Left = 50, Top = 110, Width = 400 };
             System.Windows.Forms.Label BirthDateLabel = new System.Windows.Forms.Label() { Left = 50, Top = 140, Text = "Geboorte datum: " };
             DateTimePicker BirthDateTextBox = new DateTimePicker() { Left = 50, Top = 170, Width = 170 };
+
             System.Windows.Forms.Button confirmation = new System.Windows.Forms.Button() { Text = "Persoon toevoegen", Left = 350, Width = 130, Top = 200, DialogResult = DialogResult.OK };
             confirmation.Click += (sender, e) => { prompt.Close(); };
             prompt.Controls.Add(NameTextLabel);
@@ -194,6 +232,10 @@ namespace WijkAgent2.Modals
             {
                 string firstName = NameTextBox.Text;
                 string lastName = SurNameTextBox.Text;
+                if(firstName == "" || lastName == "" || firstName.Length > 1 || lastName.Length > 1)
+                {
+                    return 00;
+                }
                 DateTime birthDate = BirthDateTextBox.Value;
                 Prompt promptclass = new Prompt();
                 int person_id = promptclass.AddPersonToDatabase(firstName, lastName, birthDate, bsnNumber);

@@ -5,7 +5,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        WindowState="Normal"
+        WindowState="Maximized"
         xmlns:local="clr-namespace:WijkAgent2"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -14,10 +14,11 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{StaticResource MaterialDesignFont}" Icon="favicon.ico"
-        Width="800"
-        Height="500"
+        Width="1920"
+        Height="1080"
         mc:Ignorable="d"
-        Title="MainWindow">
+        Title="MainWindow"
+        WindowStartupLocation="CenterScreen">
     <Window.CommandBindings>
         <CommandBinding Command="Copy" Executed="OnCopy"></CommandBinding>
     </Window.CommandBindings>
@@ -54,23 +55,35 @@
                         <ListBox.Resources>
                             <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
                         </ListBox.Resources>
-                        
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="domain:DemoItem">
-                                <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
                         <ListBoxItem x:Name="LBHome">
-                            <Label Content="Home"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/home.png"/>
+                                <Label Margin="40,10,0,10" Content="Home"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBDelicten">
-                            <Label Content="Delicten"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/delict.png"/>
+                                <Label Margin="40,10,0,10" Content="Delicten"/>
+                            </Grid>
+                        </ListBoxItem>
+                        <ListBoxItem x:Name="LBArchive">
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/archive.png"/>
+                                <Label Margin="40,10,0,10" Content="Archive"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBGebruikers">
-                            <Label Content="Gebruikers"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/users.png"/>
+                                <Label Margin="40,10,0,10" Content="Gebruikers"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBLogout">
-                            <Label Content="Logout"/>
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/logout.png"/>
+                                <Label Margin="40,10,0,10" Content="Logout"/>
+                            </Grid>
                         </ListBoxItem>
                     </ListBox>
                 </DockPanel>
@@ -82,8 +95,14 @@
 
                         <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
                                         x:Name="MenuToggleButton"/>
-                        
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
+
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Center" x:Name="TopHeader" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
+                            <Grid x:Name="UserInfo" HorizontalAlignment="Right">
+                                <Image MaxHeight="50px" MaxWidth="50px" x:Name="UserImage" Source="Images/no_user.png" HorizontalAlignment="Left" Width="57" />
+                                <TextBlock x:Name="NameHeader" VerticalAlignment="Center" FontSize="22" Margin="60,12,0,12">AAAA</TextBlock>
+                            </Grid>
+                        </Grid>
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <Grid>
@@ -100,6 +119,15 @@
                         </ContentControl>
                     </ScrollViewer>
 
+                    <materialDesign:DialogHost CloseOnClickAway="True" Identifier="MessageDialog" Grid.RowSpan="2" Margin="0,0,0,0">
+                        <materialDesign:DialogHost.DialogContentTemplate>
+                            <DataTemplate DataType="local:Message">
+                                <StackPanel Margin="20">
+                                    <TextBlock Text="{Binding message}" MinWidth="150" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </materialDesign:DialogHost.DialogContentTemplate>
+                    </materialDesign:DialogHost>
                     <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="MainSnackbar"
                                             Grid.Row="1" />
                 </Grid>

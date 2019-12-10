@@ -1,0 +1,42 @@
+﻿<Page x:Class="WijkAgent2.Pages.permissions.permission_window"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WijkAgent2.Pages.permissions"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="permission_window">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <ComboBox Name="comboBox" Margin="0,0,500,0" ItemsSource="{Binding Roles}" SelectionChanged="ComboBox_SelectionChanged">
+        </ComboBox>
+
+        <Popup Name="myPopup">
+            <TextBlock Name="myPopupText" 
+                 Background="LightBlue" 
+                 Foreground="Blue">
+                 Veranderingen opgeslagen
+            </TextBlock>
+        </Popup>
+
+        <ListBox x:Name="LBPermissions" Margin="0,10,499.6,-37.2" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Checked}"></CheckBox>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Content="Opslaan" HorizontalAlignment="right" Margin="690,10,10,0" VerticalAlignment="Top" Width="94" Click="Button_Click"/>
+        <Button Content="Rol toevoegen" HorizontalAlignment="right" Margin="0,325.8,10,-350.6" VerticalAlignment="Top" Width="177" Click="Button_ClickR" Grid.Row="2"/>
+        <Button Content="Permissie toevoegen" HorizontalAlignment="right" Margin="0,362.8,10,-390.4" VerticalAlignment="Top" Width="177" Click="Button_ClickP" Grid.Row="2" Height="34"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="380,329.8,200,-343.2" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="211" Name="Rolbox"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="380,362.8,200,-374.6" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="211" Name="permissiebox"/>
+    </Grid>
+</Page>

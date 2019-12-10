@@ -55,10 +55,7 @@ namespace WijkAgent2.Pages.delicten
                 }
 
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.archive as a " +
-                                                      "JOIN dbo.delict as d ON a.delict_id = d.delict_id " +
-                                                      "WHERE d.status = 0 " +
-                                                      "ORDER BY a.delict_id";
+                command.CommandText = "SELECT d.delict_id, u.user_id, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id";
 
 
                 using (DbDataReader dataReader = command.ExecuteReader())
@@ -68,13 +65,44 @@ namespace WijkAgent2.Pages.delicten
                         int id = Convert.ToInt32(dataReader["delict_id"]);
                         Delict d1 = new Delict();
                         d1.id = id;
-                        d1.street = (string)dataReader["street"];
-                        d1.createtime = (DateTime)dataReader["added_date"];
-                        Console.WriteLine($"{dataReader["street"]}");
+                        d1.street = GetDelictCategory(id);
+                        d1.changedBy = (int)dataReader["user_id"];
+                        d1.addedDate = (DateTime)dataReader["date_added"];
                         Delicten.Items.Add(d1);
                     }
                 }
 
+            }
+        }
+        private string GetDelictCategory(int delictID)
+        {
+            string returnString = "";
+            string provider = ConfigurationManager.AppSettings["provider"];
+            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+            using (DbConnection connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionstring;
+                connection.Open();
+                DbCommand command = factory.CreateCommand();
+
+                command.Connection = connection;
+                command.CommandText = "SELECT name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        returnString += dataReader["name"];
+                        returnString += ", ";
+                    }
+                }
+                if (returnString.Length > 2)
+                {
+                    return returnString.Substring(0, returnString.Length - 2);
+                }
+                return returnString;
             }
         }
 
@@ -140,6 +168,8 @@ namespace WijkAgent2.Pages.delicten
 
                     }
                 }
+                var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
+                Delicten.Items.RemoveAt(currentRowIndex);
             }
             else if (dialogResult == MessageBoxResult.No)
             {

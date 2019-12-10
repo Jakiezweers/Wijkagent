@@ -69,7 +69,7 @@ namespace Wijkagent2.Classes
                 
                 System.Diagnostics.Debug.WriteLine(response);
                 var responseString = await response.Content.ReadAsStringAsync();
-                return responseString;
+                return "http://141.138.137.63/" + folder + filename_upload;
             }
         }
     }

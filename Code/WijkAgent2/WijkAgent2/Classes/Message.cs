@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wijkagent2.Classes
+namespace WijkAgent2.Classes
 {
-    class Database_queries
+    class Message
     {
+        public string message { get; set; }
     }
 }

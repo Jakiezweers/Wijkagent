@@ -17,6 +17,8 @@ namespace Wijkagent2.Classes
         public decimal lat { get; set; }
         public int status { get; set; }
         public DateTime createtime { get; set; }
+        public int changedBy { get; set; }
+        public DateTime addedDate { get; set; }
 
 
     }
