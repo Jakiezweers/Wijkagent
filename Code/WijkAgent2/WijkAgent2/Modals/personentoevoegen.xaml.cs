@@ -95,12 +95,12 @@ namespace WijkAgent2.Modals
             int person_id = CheckIfPersonExists(BSNNumber);
             if(person_id == 0)
             {
-                MessageBox.Show("Er is iets foutgegaan!");
+                mw.ShowDialog("Er is iets foutgegaan!");
                 return;
             }
             if(person_id == 00)
             {
-                MessageBox.Show("Persoons gegevens kloppen niet!");
+                mw.ShowDialog("Persoons gegevens kloppen niet!");
                 return;
             }
             foreach (var item in bsnlist)
@@ -232,7 +232,7 @@ namespace WijkAgent2.Modals
             {
                 string firstName = NameTextBox.Text;
                 string lastName = SurNameTextBox.Text;
-                if(firstName == "" || lastName == "" || firstName.Length > 1 || lastName.Length > 1)
+                if(firstName == "" || lastName == "" || firstName.Length < 1 || lastName.Length < 1)
                 {
                     return 00;
                 }
