@@ -59,5 +59,10 @@ namespace WijkAgent2.Pages.User
         {
             mw.AddUser();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            mw.LoadHomeScreen();
+        }
     }
 }

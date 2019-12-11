@@ -203,6 +203,9 @@ namespace WijkAgent2
                     case "LBHome":
                         LoadHomeScreen();
                         break;
+                    case "LBAddDelict":
+                        AddDelict();
+                        break;
                     case "LBDelicten":
                         ShowDelictenList();
                         break;
