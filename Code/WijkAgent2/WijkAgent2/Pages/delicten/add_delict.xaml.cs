@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.Tasks.Geocoding;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -32,6 +33,8 @@ namespace WijkAgent2.Pages.delicten
         List<int> personsbsn = new List<int>();
         List<string> personstype = new List<string>();
         List<int> person_id = new List<int>();
+        LocatorTask _geocoder;
+        Uri _serviceUri = new Uri("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
 
         private Connection cn = new Connection();
         int i = 0;
@@ -101,6 +104,8 @@ namespace WijkAgent2.Pages.delicten
             string date = DatumTB.Text;
             double longCoord = 0.0000;
             double latCoord = 0.0000;
+            string checkCoord = street + ' ' + homeNumber + ' ' + placeName;
+
 
             StringBuilder homeNumbernum =
                   new StringBuilder();
@@ -173,9 +178,39 @@ namespace WijkAgent2.Pages.delicten
             else //Hieronder alles wat uitgevoerd moet worden als alles goed is. 
             {
                 SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), int.Parse(homeNumbernum.ToString()), homeNumberLet.ToString().ToUpper(), zipCode.ToUpper(), mw.FirstCharToUpper(street), description, longCoord, latCoord);
+                SearchCoord(checkCoord);
                 mw.ShowMessage("Delict toegevoegd");
             }
         }
+
+        private async void SearchCoord(string check)
+        {
+            try {
+                _geocoder = await LocatorTask.CreateAsync(_serviceUri);
+                IReadOnlyList<SuggestResult> suggestions = await _geocoder.SuggestAsync(check);
+                SuggestResult firstsuggestion = suggestions.First();
+                IReadOnlyList<GeocodeResult> coords = await _geocoder.GeocodeAsync(firstsuggestion.Label);
+                if (coords.Count < 1) { return; } // GEEN RESULTATEN GEVONDEN!
+                string xcoord = coords.First().DisplayLocation.X.ToString();
+                string ycoord = coords.First().DisplayLocation.Y.ToString();
+                double parseX = Double.Parse(xcoord);
+                double parseY = Double.Parse(ycoord);
+                cn.OpenConection();
+                string UpdatePerson = "UPDATE dbo.delict SET long = @X, lat = @Y WHERE delict_id = (SELECT max(delict_id) from dbo.delict)";
+                using (SqlCommand cmd = new SqlCommand(UpdatePerson))
+                {
+                    cmd.Connection = cn.GetConnection();
+                    cmd.Parameters.Add("@X", SqlDbType.Float).Value = parseX;
+                    cmd.Parameters.Add("@Y", SqlDbType.Float).Value = parseY;
+                    cmd.ExecuteScalar();
+                }
+
+
+
+            }
+            catch (Exception eas) { Console.WriteLine(eas);  }
+            cn.CloseConnection();
+            }
 
         private void GetLat()
         {
