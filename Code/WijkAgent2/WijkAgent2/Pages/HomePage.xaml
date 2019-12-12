@@ -4,11 +4,29 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WijkAgent2.Pages"
+      xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
-    <Grid>
+    <Grid Margin="0,0,-70,-17">
+        <esri:MapView x:Name="mapview" Margin="166,2,560,-2">
+
+        </esri:MapView>
+
         <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
+
+
+        <DataGrid HorizontalAlignment="Left" Height="483" Margin="1421,34,-1097,-50" VerticalAlignment="Top" Width="546">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding street}"/>
+                <DataGridTextColumn Header="Personen" Binding="{Binding createtime}" Width="250"/>
+                <DataGridTextColumn Header="Datum" Binding="{Binding firstnamecount}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
+
+
 </Page>
