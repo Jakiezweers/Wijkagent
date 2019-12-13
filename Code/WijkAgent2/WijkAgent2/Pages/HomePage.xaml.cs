@@ -45,6 +45,30 @@ namespace WijkAgent2.Pages
             mapview.GeoViewTapped += Click;
         }
 
+        private async void LoadMap()
+        {
+
+            //Map inladen
+            var mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
+            Viewpoint startingpoint = new Viewpoint(mapPoint, 50000);
+            Map.InitialViewpoint = startingpoint;
+            mapview.Map = Map;
+
+            //Delicten op map laden
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("Select * from dbo.delict");
+            while (sq.Read())
+            {
+                MapPoint point = new MapPoint((double)sq["long"], (double)sq["lat"], SpatialReferences.Wgs84);
+                paint = new Graphic(point, marker);
+                mapview.GraphicsOverlays.Remove(overlay);
+                overlay.Graphics.Add(paint);
+                mapview.GraphicsOverlays.Add(overlay);
+            }
+            cn.CloseConnection();
+
+        }
+
         private async void Click(object sender, Esri.ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
             MapPoint point = new MapPoint(e.Location.X, e.Location.Y);
@@ -64,29 +88,7 @@ namespace WijkAgent2.Pages
 
         }
 
-        private async void LoadMap()
-        {
-
-            //Map inladen
-            var mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
-            Viewpoint startingpoint = new Viewpoint(mapPoint, 50000);
-            Map.InitialViewpoint = startingpoint;
-            mapview.Map = Map;
-
-            //Delicten op map laden
-            cn.OpenConection();
-            SqlDataReader sq = cn.DataReader("Select * from dbo.delict");
-            while (sq.Read())
-            {
-                MapPoint point = new MapPoint((double)sq["long"], (double)sq["lat"], SpatialReferences.Wgs84);
-                paint = new Graphic(point, marker);
-                mapview.GraphicsOverlays.Remove(overlay);
-                overlay.Graphics.Add(paint);
-                mapview.GraphicsOverlays.Add(overlay);                
-            }
-            cn.CloseConnection();
-
-        }
+  
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {

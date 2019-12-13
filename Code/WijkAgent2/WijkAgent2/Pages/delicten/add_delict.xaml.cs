@@ -187,6 +187,7 @@ namespace WijkAgent2.Pages.delicten
         {
             try {
                 _geocoder = await LocatorTask.CreateAsync(_serviceUri);
+                
                 IReadOnlyList<SuggestResult> suggestions = await _geocoder.SuggestAsync(check);
                 SuggestResult firstsuggestion = suggestions.First();
                 IReadOnlyList<GeocodeResult> coords = await _geocoder.GeocodeAsync(firstsuggestion.Label);
