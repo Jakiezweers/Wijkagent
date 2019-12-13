@@ -9,33 +9,26 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HomePage">
 
-    <Grid Margin="0,0,-70,-17">
-        <esri:MapView x:Name="mapview" Margin="166,2,560,-2">
+    <Grid Margin="0,0,10,-17">
+        <esri:MapView x:Name="mapview" Margin="166,2,657,-2">
 
         </esri:MapView>
 
         <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
 
 
-        <DataGrid HorizontalAlignment="Left" Height="483" Margin="1415,15,-1042,-31" VerticalAlignment="Top" Width="497">
+        <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"/>
-                <DataGridTextColumn Header="Categorie" Binding="{Binding street}"/>
-                <DataGridTextColumn Header="Personen" Binding="{Binding createtime}" Width="250"/>
-                <DataGridTextColumn Header="Datum" Binding="{Binding firstnamecount}"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding category}"/>
+                <DataGridTextColumn Header="Personen" Binding="{Binding person}" Width="250"/>
+                <DataGridTextColumn Header="Datum" Binding="{Binding datetime1}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Delict inzien" HorizontalAlignment="Left" Margin="1737,528,-1047,-93" VerticalAlignment="Top" Width="120"/>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="259" Margin="1419,582,-1033,-374" VerticalAlignment="Top" Width="484">
-            <Label Content=""/>
-        </Border>
-        <Label Content="Delict 2" HorizontalAlignment="Left" Height="23" Margin="1444,603,-697,-159" VerticalAlignment="Top" Width="123"/>
-        <Label Content="12-11-2019" HorizontalAlignment="Left" Height="100" Margin="1503,602,-733,-235" VerticalAlignment="Top" Width="100"/>
-        <Label Content="Categorie Diefstal" HorizontalAlignment="Left" Height="65" Margin="1442,644,-698,-242" VerticalAlignment="Top" Width="126"/>
-        <Label Content="Personen Gerard Vos" HorizontalAlignment="Left" Height="100" Margin="1442,687,-728,-320" VerticalAlignment="Top" Width="156"/>
-        <Label Content="Omschrijving" HorizontalAlignment="Left" Height="100" Margin="1444,726,-900,-359" VerticalAlignment="Top" Width="326"/>
-        <Label Content="Coordinaten 1.234N, 52,222W" HorizontalAlignment="Left" Height="100" Margin="1674,601,-1066,-234" VerticalAlignment="Top" Width="262"/>
-        <Label Content="Postcode 5432TN" HorizontalAlignment="Left" Height="100" Margin="1673,644,-948,-277" VerticalAlignment="Top" Width="145"/>
+        <Border x:Name="labelsVis6" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="256" Margin="1252,585,-1113,-374" VerticalAlignment="Top" Width="651" Visibility="Hidden"/>
+        <Label x:Name="labelsVis5" Content="Delict" HorizontalAlignment="Left" Height="23" Margin="1277,602,-610,-158" VerticalAlignment="Top" Width="123" FontWeight="Bold" Visibility="Hidden"/>
+        <Label x:Name="delictDate"  HorizontalAlignment="Left" Height="100" Margin="1429,601,-739,-234" VerticalAlignment="Top" Width="100" FontWeight="Bold"/>
         <TextBox HorizontalAlignment="Left" Height="22" Margin="22,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <ComboBox HorizontalAlignment="Left" Margin="22,179,0,0" VerticalAlignment="Top" Width="120"/>
         <CheckBox Content="Zoeken op één datum" HorizontalAlignment="Left" Margin="20,380,0,0" VerticalAlignment="Top"/>
@@ -46,6 +39,19 @@
         <Label Content="Categorie" HorizontalAlignment="Left" Margin="16,152,0,0" VerticalAlignment="Top"/>
         <Label Content="Postcode" HorizontalAlignment="Left" Margin="16,80,0,0" VerticalAlignment="Top"/>
         <Button Content="Filter" HorizontalAlignment="Left" Margin="11,495,0,-60" VerticalAlignment="Top" Width="75"/>
+        <Label x:Name="labelsVis" Content="Categorie" HorizontalAlignment="Left" Height="100" Margin="1277,687,-587,-320" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
+        <Label x:Name="labelsVis1" Content="Personen" HorizontalAlignment="Left" Height="100" Margin="1278,724,-588,-357" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
+        <Label x:Name="labelsVis2" Content="Omschrijving" HorizontalAlignment="Left" Height="100" Margin="1278,760,-588,-393" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
+        <Label x:Name="labelsVis3" Content="Coördinaten" HorizontalAlignment="Left" Height="100" Margin="1517,600,-827,-233" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
+        <Label x:Name="labelsVis4" Content="Postcode" HorizontalAlignment="Left" Height="100" Margin="1517,650,-827,-283" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
+        <Label x:Name="delictName"  HorizontalAlignment="Left" Height="100" Margin="1328,603,-638,-236" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="delictCategory"  HorizontalAlignment="Left" Height="63" Margin="1347,688,-1097,-284" VerticalAlignment="Top" Width="540"/>
+        <Label x:Name="delictPerson"  HorizontalAlignment="Left" Height="45" Margin="1347,725,-1101,-303" VerticalAlignment="Top" Width="544"/>
+        <Label x:Name="delictDescription" HorizontalAlignment="Left" Height="76" Margin="1373,763,-1108,-372" VerticalAlignment="Top" Width="525"/>
+        <Label x:Name="delictCoordinatesX" HorizontalAlignment="Left" Height="100" Margin="1597,602,-1034,-235" VerticalAlignment="Top" Width="227"/>
+        <Label x:Name="delictCoordinatesY"  HorizontalAlignment="Left" Height="100" Margin="1598,619,-1035,-252" VerticalAlignment="Top" Width="227"/>
+        <Label x:Name="delictZip"  HorizontalAlignment="Left" Height="100" Margin="1598,653,-908,-286" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="labelsVis7" Content="X" HorizontalAlignment="Left" Margin="1851,589,-1108,-154" VerticalAlignment="Top" Width="47" Click="Close_window" Visibility="Hidden"/>
 
     </Grid>
 

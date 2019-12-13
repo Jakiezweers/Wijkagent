@@ -18,7 +18,6 @@
                     </CheckBox>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-            <Canvas Height="100" Width="100"/>
         </ComboBox>
         <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="101" Margin="41,98,0,0" VerticalAlignment="Top" Width="210" />
         <TextBox FontSize="18" x:Name="StraatTB" Height="35" Margin="0,249,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.494,1.71" HorizontalAlignment="Right" Width="142"/>
