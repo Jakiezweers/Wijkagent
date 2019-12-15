@@ -338,7 +338,7 @@ namespace WijkAgent2.Pages.delicten
 
         private void AddPerson_Click(object sender, RoutedEventArgs e)
         {
-            personentoevoegen addperson = new personentoevoegen(mw, personstype, personsbsn, person_id);
+            AddNewPerson addperson = new AddNewPerson(mw, personstype, personsbsn, person_id);
             addperson.RefreshData();
             addperson.ShowDialog();
             personsbsn = addperson.bsnlist;

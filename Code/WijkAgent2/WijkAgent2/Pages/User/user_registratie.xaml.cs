@@ -72,7 +72,7 @@ namespace WijkAgent2.Pages.User
         }
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
         {
-            mw.LoadHomeScreen();
+            mw.ShowUserList();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
