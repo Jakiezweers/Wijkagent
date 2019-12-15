@@ -170,9 +170,9 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Login";
         }
 
-        public void ShowDelict(int delictID)
+        public void ShowDelict(int delictID, int originalPage)
         {
-            MainFrame.Navigate(new view_delict(this,delictID));
+            MainFrame.Navigate(new view_delict(this,delictID,originalPage));
             TopHeader.Text = "Wijkagent - Delict " + delictID;
         }
         public void EditDelict(int delictID)

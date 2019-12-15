@@ -123,7 +123,7 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelict(currDelictID);
+            mw.ShowDelict(currDelictID,1);
         }
         private void category_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -331,7 +331,7 @@ namespace WijkAgent2.Pages.delicten
                 {
                     MessageBox.Show("ERROROR?:!" + ex.Message);
                 }
-                mw.ShowDelict(currDelictID);
+                mw.ShowDelict(currDelictID,1);
                 mw.ShowMessage("Delict succesvol gewijzigd");
             }
         }

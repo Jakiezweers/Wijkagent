@@ -190,6 +190,7 @@ namespace WijkAgent2.Pages
 
         public void clickDelict(Object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            DelictInzienBTN.IsEnabled = true;
             labelsVis.Visibility = Visibility.Visible;
             labelsVis1.Visibility = Visibility.Visible;
             labelsVis2.Visibility = Visibility.Visible;
@@ -358,7 +359,7 @@ namespace WijkAgent2.Pages
             TextBlock x = new TextBlock();
             x.Text = "close";
             setMarker(x);
-
+            DelictInzienBTN.IsEnabled = false;
         }
 
         private void filterMap(object sender, RoutedEventArgs e)
@@ -519,6 +520,10 @@ namespace WijkAgent2.Pages
                 disablefield = false;
             }
         }
-    }
 
+        private void OpenDelict(object sender, RoutedEventArgs e)
+        {
+            mw.ShowDelict(Convert.ToInt32(delictName.Content),3);
+        }
+    }
 }
