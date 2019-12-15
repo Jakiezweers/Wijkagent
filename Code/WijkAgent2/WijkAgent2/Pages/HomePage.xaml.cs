@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
+using WijkAgent2.Classes;
 using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages
@@ -34,24 +35,50 @@ namespace WijkAgent2.Pages
         private Connection cn = new Connection();
         private Connection cn1 = new Connection();
         private Connection cn2 = new Connection();
+        bool disablefield = false;
+        MapPoint mapPoint;
+        Viewpoint startingpoint;
         Map Map { get; set; } = new Map(Basemap.CreateStreets());
         GraphicsOverlay overlay = new GraphicsOverlay();
         Graphic paint;
         SimpleMarkerSymbol marker = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
+        List<CategoryList> categoryList = new List<CategoryList>();
+        List<Delict> delictenlist = new List<Delict>();
+        List<Delict> delictenlistWithDate = new List<Delict>();
+        List<Delict> delictenlistWithDateAndCategory = new List<Delict>();
+
+        int i = 0;
+
         public HomePage(MainWindow MW)
         {
             mw = MW;
             InitializeComponent();
             LoadMap();
             mapview.GeoViewTapped += Click;
+
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("Select * from dbo.category");
+            while (sq.Read())
+            {
+                categoryBox.Items.Add(sq["name"].ToString());
+            }
+            cn.CloseConnection();
+        }
+
+        //wanneer er geklikt wordt op een delict, focus op de juiste locatie
+        private async void LoadMap(double x, double y)
+        {
+            mapPoint = new MapPoint(x, y, SpatialReferences.Wgs84);
+            await mapview.SetViewpointCenterAsync(mapPoint);
+
         }
 
         private async void LoadMap()
         {
 
             //Map inladen
-            var mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
-            Viewpoint startingpoint = new Viewpoint(mapPoint, 50000);
+            mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
+            startingpoint = new Viewpoint(mapPoint, 50000);
             Map.InitialViewpoint = startingpoint;
             mapview.Map = Map;
 
@@ -62,6 +89,10 @@ namespace WijkAgent2.Pages
             while (sq.Read())
             {
                 MapPoint point = new MapPoint((double)sq["long"], (double)sq["lat"], SpatialReferences.Wgs84);
+
+                double longitude = double.Parse(sq["long"].ToString());
+                double lat = double.Parse(sq["lat"].ToString());
+
                 paint = new Graphic(point, marker);
                 paint.Attributes.Add(sq["id"].ToString(), sq["id"].ToString());
                 Delict d = new Delict();
@@ -122,13 +153,23 @@ namespace WijkAgent2.Pages
                     d.category = categories.ToString();
                     d.person = persons.ToString();
                     d.datetime1 = delicttime.ToString("dd-MM-yyyy");
-                    delictList.Items.Add(d);
+                d.longitude = longitude;
+                d.lat = lat;
+                delictenlist.Add(d);
 
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
                 mapview.GraphicsOverlays.Add(overlay);
             }
             cn.CloseConnection();
+
+            foreach(var be in delictenlist)
+            {
+                delictList.Items.Add(delictenlist[i]);
+                i++;
+
+            }
+            i = 0;
         }
 
         private async void Click(object sender, Esri.ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
@@ -138,16 +179,13 @@ namespace WijkAgent2.Pages
             IdentifyGraphicsOverlayResult identifyResults = await mapview.IdentifyGraphicsOverlayAsync(overlay, e.Position, 0, false, 1);
             if (identifyResults.Graphics.Count > 0)
             {
-
             }
             else
             {
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
                 mapview.GraphicsOverlays.Add(overlay);
-
             }
-
         }
 
         public void clickDelict(Object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -174,6 +212,7 @@ namespace WijkAgent2.Pages
             
             if (delictList.SelectedCells.Count > 0)
             {
+
                 TextBlock x = delictList.Columns[0].GetCellContent(delictList.Items[delictList.SelectedIndex]) as TextBlock;
                 cn.OpenConection();
                 Console.WriteLine("ID: " + x.Text);
@@ -181,11 +220,16 @@ namespace WijkAgent2.Pages
                 while (sq.Read())
                 {
                     delictName.Content = sq["delict_id"].ToString();
+                    delictDescription.Content = sq["description"].ToString();
                     DateTime delicttime = Convert.ToDateTime(sq["date"].ToString());
                     delictDate.Content = delicttime.ToString("dd-MM-yyyy");
                     delictZip.Content = sq["zipcode"].ToString();
                     delictCoordinatesX.Content = "X: " + sq["long"].ToString();
                     delictCoordinatesY.Content = "Y: " + sq["lat"].ToString();
+                    double xcoor = double.Parse(sq["long"].ToString());
+                    double ycoor = double.Parse(sq["lat"].ToString());
+                    LoadMap(xcoor, ycoor);
+                   
                 }
                 cn.CloseConnection();
 
@@ -194,7 +238,10 @@ namespace WijkAgent2.Pages
                 SqlDataReader sq1 = cn1.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + x.Text);
                 while (sq1.Read())
                 {
-                        categories.Append(sq1["name"].ToString() + ", ");     
+                   
+
+                    categories.Append(sq1["name"].ToString() + ", ");
+                   
                 }
                 cn1.CloseConnection();
 
@@ -215,6 +262,10 @@ namespace WijkAgent2.Pages
 
                 delictCategory.Content = categories;
                 delictPerson.Content = persons;
+
+
+
+               
                 setMarker(x);
             }
         }
@@ -226,6 +277,8 @@ namespace WijkAgent2.Pages
         {
             foreach (var a in overlay.Graphics)
             {
+                Console.WriteLine("X IN TEKST: " + x.Text);
+                Console.WriteLine("ATTRIBUTES: " + a.Attributes);
                 try
                 {
                     SimpleMarkerSymbol marker1 = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
@@ -234,8 +287,6 @@ namespace WijkAgent2.Pages
 
                     if (a.Attributes.ContainsKey(x.Text))
                     {
-                     //   Console.WriteLine("X VARIABLE: " + x.Text);
-
                         if (x.Text != "close")
                         {
                             SimpleMarkerSymbol marker = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Blue, 50);
@@ -246,13 +297,21 @@ namespace WijkAgent2.Pages
                             SimpleMarkerSymbol marker = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
                             a.Symbol = marker;
                         }
-                        
-              //          Console.WriteLine(a.Attributes[x.Text]);
-                    }
+                                            }
                 }
                 catch (Exception ere) { }
             }
         }
+
+
+
+
+
+
+
+
+
+
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             mw.Logout();
@@ -300,6 +359,165 @@ namespace WijkAgent2.Pages
             x.Text = "close";
             setMarker(x);
 
+        }
+
+        private void filterMap(object sender, RoutedEventArgs e)
+        {
+
+            overlay.Graphics.Clear();
+            delictenlistWithDate.Clear();
+            delictenlistWithDateAndCategory.Clear();
+            delictList.Items.Clear();
+            listview.Items.Clear();
+            if (startDate.SelectedDate != null && endDate.SelectedDate != null)
+            {
+                DateTime startdate = Convert.ToDateTime(startDate.Text);
+                DateTime enddate = Convert.ToDateTime(endDate.Text);
+                string correctEndDate = enddate.ToString("yyyy-MM-dd");
+                string correctStartDate = startdate.ToString("yyyy-MM-dd");
+
+
+
+                cn.OpenConection();
+                if (enddate == null || disablefield == true)
+                {
+                    listview.Items.Add(startDate.Text);
+
+                    SqlDataReader sq = cn.DataReader("SELECT delict_id as id FROM delict WHERE date = " + "'" + correctStartDate + "'");
+
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlistWithDate.Add(b);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    listview.Items.Add(startDate.Text + "\n" + "T/M " + "\n" + endDate.Text);
+
+                    SqlDataReader sq = cn.DataReader("SELECT delict_id as id FROM delict WHERE date BETWEEN" + "'" + correctStartDate + "'" + "AND" + "'" + correctEndDate + "'");
+
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlistWithDate.Add(b);
+                            }
+                        }
+                    }
+                }
+
+                cn.CloseConnection();
+
+            }
+            if (categoryBox.SelectedItem != null)
+            {
+
+                listview.Items.Add(categoryBox.SelectedItem);
+                 cn.OpenConection();
+                SqlDataReader sq1 = cn.DataReader("SELECT category.name as name, category_delict.delict_id as id from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'");
+
+
+                while (sq1.Read())
+                {
+                    int id = Int32.Parse(sq1["id"].ToString());
+
+                    if (delictenlistWithDate.Count > 0)
+                    {
+                        for (int k = 0; k < delictenlistWithDate.Count; k++)
+                        {
+                        Console.WriteLine("K: " + k);
+                            if (delictenlistWithDate[k].id == id)
+                            {
+                                delictenlistWithDateAndCategory.Add(delictenlistWithDate[k]);
+                            }
+                        }
+
+
+           }
+                    else
+                    {
+                        Console.WriteLine("ELSE STATEMENT");
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                Console.WriteLine(b.id);
+                                delictenlistWithDateAndCategory.Add(b);
+                            }
+                        }
+                    }
+                }
+
+                cn.CloseConnection();
+                foreach (var he in delictenlistWithDateAndCategory)
+                {
+                    delictList.Items.Add(delictenlistWithDateAndCategory[i]);
+                    MapPoint point = new MapPoint(he.longitude, he.lat, SpatialReferences.Wgs84);
+                    paint = new Graphic(point, marker);
+                    paint.Attributes.Add(he.id.ToString(), he.id.ToString());
+                    mapview.GraphicsOverlays.Remove(overlay);
+                    overlay.Graphics.Add(paint);
+                    mapview.GraphicsOverlays.Add(overlay);
+                    i++;
+                }
+
+            }
+            else
+            {
+                foreach (var he in delictenlistWithDate)
+                {
+                    delictList.Items.Add(delictenlistWithDate[i]);
+                    MapPoint point = new MapPoint(he.longitude, he.lat, SpatialReferences.Wgs84);
+                    paint = new Graphic(point, marker);
+                    paint.Attributes.Add(he.id.ToString(), he.id.ToString());
+                    mapview.GraphicsOverlays.Remove(overlay);
+                    overlay.Graphics.Add(paint);
+                    mapview.GraphicsOverlays.Add(overlay);
+                    i++;
+                }
+
+            }
+
+
+      
+            i = 0;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            listview.Items.Clear();
+            delictenlist.Clear();
+            delictenlistWithDate.Clear();
+            delictenlistWithDateAndCategory.Clear();
+            delictList.Items.Clear();
+            LoadMap();
+        }
+
+
+        private void checkClick(object sender, RoutedEventArgs e)
+        {
+            if(disablefield == false)
+            {
+                endDate.IsEnabled = false;
+                disablefield = true;
+            }
+            else
+            {
+                endDate.IsEnabled = true;
+                disablefield = false;
+            }
         }
     }
 
