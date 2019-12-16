@@ -228,7 +228,7 @@ namespace WijkAgent2.Pages.delicten
         private void ViewDelict(object sender, RoutedEventArgs e)
         {
             var DelictID = (int)((System.Windows.Controls.Button)sender).Tag;
-            mw.ShowDelict(DelictID);
+            mw.ShowDelict(DelictID,1);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

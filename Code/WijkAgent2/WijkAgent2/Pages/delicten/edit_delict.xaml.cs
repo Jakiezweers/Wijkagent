@@ -123,7 +123,7 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelict(currDelictID);
+            mw.ShowDelict(currDelictID,1);
         }
         private void category_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -331,14 +331,14 @@ namespace WijkAgent2.Pages.delicten
                 {
                     MessageBox.Show("ERROROR?:!" + ex.Message);
                 }
-                mw.ShowDelict(currDelictID);
+                mw.ShowDelict(currDelictID,1);
                 mw.ShowMessage("Delict succesvol gewijzigd");
             }
         }
 
         private void AddPerson_Click(object sender, RoutedEventArgs e)
         {
-            personentoevoegen addperson = new personentoevoegen(mw, personstype, personsbsn, person_id);
+            AddNewPerson addperson = new AddNewPerson(mw, personstype, personsbsn, person_id);
             addperson.RefreshData();
             addperson.ShowDialog();
             personsbsn = addperson.bsnlist;

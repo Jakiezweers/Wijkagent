@@ -26,5 +26,6 @@
 
             </DataGrid.Columns>
         </DataGrid>
+        <Button Content="Terug" Width="100" Margin="196,158,10,10" RenderTransformOrigin="0.427,-0.474" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="Auto" Click="Button_Click"/>
     </Grid>
 </Page>

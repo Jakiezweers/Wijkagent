@@ -61,6 +61,12 @@
                                 <Label Margin="40,10,0,10" Content="Home"/>
                             </Grid>
                         </ListBoxItem>
+                        <ListBoxItem x:Name="LBAddDelict">
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/plus.png"/>
+                                <Label Margin="40,10,0,10" Content="Delict aanmaken"/>
+                            </Grid>
+                        </ListBoxItem>
                         <ListBoxItem x:Name="LBDelicten">
                             <Grid>
                                 <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/delict.png"/>
