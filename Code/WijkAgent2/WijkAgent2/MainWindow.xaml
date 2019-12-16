@@ -85,6 +85,12 @@
                                 <Label Margin="40,10,0,10" Content="Gebruikers"/>
                             </Grid>
                         </ListBoxItem>
+                        <ListBoxItem x:Name="LBPermissions">
+                            <Grid>
+                                <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/permission.png"/>
+                                <Label Margin="40,10,0,10" Content="Permissions"/>
+                            </Grid>
+                        </ListBoxItem>
                         <ListBoxItem x:Name="LBLogout">
                             <Grid>
                                 <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/logout.png"/>

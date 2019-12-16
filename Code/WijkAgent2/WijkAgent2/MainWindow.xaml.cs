@@ -215,6 +215,9 @@ namespace WijkAgent2
                     case "LBArchive":
                         ShowDelictenArchive();
                         break;
+                    case "LBPermissions":
+                        LoadPermissionPage();
+                        break;
                     case "LBLogout":
                         Logout();
                         break;
