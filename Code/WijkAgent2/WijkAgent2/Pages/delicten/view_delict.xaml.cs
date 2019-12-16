@@ -90,7 +90,7 @@ namespace WijkAgent2.Pages.delicten
         {
             if(returnPage == 1)
             {
-                mw.ShowDelictenList();
+                mw.ShowDelictenList(true);
                 return;
             }
             if (returnPage == 2)

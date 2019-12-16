@@ -138,9 +138,9 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Gebruiker lijst";
         }
 
-        public void ShowDelictenList()
+        public void ShowDelictenList(bool activeDelicts)
         {
-            MainFrame.Navigate(new delicten_list(this));
+            MainFrame.Navigate(new delicten_list(this, activeDelicts));
             TopHeader.Text = "Wijkagent - Delicten lijst";
         }
 
@@ -151,7 +151,7 @@ namespace WijkAgent2
         }
         public void ShowDelictenArchive()
         {
-            MainFrame.Navigate(new delict_archive(this));
+            MainFrame.Navigate(new delicten_list(this,false));
             TopHeader.Text = "Wijkagent - Delicten Archive";
         }
 
@@ -207,7 +207,7 @@ namespace WijkAgent2
                         AddDelict();
                         break;
                     case "LBDelicten":
-                        ShowDelictenList();
+                        ShowDelictenList(true);
                         break;
                     case "LBGebruikers":
                         ShowUserList();

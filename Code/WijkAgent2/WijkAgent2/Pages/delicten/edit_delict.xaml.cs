@@ -263,6 +263,7 @@ namespace WijkAgent2.Pages.delicten
             }
             else if (dialogResult == MessageBoxResult.No)
             {
+                mw.ShowDelict(currDelictID, returnPage);
                 mw.ShowMessage("Delict niet aangepast.");
             }
         }

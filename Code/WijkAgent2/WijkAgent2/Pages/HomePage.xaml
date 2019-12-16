@@ -13,10 +13,6 @@
         <esri:MapView x:Name="mapview" Margin="166,2,657,-2">
 
         </esri:MapView>
-
-        <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Right" Margin="0,0,10,20" VerticalAlignment="Bottom" Width="110" Height="29" Click="LogOut_Click"/>
-
-
         <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"/>

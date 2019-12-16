@@ -46,6 +46,7 @@ namespace WijkAgent2.Pages
         List<Delict> delictenlist = new List<Delict>();
         List<Delict> delictenlistWithDate = new List<Delict>();
         List<Delict> delictenlistWithDateAndCategory = new List<Delict>();
+        List<string> categorylist = new List<string>();
 
         int i = 0;
 
@@ -58,9 +59,15 @@ namespace WijkAgent2.Pages
 
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("Select * from dbo.category");
+            categoryBox.Items.Clear();
             while (sq.Read())
             {
-                categoryBox.Items.Add(sq["name"].ToString());
+                categorylist.Add(sq["name"].ToString());
+/*                categoryBox.Items.Add(sq["name"].ToString());
+*/            }
+            foreach (var item in categorylist)
+            {
+                categoryBox.Items.Add(item);
             }
             cn.CloseConnection();
         }
@@ -310,7 +317,7 @@ namespace WijkAgent2.Pages
 
         private void DelictList_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelictenList();
+            mw.ShowDelictenList(true);
         }
 
         private void DelictArchive_Click(object sender, RoutedEventArgs e)
