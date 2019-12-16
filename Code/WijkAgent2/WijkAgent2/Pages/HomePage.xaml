@@ -14,7 +14,7 @@
 
         </esri:MapView>
 
-        <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
+        <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Right" Margin="0,0,10,20" VerticalAlignment="Bottom" Width="110" Height="29" Click="LogOut_Click"/>
 
 
         <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">

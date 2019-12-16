@@ -107,7 +107,7 @@ namespace WijkAgent2.Pages.delicten
         }
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-            mw.EditDelict(viewDelictID);
+            mw.EditDelict(viewDelictID,returnPage);
         }
     }
 }

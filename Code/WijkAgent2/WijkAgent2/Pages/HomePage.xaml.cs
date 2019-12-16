@@ -279,11 +279,11 @@ namespace WijkAgent2.Pages
             foreach (var a in overlay.Graphics)
             {
                 Console.WriteLine("X IN TEKST: " + x.Text);
+                Console.WriteLine("tester");
                 Console.WriteLine("ATTRIBUTES: " + a.Attributes);
                 try
                 {
-                    SimpleMarkerSymbol marker1 = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
-                    a.Symbol = marker1;
+                    a.Symbol = marker;
                     Console.WriteLine(a.Attributes.ContainsKey(x.Text));
 
                     if (a.Attributes.ContainsKey(x.Text))
@@ -295,7 +295,6 @@ namespace WijkAgent2.Pages
                         }
                         else
                         {
-                            SimpleMarkerSymbol marker = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
                             a.Symbol = marker;
                         }
                                             }
@@ -303,15 +302,6 @@ namespace WijkAgent2.Pages
                 catch (Exception ere) { }
             }
         }
-
-
-
-
-
-
-
-
-
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
