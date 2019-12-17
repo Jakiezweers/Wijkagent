@@ -46,7 +46,7 @@ namespace WijkAgent2.Pages.delicten
             categoryList = new List<CategoryList>();
             BindCategroryDropDown();
             DatumTB.SelectedDate = DateTime.Today;
-            personentoevoegen addperson = new personentoevoegen(mw);
+            AddNewPerson addperson = new AddNewPerson(mw);
             AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
 
             cn.OpenConection();
@@ -185,13 +185,12 @@ namespace WijkAgent2.Pages.delicten
 
         private async void SearchCoord(string check)
         {
-            try
-            {
+            try {
                 _geocoder = await LocatorTask.CreateAsync(_serviceUri);
                 IReadOnlyList<SuggestResult> suggestions = await _geocoder.SuggestAsync(check);
                 SuggestResult firstsuggestion = suggestions.First();
                 IReadOnlyList<GeocodeResult> coords = await _geocoder.GeocodeAsync(firstsuggestion.Label);
-                if (coords.Count < 1) { Console.WriteLine("GEEN RESULTATEN!"); return; } // GEEN RESULTATEN GEVONDEN!
+                if (coords.Count < 1) { return; } // GEEN RESULTATEN GEVONDEN!
                 string xcoord = coords.First().DisplayLocation.X.ToString();
                 string ycoord = coords.First().DisplayLocation.Y.ToString();
                 double parseX = Double.Parse(xcoord);
@@ -209,9 +208,9 @@ namespace WijkAgent2.Pages.delicten
 
 
             }
-            catch (Exception eas) { Console.WriteLine(eas); }
+            catch (Exception eas) { Console.WriteLine(eas);  }
             cn.CloseConnection();
-        }
+            }
 
         private void GetLat()
         {
@@ -283,10 +282,10 @@ namespace WijkAgent2.Pages.delicten
                         cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
                         cmd.Parameters.Add("@categoryID", SqlDbType.NVarChar).Value = item.Category_ID;
                         cmd.ExecuteNonQuery();
-                    }
+                    }   
                 }
             }
-            mw.ShowDelictenList();
+            mw.LoadHomeScreen();
         }
 
         private bool CheckCategorie()
@@ -303,9 +302,9 @@ namespace WijkAgent2.Pages.delicten
 
         private void CancelDelict_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelictenList();
+            mw.LoadHomeScreen();
         }
-        private void AddPerson_Click(object sender, RoutedEventArgs e, personentoevoegen addperson)
+        private void AddPerson_Click(object sender, RoutedEventArgs e, AddNewPerson addperson)
         {
             addperson.ShowDialog();
             personsbsn = addperson.bsnlist;
