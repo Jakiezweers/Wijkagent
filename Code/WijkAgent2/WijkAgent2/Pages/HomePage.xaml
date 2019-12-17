@@ -17,7 +17,7 @@
         <Button x:Name="LogOutBtn" Content="Log-uit" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Height="29" Click="LogOut_Click"/>
 
 
-        <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">
+        <DataGrid ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"/>
                 <DataGridTextColumn Header="Categorie" Binding="{Binding category}"/>
@@ -29,7 +29,7 @@
         <Border x:Name="labelsVis6" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="256" Margin="1252,585,-1113,-374" VerticalAlignment="Top" Width="651" Visibility="Hidden"/>
         <Label x:Name="labelsVis5" Content="Delict" HorizontalAlignment="Left" Height="23" Margin="1277,602,-610,-158" VerticalAlignment="Top" Width="123" FontWeight="Bold" Visibility="Hidden"/>
         <Label x:Name="delictDate"  HorizontalAlignment="Left" Height="100" Margin="1429,601,-739,-234" VerticalAlignment="Top" Width="100" FontWeight="Bold"/>
-        <TextBox HorizontalAlignment="Left" Height="22" Margin="22,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="ZIPfield" HorizontalAlignment="Left" Height="22" Margin="22,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="categoryBox" HorizontalAlignment="Left" Margin="22,179,0,0" VerticalAlignment="Top" Width="120"/>
         <CheckBox x:Name="checkBox" Content="Zoeken op één datum" HorizontalAlignment="Left" Margin="20,380,0,0" VerticalAlignment="Top" Click="checkClick"/>
         <DatePicker x:Name="endDate" HorizontalAlignment="Left" Margin="18,334,0,0" VerticalAlignment="Top" Width="134"/>

@@ -44,8 +44,7 @@ namespace WijkAgent2.Pages
         SimpleMarkerSymbol marker = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
         List<CategoryList> categoryList = new List<CategoryList>();
         List<Delict> delictenlist = new List<Delict>();
-        List<Delict> delictenlistWithDate = new List<Delict>();
-        List<Delict> delictenlistWithDateAndCategory = new List<Delict>();
+        List<Delict> delictenlist1 = new List<Delict>();
 
         int i = 0;
 
@@ -363,107 +362,314 @@ namespace WijkAgent2.Pages
 
         private void filterMap(object sender, RoutedEventArgs e)
         {
-
-            overlay.Graphics.Clear();
-            delictenlistWithDate.Clear();
-            delictenlistWithDateAndCategory.Clear();
             delictList.Items.Clear();
             listview.Items.Clear();
-            if (startDate.SelectedDate != null && endDate.SelectedDate != null)
+            overlay.Graphics.Clear();
+            delictenlist1.Clear();
+
+            if (!string.IsNullOrEmpty(ZIPfield.Text) &&  categoryBox.SelectedItem == null && startDate.SelectedDate == null)
             {
-                DateTime startdate = Convert.ToDateTime(startDate.Text);
-                DateTime enddate = Convert.ToDateTime(endDate.Text);
-                string correctEndDate = enddate.ToString("yyyy-MM-dd");
-                string correctStartDate = startdate.ToString("yyyy-MM-dd");
-
-
-
+                listview.Items.Add(ZIPfield.Text);
                 cn.OpenConection();
-                if (enddate == null || disablefield == true)
+                SqlDataReader sq = cn.DataReader("SELECT delict_id as id FROM delict WHERE zipcode = " + "'" + ZIPfield.Text + "'");
+                while (sq.Read())
                 {
-                    listview.Items.Add(startDate.Text);
+                    int id = Int32.Parse(sq["id"].ToString());
+                    foreach (var b in delictenlist)
+                    {
+                        if (b.id == id)
+                        {
+                            delictenlist1.Add(b);
+                        }
+                    }
+                }
+                cn.CloseConnection();
+            }
 
-                    SqlDataReader sq = cn.DataReader("SELECT delict_id as id FROM delict WHERE date = " + "'" + correctStartDate + "'");
 
+            if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate == null)
+            {
+                listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem);
+                Console.WriteLine();
+                    cn.OpenConection();
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + "AND category.name = " + "'" + categoryBox.SelectedItem + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-
                         foreach (var b in delictenlist)
                         {
                             if (b.id == id)
                             {
-                                delictenlistWithDate.Add(b);
+                                delictenlist1.Add(b);
                             }
                         }
                     }
+                    cn.CloseConnection();
+             
+            }
+
+
+
+
+            if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate == null)
+            {
+                listview.Items.Add(categoryBox.SelectedItem);
+                cn.OpenConection();
+                SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'");
+                while (sq.Read())
+                {
+                    int id = Int32.Parse(sq["id"].ToString());
+                    foreach (var b in delictenlist)
+                    {
+                        if (b.id == id)
+                        {
+                            delictenlist1.Add(b);
+                        }
+                    }
+                }
+                cn.CloseConnection();
+
+            }
+
+
+
+            if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate != null)
+            {
+                if (endDate.SelectedDate == null || disablefield == true)
+                {
+                    Console.WriteLine("ELSE fout2");
+
+
+                    cn.OpenConection();
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text);
+
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + "AND category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date = " + "'" + correctStartDate + "'");
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlist1.Add(b);
+                            }
+                        }
+                    }
+                    cn.CloseConnection();
+                } else
+                {
+                    Console.WriteLine("ELSE fout3");
+                    Console.WriteLine(ZIPfield);
+
+                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    DateTime enddate = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+
+                    cn.OpenConection();
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + "AND category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlist1.Add(b);
+                            }
+                        }
+                    }
+                    cn.CloseConnection();
+
+                }
+            }
+
+
+
+
+            if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate != null)
+            {
+                if (endDate.SelectedDate == null || disablefield == true)
+                {
+
+                    Console.WriteLine("ELSE fout");
+
+                    cn.OpenConection();
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add( categoryBox.SelectedItem + "\n" + startDate.Text);
+
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date = " + "'" + correctStartDate + "'");
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlist1.Add(b);
+                            }
+                        }
+                    }
+                    cn.CloseConnection();
                 }
                 else
                 {
-                    listview.Items.Add(startDate.Text + "\n" + "T/M " + "\n" + endDate.Text);
 
-                    SqlDataReader sq = cn.DataReader("SELECT delict_id as id FROM delict WHERE date BETWEEN" + "'" + correctStartDate + "'" + "AND" + "'" + correctEndDate + "'");
+                    Console.WriteLine("ELSE goed");
 
+                    listview.Items.Add(categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    DateTime enddate = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+
+                    cn.OpenConection();
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-
                         foreach (var b in delictenlist)
                         {
                             if (b.id == id)
                             {
-                                delictenlistWithDate.Add(b);
+                                delictenlist1.Add(b);
                             }
                         }
                     }
+                    cn.CloseConnection();
+
                 }
-
-                cn.CloseConnection();
-
             }
-            if (categoryBox.SelectedItem != null)
+
+
+            if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate != null)
             {
-
-                listview.Items.Add(categoryBox.SelectedItem);
-                 cn.OpenConection();
-                SqlDataReader sq1 = cn.DataReader("SELECT category.name as name, category_delict.delict_id as id from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'");
-
-
-                while (sq1.Read())
+                if (endDate.SelectedDate == null || disablefield == true)
                 {
-                    int id = Int32.Parse(sq1["id"].ToString());
 
-                    if (delictenlistWithDate.Count > 0)
+                    Console.WriteLine("ELSE fout5");
+
+                    cn.OpenConection();
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(ZIPfield.Text + "\n" + startDate.Text);
+
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date = " + "'" + correctStartDate + "'");
+                    while (sq.Read())
                     {
-                        for (int k = 0; k < delictenlistWithDate.Count; k++)
-                        {
-                        Console.WriteLine("K: " + k);
-                            if (delictenlistWithDate[k].id == id)
-                            {
-                                delictenlistWithDateAndCategory.Add(delictenlistWithDate[k]);
-                            }
-                        }
-
-
-           }
-                    else
-                    {
-                        Console.WriteLine("ELSE STATEMENT");
+                        int id = Int32.Parse(sq["id"].ToString());
                         foreach (var b in delictenlist)
                         {
                             if (b.id == id)
                             {
-                                Console.WriteLine(b.id);
-                                delictenlistWithDateAndCategory.Add(b);
+                                delictenlist1.Add(b);
                             }
                         }
                     }
+                    cn.CloseConnection();
                 }
-
-                cn.CloseConnection();
-                foreach (var he in delictenlistWithDateAndCategory)
+                else
                 {
-                    delictList.Items.Add(delictenlistWithDateAndCategory[i]);
+                    Console.WriteLine("ELSE fout6");
+
+                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    DateTime enddate = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+
+                    cn.OpenConection();
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlist1.Add(b);
+                            }
+                        }
+                    }
+                    cn.CloseConnection();
+
+                }
+            }
+
+
+
+
+
+            if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate != null)
+            {
+                if (endDate.SelectedDate == null || disablefield == true)
+                {
+
+                    Console.WriteLine("ELSE fout5");
+
+                    cn.OpenConection();
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(startDate.Text);
+
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict WHERE date = " + "'" + correctStartDate + "'");
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlist1.Add(b);
+                            }
+                        }
+                    }
+                    cn.CloseConnection();
+                }
+                else
+                {
+                    Console.WriteLine("ELSE fout6");
+
+                    listview.Items.Add(startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+
+                    DateTime startdate = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    DateTime enddate = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+
+                    cn.OpenConection();
+                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict WHERE date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
+                    while (sq.Read())
+                    {
+                        int id = Int32.Parse(sq["id"].ToString());
+                        foreach (var b in delictenlist)
+                        {
+                            if (b.id == id)
+                            {
+                                delictenlist1.Add(b);
+                            }
+                        }
+                    }
+                    cn.CloseConnection();
+
+                }
+            }
+
+
+
+
+
+            foreach (var he in delictenlist1)
+                {
+                    Console.WriteLine("POSTCODE: " + he.id);
+                    delictList.Items.Add(delictenlist1[i]);
                     MapPoint point = new MapPoint(he.longitude, he.lat, SpatialReferences.Wgs84);
                     paint = new Graphic(point, marker);
                     paint.Attributes.Add(he.id.ToString(), he.id.ToString());
@@ -472,35 +678,14 @@ namespace WijkAgent2.Pages
                     mapview.GraphicsOverlays.Add(overlay);
                     i++;
                 }
-
-            }
-            else
-            {
-                foreach (var he in delictenlistWithDate)
-                {
-                    delictList.Items.Add(delictenlistWithDate[i]);
-                    MapPoint point = new MapPoint(he.longitude, he.lat, SpatialReferences.Wgs84);
-                    paint = new Graphic(point, marker);
-                    paint.Attributes.Add(he.id.ToString(), he.id.ToString());
-                    mapview.GraphicsOverlays.Remove(overlay);
-                    overlay.Graphics.Add(paint);
-                    mapview.GraphicsOverlays.Add(overlay);
-                    i++;
-                }
-
-            }
-
-
-      
-            i = 0;
+                i = 0;
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             listview.Items.Clear();
             delictenlist.Clear();
-            delictenlistWithDate.Clear();
-            delictenlistWithDateAndCategory.Clear();
             delictList.Items.Clear();
             LoadMap();
         }
