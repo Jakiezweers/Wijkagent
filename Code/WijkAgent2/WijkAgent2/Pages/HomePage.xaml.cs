@@ -189,6 +189,7 @@ namespace WijkAgent2.Pages
 
         public void clickDelict(Object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            DelictInzienBTN.IsEnabled = true;
             labelsVis.Visibility = Visibility.Visible;
             labelsVis1.Visibility = Visibility.Visible;
             labelsVis2.Visibility = Visibility.Visible;
@@ -327,6 +328,7 @@ namespace WijkAgent2.Pages
 
         private void Close_window(object sender, RoutedEventArgs e)
         {
+            DelictInzienBTN.IsEnabled = false;
             labelsVis.Visibility = Visibility.Hidden;
             labelsVis1.Visibility = Visibility.Hidden;
             labelsVis2.Visibility = Visibility.Hidden;

@@ -136,6 +136,7 @@ namespace WijkAgent2.Pages.delicten
                           zipCode[i] <= 'z'))
                     zipCodeLet.Append(zipCode[i]);
             }
+            zipCode = Convert.ToString(zipCodeNum) + Convert.ToString(zipCodeLet);
 
             if (!CheckCategorie())
             {
