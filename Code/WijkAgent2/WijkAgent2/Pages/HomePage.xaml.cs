@@ -262,9 +262,6 @@ namespace WijkAgent2.Pages
                 delictCategory.Content = categories;
                 delictPerson.Content = persons;
 
-
-
-               
                 setMarker(x);
             }
         }
@@ -276,8 +273,6 @@ namespace WijkAgent2.Pages
         {
             foreach (var a in overlay.Graphics)
             {
-                Console.WriteLine("X IN TEKST: " + x.Text);
-                Console.WriteLine("ATTRIBUTES: " + a.Attributes);
                 try
                 {
                     SimpleMarkerSymbol marker1 = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
@@ -301,12 +296,6 @@ namespace WijkAgent2.Pages
                 catch (Exception ere) { }
             }
         }
-
-
-
-
-
-
 
 
 
@@ -367,7 +356,7 @@ namespace WijkAgent2.Pages
             overlay.Graphics.Clear();
             delictenlist1.Clear();
 
-            if (!string.IsNullOrEmpty(ZIPfield.Text) &&  categoryBox.SelectedItem == null && startDate.SelectedDate == null)
+            if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate == null)
             {
                 listview.Items.Add(ZIPfield.Text);
                 cn.OpenConection();
@@ -437,9 +426,6 @@ namespace WijkAgent2.Pages
             {
                 if (endDate.SelectedDate == null || disablefield == true)
                 {
-                    Console.WriteLine("ELSE fout2");
-
-
                     cn.OpenConection();
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
                     listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text);
@@ -460,11 +446,7 @@ namespace WijkAgent2.Pages
                     cn.CloseConnection();
                 } else
                 {
-                    Console.WriteLine("ELSE fout3");
-                    Console.WriteLine(ZIPfield);
-
                     listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
-
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
                     string correctStartDate = startdate.ToString("yyyy-MM-dd");
                     DateTime enddate = Convert.ToDateTime(endDate.Text);
@@ -495,9 +477,6 @@ namespace WijkAgent2.Pages
             {
                 if (endDate.SelectedDate == null || disablefield == true)
                 {
-
-                    Console.WriteLine("ELSE fout");
-
                     cn.OpenConection();
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
                     listview.Items.Add( categoryBox.SelectedItem + "\n" + startDate.Text);
@@ -519,9 +498,6 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-
-                    Console.WriteLine("ELSE goed");
-
                     listview.Items.Add(categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
 
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
@@ -548,13 +524,10 @@ namespace WijkAgent2.Pages
             }
 
 
-            if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate != null)
+            if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null  && startDate.SelectedDate != null)
             {
                 if (endDate.SelectedDate == null || disablefield == true)
                 {
-
-                    Console.WriteLine("ELSE fout5");
-
                     cn.OpenConection();
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
                     listview.Items.Add(ZIPfield.Text + "\n" + startDate.Text);
@@ -576,8 +549,6 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-                    Console.WriteLine("ELSE fout6");
-
                     listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
 
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
@@ -602,18 +573,10 @@ namespace WijkAgent2.Pages
 
                 }
             }
-
-
-
-
-
             if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate != null)
             {
                 if (endDate.SelectedDate == null || disablefield == true)
                 {
-
-                    Console.WriteLine("ELSE fout5");
-
                     cn.OpenConection();
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
                     listview.Items.Add(startDate.Text);
@@ -635,8 +598,6 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-                    Console.WriteLine("ELSE fout6");
-
                     listview.Items.Add(startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
 
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
