@@ -18,7 +18,6 @@ namespace Wijkagent2.Classes
         public int status { get; set; }
         
         public string person { get; set; }
-
         public string category { get; set; }
         public DateTime createtime { get; set; }
         public int changedBy { get; set; }

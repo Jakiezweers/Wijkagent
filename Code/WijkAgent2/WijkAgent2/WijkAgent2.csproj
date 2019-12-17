@@ -109,6 +109,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Modals\AddNewPerson.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Modals\personentoevoegen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,6 +162,9 @@
     <Compile Include="ManagementClass.cs" />
     <Compile Include="Modals\AddNewPerson.xaml.cs">
       <DependentUpon>AddNewPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modals\personentoevoegen.xaml.cs">
+      <DependentUpon>personentoevoegen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\delicten\add_delict.xaml.cs">
       <DependentUpon>add_delict.xaml</DependentUpon>
@@ -238,12 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\wijkagentcover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\permission.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Esri.ArcGISRuntime.WPF.100.6.0\build\net461\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\packages\Esri.ArcGISRuntime.WPF.100.6.0\build\net461\Esri.ArcGISRuntime.WPF.targets')" />

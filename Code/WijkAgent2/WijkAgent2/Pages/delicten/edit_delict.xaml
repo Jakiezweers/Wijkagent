@@ -20,7 +20,7 @@
         <TextBox FontSize="18" x:Name="DelictDescriptionTB" AcceptsReturn="True"  HorizontalAlignment="Left" Margin="-1,451,0,-3" TextWrapping="Wrap" Text="" Width="653" BorderThickness="1" BorderBrush="#89000000"/>
         <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
         <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
-        <ComboBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="35" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="729,389,0,0">
+        <ComboBox HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Disabled" Height="35" TextBoxBase.TextChanged="category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="729,389,0,0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox FontSize="18" Width="220" Checked="AllCheckbocx_CheckedAndUnchecked" Unchecked="AllCheckbocx_CheckedAndUnchecked" Content="{Binding Category_Name}" IsChecked="{Binding Check_Status}" CommandParameter="{Binding Category_ID}">

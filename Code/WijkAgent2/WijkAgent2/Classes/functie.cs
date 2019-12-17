@@ -22,6 +22,7 @@ namespace WijkAgent2.Classes
         {
 
         }
+
         public override string ToString()
         {
             // Generates the text shown in the combo box

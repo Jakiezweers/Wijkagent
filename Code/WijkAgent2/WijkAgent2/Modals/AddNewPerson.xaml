@@ -1,31 +1,14 @@
-﻿<Window x:Class="WijkAgent2.Modals.AddNewPerson"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WijkAgent2"
-        mc:Ignorable="d"
-        Title="AddNewPerson" Height="465.429" Width="711.285">
-    <Grid HorizontalAlignment="Center" Margin="16,0,2,0">
-        <ComboBox x:Name="CategoryCB" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True"  Text="" SelectionChanged="Combobox_SelectionChanged"/>
-        <TextBox x:Name="bsnfield" HorizontalAlignment="Left" Height="24" Margin="255,59,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="209"/>
-        <Label Content="BSN" HorizontalAlignment="Left" Margin="255,28,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="AddNewPersonBTN" Content="Voeg persoon toe" Margin="500,40,0,0" VerticalAlignment="Top" Height="27" Click="AddPersonButton" HorizontalAlignment="Left" Width="145"/>
-        <Button Content="Terug" HorizontalAlignment="Left" Margin="548,377,0,0" VerticalAlignment="Top" Width="113" Click="ClickCancel"/>
-        <DataGrid x:Name="Personen" HorizontalAlignment="Left" Height="304" Margin="10,105,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="Personen_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="BSN" Binding="{Binding bsn}"/>
-                <DataGridTextColumn Header="Categorie" Binding="{Binding type}"/>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Click="RemovePerson" Tag="{Binding bsn}" >Verwijder</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Label x:Name="BSNErrorLabel" Content="" HorizontalAlignment="Left" Margin="331,14,0,0" VerticalAlignment="Top" Width="314"/>
-        <Label Content="Categorie" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top"/>
+﻿<Page x:Class="WijkAgent2.Modals.AddNewPerson"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WijkAgent2.Modals"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AddNewPerson">
+
+    <Grid>
+        
     </Grid>
-</Window>
+</Page>

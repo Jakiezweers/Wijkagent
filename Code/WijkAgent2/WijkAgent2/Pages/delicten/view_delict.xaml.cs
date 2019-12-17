@@ -28,14 +28,12 @@ namespace WijkAgent2.Pages.delicten
         MainWindow mw;
         int viewDelictID;
         private Connection cn = new Connection();
-        int returnPage = 0;
-        public view_delict(MainWindow MW, int delictID, int originalPage)
+        public view_delict(MainWindow MW, int delictID)
         {
             viewDelictID = delictID;
             InitializeComponent();
             LoadDelict(delictID);
             mw = MW;
-            returnPage = originalPage;
         }
 
         private void LoadDelict(int viewDelictID)
@@ -88,26 +86,11 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(returnPage == 1)
-            {
-                mw.ShowDelictenList(true);
-                return;
-            }
-            if (returnPage == 2)
-            {
-                mw.ShowDelictenArchive();
-                return;
-            }
-            if (returnPage == 3)
-            {
-                mw.LoadHomeScreen();
-                return;
-            }
-            mw.LoadHomeScreen();
+            mw.ShowDelictenList();
         }
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-            mw.EditDelict(viewDelictID,returnPage);
+            mw.EditDelict(viewDelictID);
         }
     }
 }

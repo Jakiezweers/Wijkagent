@@ -53,13 +53,13 @@
                 <TextBox x:Name="TxtBadgeNr" Margin="10,123,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="18"/>
                 <Label x:Name="LblTel" Content="Tel" HorizontalAlignment="Left" Margin="10,161,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
                 <TextBox x:Name="TxtTel" Margin="10,195,10,0" TextWrapping="Wrap" Text="" FontSize="18" Height="40" VerticalAlignment="Top"/>
-                <Label x:Name="LblPassword" Content="Wachtwoord" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <Label x:Name="LblPassword" Content="Wachtwoord." HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
                 <PasswordBox x:Name="TxtPassword" Margin="10,274,10,0" VerticalAlignment="Top" FontSize="18"/>
-                <Label x:Name="LblPasswordRepeat" Content="Wachtwoord check" HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
+                <Label x:Name="LblPasswordRepeat" Content="Wachtwoord check." HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="230" FontSize="18"/>
                 <PasswordBox x:Name="TxtPasswordRepeat" Margin="10,346,10,-24" VerticalAlignment="Top" FontSize="18"/>
             </Grid>
         </Grid>
-        <Button x:Name="BtnSave" MaxWidth="150" Content="Opslaan" Margin="0,10,10,0" Click="BtnSave_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
+        <Button x:Name="BtnSave" MaxWidth="150" Content="Save" Margin="0,10,10,0" Click="BtnSave_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148"/>
 
     </Grid>
 </Page>

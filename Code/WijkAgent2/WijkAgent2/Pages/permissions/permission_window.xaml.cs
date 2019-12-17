@@ -68,7 +68,7 @@ namespace WijkAgent2.Pages.permissions
                 {
                     while (dataReader.Read())
                     {
-                        role.Add(Convert.ToString(dataReader["rol_name"]));
+                        role.Add(Convert.ToString(dataReader["name"]));
                         role_idList.Add(Convert.ToInt32(dataReader["rol_id"]));
                     }
                 }

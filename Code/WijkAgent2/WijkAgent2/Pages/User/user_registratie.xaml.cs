@@ -44,7 +44,7 @@ namespace WijkAgent2.Pages.User
             SqlDataReader sq_rollen = cn.DataReader("SELECT * FROM dbo.rol");
             while (sq_rollen.Read())
             {
-                Roles r = new Roles((string)sq_rollen["rol_name"], Convert.ToInt32(sq_rollen["rol_id"]));
+                Roles r = new Roles((string)sq_rollen["name"], Convert.ToInt32(sq_rollen["rol_id"]));
                 CBRol.Items.Add(r);
             }
             cn.CloseConnection();
@@ -72,7 +72,7 @@ namespace WijkAgent2.Pages.User
         }
         private void BtnReturn_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowUserList();
+            mw.LoadHomeScreen();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)

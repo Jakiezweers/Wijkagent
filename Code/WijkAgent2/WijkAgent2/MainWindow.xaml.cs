@@ -138,9 +138,9 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Gebruiker lijst";
         }
 
-        public void ShowDelictenList(bool activeDelicts)
+        public void ShowDelictenList()
         {
-            MainFrame.Navigate(new delicten_list(this, activeDelicts));
+            MainFrame.Navigate(new delicten_list(this));
             TopHeader.Text = "Wijkagent - Delicten lijst";
         }
 
@@ -151,7 +151,7 @@ namespace WijkAgent2
         }
         public void ShowDelictenArchive()
         {
-            MainFrame.Navigate(new delicten_list(this,false));
+            MainFrame.Navigate(new delict_archive(this));
             TopHeader.Text = "Wijkagent - Delicten Archive";
         }
 
@@ -170,14 +170,14 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Login";
         }
 
-        public void ShowDelict(int delictID, int originalPage)
+        public void ShowDelict(int delictID)
         {
-            MainFrame.Navigate(new view_delict(this,delictID,originalPage));
+            MainFrame.Navigate(new view_delict(this,delictID));
             TopHeader.Text = "Wijkagent - Delict " + delictID;
         }
-        public void EditDelict(int delictID, int previousPage)
+        public void EditDelict(int delictID)
         {
-            MainFrame.Navigate(new edit_delict(this, delictID, previousPage));
+            MainFrame.Navigate(new edit_delict(this, delictID));
         }
 
         public void close()
@@ -203,20 +203,14 @@ namespace WijkAgent2
                     case "LBHome":
                         LoadHomeScreen();
                         break;
-                    case "LBAddDelict":
-                        AddDelict();
-                        break;
                     case "LBDelicten":
-                        ShowDelictenList(true);
+                        ShowDelictenList();
                         break;
                     case "LBGebruikers":
                         ShowUserList();
                         break;
                     case "LBArchive":
                         ShowDelictenArchive();
-                        break;
-                    case "LBPermissions":
-                        LoadPermissionPage();
                         break;
                     case "LBLogout":
                         Logout();
