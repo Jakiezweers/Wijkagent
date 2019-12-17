@@ -155,7 +155,7 @@ namespace WijkAgent2.Pages
                 d.longitude = longitude;
                 d.lat = lat;
                 delictenlist.Add(d);
-
+                
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
                 mapview.GraphicsOverlays.Add(overlay);
@@ -533,10 +533,11 @@ namespace WijkAgent2.Pages
                     listview.Items.Add(ZIPfield.Text + "\n" + startDate.Text);
 
                     string correctStartDate = startdate.ToString("yyyy-MM-dd");
-                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date = " + "'" + correctStartDate + "'");
+                    SqlDataReader sq = cn.DataReader("SELECT DISTINCT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date = " + "'" + correctStartDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
+                        Console.WriteLine(id.ToString());
                         foreach (var b in delictenlist)
                         {
                             if (b.id == id)
@@ -557,7 +558,7 @@ namespace WijkAgent2.Pages
                     string correctEndDate = enddate.ToString("yyyy-MM-dd");
 
                     cn.OpenConection();
-                    SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
+                    SqlDataReader sq = cn.DataReader("SELECT DISTINCT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
