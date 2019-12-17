@@ -10,18 +10,18 @@
       >
 
     <Grid>
-        <DataGrid SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="AliceBlue" AlternationCount="2" x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
+        <DataGrid IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="AliceBlue" AlternationCount="2" x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
                 <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="400"/>
 
-                
+
                 <DataGridTextColumn x:Name="ArchivelistAddedDate" Visibility="Hidden" Header="Archiveringsdatum" Binding="{Binding addedDate}"/>
                 <DataGridTextColumn x:Name="ArchivelistChangedBy" Visibility="Hidden" Header="Gearchiveerd door" Binding="{Binding changedBy}"/>
 
                 <DataGridTextColumn x:Name="ActivelistCreatedtime" Header="Aanmaakdatum" Binding="{Binding createtime}"/>
                 <DataGridTextColumn x:Name="ActivelistFirstnamecount" Header="Personen" Binding="{Binding firstnamecount}"/>
-                
+
                 <DataGridTemplateColumn Header="Actie" Visibility="Hidden"  x:Name="DelictArchiveBTN">
                     <DataGridTemplateColumn.CellTemplate>
 
@@ -61,7 +61,7 @@
         </ComboBox>
         <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="590" Margin="1242,72,0,0" VerticalAlignment="Top" Width="210" />
         <Button Content="Terug" Margin="1580,620,0,0" Click="Button_Click" Height="32" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top"/>
-        <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="468" Margin="1493,32,0,0" VerticalAlignment="Top" Width="197"/>
+        <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="240" Margin="803,620,0,-166" VerticalAlignment="Top" Width="197"/>
         <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="297,630,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
         <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="78,630,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
         <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="193,630,0,0" VerticalAlignment="Top" Height="32" Width="87"/>
