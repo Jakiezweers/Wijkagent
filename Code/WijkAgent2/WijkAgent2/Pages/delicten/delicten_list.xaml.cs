@@ -97,6 +97,7 @@ namespace WijkAgent2.Pages.delicten
                         Delict d1 = new Delict();
                         d1.id = id;
                         d1.street = GetDelictCategory(id);
+
                         d1.createtime = (DateTime)dataReader["date"];
 
                         d1.firstnamecount = count;
@@ -483,14 +484,41 @@ namespace WijkAgent2.Pages.delicten
             BindListBOX();
             ShowDelicts();
         }
-
+        bool sortID = false;
+        bool sortDate = false;
         private void CustomSort(object sender, DataGridSortingEventArgs e)
         {
-            MessageBox.Show("" + e.Column.Header.ToString());
             e.Handled = true;
-/*            if(e.Column == "Delict")
-*/            delictenlistCheck = delictenlistCheck.OrderBy(o=>o.createtime).ToList();
-            delictenlistCheck.Reverse();
+            if (e.Column.Header.ToString() == "Delict")
+            {
+                if (sortID)
+                {
+                    delictenlistCheck = delictenlistCheck.OrderBy(o => o.id).ToList();
+                    sortDate = false;
+                    sortID = false;
+                }
+                else
+                {
+                    delictenlistCheck = delictenlistCheck.OrderByDescending(o => o.id).ToList();
+                    sortDate = false;
+                    sortID = true;
+                }
+            }
+            if(e.Column.Header.ToString() == "Aanmaakdatum")
+            {
+                if (sortDate)
+                {
+                    delictenlistCheck = delictenlistCheck.OrderBy(o => o.createtime).ToList();
+                    sortID = false;
+                    sortDate = false;
+                }
+                else
+                {
+                    delictenlistCheck = delictenlistCheck.OrderByDescending(o => o.createtime).ToList();
+                    sortID = false;
+                    sortDate = true;
+                }
+            }
             ShowDelicts();
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
