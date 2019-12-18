@@ -10,10 +10,10 @@
       >
 
     <Grid>
-        <DataGrid IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="AliceBlue" AlternationCount="2" x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
+        <DataGrid Sorting="CustomSort" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" AlternatingRowBackground="AliceBlue" AlternationCount="2" x:Name="Delicten" Margin="67,32,700,419" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
-                <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="400"/>
+                <DataGridTextColumn CanUserSort="False" Header="Categorie" Binding="{Binding street}" Width="400"/>
 
 
                 <DataGridTextColumn x:Name="ArchivelistAddedDate" Visibility="Hidden" Header="Archiveringsdatum" Binding="{Binding addedDate}"/>
@@ -22,7 +22,7 @@
                 <DataGridTextColumn x:Name="ActivelistCreatedtime" Header="Aanmaakdatum" Binding="{Binding createtime}"/>
                 <DataGridTextColumn x:Name="ActivelistFirstnamecount" Header="Personen" Binding="{Binding firstnamecount}"/>
 
-                <DataGridTemplateColumn Header="Actie" Visibility="Hidden"  x:Name="DelictArchiveBTN">
+                <DataGridTemplateColumn CanUserSort="False" Header="Actie" Visibility="Hidden"  x:Name="DelictArchiveBTN">
                     <DataGridTemplateColumn.CellTemplate>
 
                         <DataTemplate>
@@ -31,7 +31,7 @@
                     </DataGridTemplateColumn.CellTemplate>
 
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Actie" Visibility="Hidden" x:Name="DelictActivateBTN">
+                <DataGridTemplateColumn CanUserSort="False" Header="Actie" Visibility="Hidden" x:Name="DelictActivateBTN">
                     <DataGridTemplateColumn.CellTemplate>
 
                         <DataTemplate>
@@ -40,7 +40,7 @@
                     </DataGridTemplateColumn.CellTemplate>
 
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Delict inzien">
+                <DataGridTemplateColumn CanUserSort="False" Header="Delict inzien">
                     <DataGridTemplateColumn.CellTemplate>
 
                         <DataTemplate>
