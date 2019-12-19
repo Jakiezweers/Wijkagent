@@ -268,7 +268,7 @@ namespace WijkAgent2.Pages.delicten
                 }
             }
         }
-        private void KeyDownEvent(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Right && NextButton.IsEnabled == true)
             {
