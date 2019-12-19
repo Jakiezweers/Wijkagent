@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,16 +30,25 @@ namespace WijkAgent2.Pages.User
         private MainWindow mw;
         public User_List(MainWindow MW)
         {
-            int rolid;
-            string rolname;
             mw = MW;
             InitializeComponent();
-            
+
+            Thread thr = new Thread(get_data);
+            thr.IsBackground = true;
+            thr.Start();
+
+        }
+
+        public void get_data()
+        {
+            Thread.Sleep(350);
+            int rolid;
+            string rolname;
             Connection cn = new Connection();
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("select us.*, up.upload_path, r.rol_name " +
                 "from[dbo].[User] us " +
-                "join[dbo].[uploads] up on us.upload_id = up.upload_id " + 
+                "join[dbo].[uploads] up on us.upload_id = up.upload_id " +
                 "join[dbo].[rol] r on us.rol_id = r.rol_id");
 
             while (sq.Read())
@@ -57,8 +67,10 @@ namespace WijkAgent2.Pages.User
                 user.PhoneNumber = (string)sq["tel"];
                 user.ProfilePicture = new Uploads(Convert.ToInt32(sq["upload_id"]), (string)sq["upload_path"]);
 
-
-                UserList.Items.Add(user);
+                Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    UserList.Items.Add(user);
+                }));
             }
         }
 

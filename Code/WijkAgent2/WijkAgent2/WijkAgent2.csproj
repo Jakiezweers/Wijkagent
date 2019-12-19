@@ -154,8 +154,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ManagementBaseObject.cs" />
-    <Compile Include="ManagementClass.cs" />
     <Compile Include="Modals\AddNewPerson.xaml.cs">
       <DependentUpon>AddNewPerson.xaml</DependentUpon>
     </Compile>
