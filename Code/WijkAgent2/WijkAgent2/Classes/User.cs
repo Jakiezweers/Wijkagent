@@ -27,6 +27,7 @@ namespace Wijkagent2.Classes
             new Roles() { rol_id = 2, RoleName = "politie" },
             new Roles() { rol_id = 3, RoleName = "wijkagent" } };
 
+        public List<Permissions> permission_list { get; set; }
         public User()
         {
 
