@@ -33,12 +33,14 @@ namespace WijkAgent2.Pages.delicten
         List<int> personsbsn = new List<int>();
         List<string> personstype = new List<string>();
         List<int> person_id = new List<int>();
-        public edit_delict(MainWindow MW, int delictID)
+        int returnPage;
+        public edit_delict(MainWindow MW, int delictID, int previousPage)
         {
             InitializeComponent();
             mw = MW;
             currDelictID = delictID;
             LoadDelict(currDelictID);
+            returnPage = previousPage;
         }
 
         private void LoadDelict(int currDelictID)
@@ -123,7 +125,7 @@ namespace WijkAgent2.Pages.delicten
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelict(currDelictID,1);
+            mw.ShowDelict(currDelictID,returnPage);
         }
         private void category_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -261,6 +263,7 @@ namespace WijkAgent2.Pages.delicten
             }
             else if (dialogResult == MessageBoxResult.No)
             {
+                mw.ShowDelict(currDelictID, returnPage);
                 mw.ShowMessage("Delict niet aangepast.");
             }
         }
@@ -331,7 +334,7 @@ namespace WijkAgent2.Pages.delicten
                 {
                     MessageBox.Show("ERROROR?:!" + ex.Message);
                 }
-                mw.ShowDelict(currDelictID,1);
+                mw.ShowDelict(currDelictID,returnPage);
                 mw.ShowMessage("Delict succesvol gewijzigd");
             }
         }

@@ -30,15 +30,20 @@ namespace WijkAgent2.Pages.delicten
         List<Delict> delictenlist = new List<Delict>();
         List<Delict> delictenlistCheck = new List<Delict>();
 
+        bool currPageIsActivated = true;
+
         List<CategoryList> categoryList = new List<CategoryList>();
+        List<String> emptylist = new List<String>();
         static int pageCounter = 1;
         decimal delictsPerPage = 10;
 
+
         private Connection cn = new Connection();
-        public delicten_list(MainWindow MW)
+        public delicten_list(MainWindow MW, bool activeDelicts)
         {
             mw = MW;
             InitializeComponent();
+            currPageIsActivated = activeDelicts;
 
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("Select * from dbo.category");
@@ -49,7 +54,26 @@ namespace WijkAgent2.Pages.delicten
             }
             cn.CloseConnection();
             BindCategroryDropDown();
+            if (currPageIsActivated)
+            {
+                DelictListSwapBTN.Content = "Gearchiveerde delicten lijst";
+                GetActiveDelicts();
+            }
+            else
+            {
+                DelictListSwapBTN.Content = "Actieve delicten lijst";
+                GetArchivedDelicts();
+            }
+        }
 
+        public void GetActiveDelicts()
+        {
+            delictenlistCheck.Clear();
+            delictenlist.Clear();
+            currPageIsActivated = true;
+            mw.TopHeader.Text = "Wijkagent - Delicten lijst";
+            DelictArchiveBTN.Visibility = Visibility.Visible;
+            DelictActivateBTN.Visibility = Visibility.Hidden;
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
@@ -87,6 +111,50 @@ namespace WijkAgent2.Pages.delicten
                 ShowDelicts();
             }
         }
+
+        public void GetArchivedDelicts()
+        {
+            delictenlistCheck.Clear();
+            delictenlist.Clear();
+            currPageIsActivated = false;
+            mw.TopHeader.Text = "Wijkagent - Delicten archief lijst";
+            DelictActivateBTN.Visibility = Visibility.Visible;
+            DelictArchiveBTN.Visibility = Visibility.Hidden;
+            string provider = ConfigurationManager.AppSettings["provider"];
+            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+            using (DbConnection connection = factory.CreateConnection())
+            {
+                connection.ConnectionString = connectionstring;
+                connection.Open();
+                DbCommand command = factory.CreateCommand();
+
+                command.Connection = connection;
+                command.CommandText = "SELECT d.delict_id, u.badge_nr, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id";
+
+                using (DbDataReader dataReader = command.ExecuteReader())
+                {
+                    while (dataReader.Read())
+                    {
+                        int id = Convert.ToInt32(dataReader["delict_id"]);
+                        Delict d1 = new Delict();
+                        d1.id = id;
+                        d1.street = GetDelictCategory(id);
+                        d1.changedBy = Convert.ToInt32(dataReader["badge_nr"]);
+                        d1.addedDate = (DateTime)dataReader["date_added"];
+                        delictenlist.Add(d1);
+                    }
+                }
+                foreach (var item in delictenlist)
+                {
+                    delictenlistCheck.Add(item);
+                }
+                ShowDelicts();
+            }
+        }
+
 
         public void ShowDelicts()
         {
@@ -132,8 +200,6 @@ namespace WijkAgent2.Pages.delicten
             ShowDelicts();
         }
 
-
-
         private string GetDelictCategory(int delictID)
         {
             string returnString = "";
@@ -163,65 +229,6 @@ namespace WijkAgent2.Pages.delicten
                     return returnString.Substring(0, returnString.Length - 2);
                 }
                 return returnString;
-            }
-        }
-        private void Archiveren(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict archiveren?", "Archiveren", MessageBoxButton.YesNo);
-            if (dialogResult == MessageBoxResult.Yes)
-            {
-                string provider = ConfigurationManager.AppSettings["provider"];
-                string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-                using (DbConnection connection = factory.CreateConnection())
-                {
-                    connection.ConnectionString = connectionstring;
-                    connection.Open();
-                    DbCommand command = factory.CreateCommand();
-
-                    command.Connection = connection;
-
-                    var myValue = ((System.Windows.Controls.Button)sender).Tag;
-                    string statusChange = "UPDATE delict " +
-                                     "SET status = 0 " +
-                                     "WHERE delict_id = @delictID";
-                    //TODO add use id 
-                    string addToArchive = "INSERT INTO dbo.archive (delict_id,user_id, date_added) " +
-                                          "VALUES (@delictID,@userID, GETDATE())";
-                    using (SqlConnection cnn = new SqlConnection(connectionstring))
-                    {
-                        try
-                        {
-                            cnn.Open();
-                            using (SqlCommand cmd = new SqlCommand(statusChange, cnn))
-                            {
-                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
-                                cmd.ExecuteNonQuery();
-                            }
-                            using (SqlCommand cmd = new SqlCommand(addToArchive, cnn))
-                            {
-                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
-                                cmd.Parameters.Add("@userID", SqlDbType.Int).Value = mw.GetUserID();
-                                cmd.ExecuteNonQuery();
-                            }
-
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("ERROR:" + ex.Message);
-                        }
-                        Console.WriteLine("ID: " + myValue);
-                    }
-                }
-                var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
-                delictenlistCheck.RemoveAt(currentRowIndex);
-                ShowDelicts();
-            }
-            else if (dialogResult == MessageBoxResult.No)
-            {
-                //do something else
             }
         }
 
@@ -278,7 +285,7 @@ namespace WijkAgent2.Pages.delicten
             mw.AddDelict();
         }
 
-        //Combobox
+        // ---- Combobox ---- //
         private void BindCategroryDropDown()
         {
             categoryCB.ItemsSource = categoryList;
@@ -332,6 +339,174 @@ namespace WijkAgent2.Pages.delicten
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             categoryCB.SelectedIndex = -1;
+        }
+
+        private void Archiveren(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict archiveren?", "Archiveren", MessageBoxButton.YesNo);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                string provider = ConfigurationManager.AppSettings["provider"];
+                string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+                using (DbConnection connection = factory.CreateConnection())
+                {
+                    connection.ConnectionString = connectionstring;
+                    connection.Open();
+                    DbCommand command = factory.CreateCommand();
+
+                    command.Connection = connection;
+
+                    var myValue = ((System.Windows.Controls.Button)sender).Tag;
+                    string statusChange = "UPDATE delict " +
+                                     "SET status = 0 " +
+                                     "WHERE delict_id = @delictID";
+                    //TODO add use id 
+                    string addToArchive = "INSERT INTO dbo.archive (delict_id,user_id, date_added) " +
+                                          "VALUES (@delictID,@userID, GETDATE())";
+                    using (SqlConnection cnn = new SqlConnection(connectionstring))
+                    {
+                        try
+                        {
+                            cnn.Open();
+                            using (SqlCommand cmd = new SqlCommand(statusChange, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
+                                cmd.ExecuteNonQuery();
+                            }
+                            using (SqlCommand cmd = new SqlCommand(addToArchive, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
+                                cmd.Parameters.Add("@userID", SqlDbType.Int).Value = mw.GetUserID();
+                                cmd.ExecuteNonQuery();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("ERROR:" + ex.Message);
+                        }
+                        Console.WriteLine("ID: " + myValue);
+                    }
+                }
+                var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
+                delictenlistCheck.RemoveAt(currentRowIndex);
+                mw.ShowMessage("Delict succesvol gearchiveerd.");
+                ShowDelicts();
+            }
+            else if (dialogResult == MessageBoxResult.No)
+            {
+                //do something else
+            }
+        }
+
+        private void Activate(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult dialogResult = MessageBox.Show("Wilt u dit delict activeren?", "Activeren", MessageBoxButton.YesNo);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                string provider = ConfigurationManager.AppSettings["provider"];
+                string connectionstring = ConfigurationManager.AppSettings["connectionString"];
+
+                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
+
+                using (DbConnection connection = factory.CreateConnection())
+                {
+                    connection.ConnectionString = connectionstring;
+                    connection.Open();
+                    DbCommand command = factory.CreateCommand();
+                    command.Connection = connection;
+
+                    var myValue = ((System.Windows.Controls.Button)sender).Tag;
+
+                    string archive = "UPDATE delict " +
+                                     "SET status = 1 " +
+                                     "WHERE delict_id = @delictID";
+                    //TODO add use id 
+                    string toActivate = "DELETE FROM dbo.archive " +
+                                         "WHERE delict_id = @delictID";
+                    using (SqlConnection cnn = new SqlConnection(connectionstring))
+                    {
+                        try
+                        {
+                            cnn.Open();
+                            using (SqlCommand cmd = new SqlCommand(archive, cnn))
+                            {
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
+                                cmd.ExecuteNonQuery();
+
+
+                            }
+                            using (SqlCommand cmd = new SqlCommand(toActivate, cnn))
+                            {
+
+                                cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = myValue;
+                                cmd.ExecuteNonQuery();
+
+
+                            }
+                            //Delicten_archief.
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("ERROR:" + ex.Message);
+                        }
+
+                        Console.WriteLine("ID: " + myValue);
+
+                    }
+                }
+                var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
+                delictenlistCheck.RemoveAt(currentRowIndex);
+                mw.ShowMessage("Delict succesvol geactiveerd.");
+                ShowDelicts();
+            }
+            else if (dialogResult == MessageBoxResult.No)
+            {
+                //do something else
+            }
+        }
+        public void UncheckAllCategories()
+        {
+            foreach (var item in categoryList)
+            {
+                item.Check_Status = false;
+            }
+            categoryCB.ItemsSource = emptylist;
+            testListbox.Items.Clear();
+            delictenlistCheck.Clear();
+            BindCategroryDropDown();
+            BindListBOX();
+            ShowDelicts();
+        }
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if(currPageIsActivated == true)
+            {
+                ActivelistCreatedtime.Visibility = Visibility.Hidden;
+                ActivelistFirstnamecount.Visibility = Visibility.Hidden;
+                ArchivelistAddedDate.Visibility = Visibility.Visible;
+                ArchivelistChangedBy.Visibility = Visibility.Visible;
+                DelictListSwapBTN.Content = "Actieve delicten lijst";
+                GetArchivedDelicts();
+                UncheckAllCategories();
+                return;
+            }
+            if(currPageIsActivated == false)
+            {
+                ActivelistCreatedtime.Visibility = Visibility.Visible;
+                ActivelistFirstnamecount.Visibility = Visibility.Visible;
+                ArchivelistAddedDate.Visibility = Visibility.Hidden;
+                ArchivelistChangedBy.Visibility = Visibility.Hidden;
+                DelictListSwapBTN.Content = "Gearchiveerde delicten lijst";
+                GetActiveDelicts();
+                UncheckAllCategories();
+                return;
+            }
         }
     }
 }
