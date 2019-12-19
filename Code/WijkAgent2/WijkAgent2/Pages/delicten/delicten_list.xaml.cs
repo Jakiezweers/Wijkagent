@@ -86,7 +86,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date ";
+                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -97,10 +97,10 @@ namespace WijkAgent2.Pages.delicten
                         Delict d1 = new Delict();
                         d1.id = id;
                         d1.street = GetDelictCategory(id);
-                        d1.createtime = (DateTime)dataReader["added_date"];
+
+                        d1.createtime = (DateTime)dataReader["date"];
 
                         d1.firstnamecount = count;
-                        Console.WriteLine($"{dataReader["street"]}");
                         delictenlist.Add(d1);
                     }
                 }
@@ -388,7 +388,6 @@ namespace WijkAgent2.Pages.delicten
                         {
                             MessageBox.Show("ERROR:" + ex.Message);
                         }
-                        Console.WriteLine("ID: " + myValue);
                     }
                 }
                 var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
@@ -455,9 +454,6 @@ namespace WijkAgent2.Pages.delicten
                         {
                             MessageBox.Show("ERROR:" + ex.Message);
                         }
-
-                        Console.WriteLine("ID: " + myValue);
-
                     }
                 }
                 var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
@@ -481,6 +477,43 @@ namespace WijkAgent2.Pages.delicten
             delictenlistCheck.Clear();
             BindCategroryDropDown();
             BindListBOX();
+            ShowDelicts();
+        }
+        bool sortID = false;
+        bool sortDate = false;
+        private void CustomSort(object sender, DataGridSortingEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Column.Header.ToString() == "Delict")
+            {
+                if (sortID)
+                {
+                    delictenlistCheck = delictenlistCheck.OrderBy(o => o.id).ToList();
+                    sortDate = false;
+                    sortID = false;
+                }
+                else
+                {
+                    delictenlistCheck = delictenlistCheck.OrderByDescending(o => o.id).ToList();
+                    sortDate = false;
+                    sortID = true;
+                }
+            }
+            if(e.Column.Header.ToString() == "Aanmaakdatum")
+            {
+                if (sortDate)
+                {
+                    delictenlistCheck = delictenlistCheck.OrderBy(o => o.createtime).ToList();
+                    sortID = false;
+                    sortDate = false;
+                }
+                else
+                {
+                    delictenlistCheck = delictenlistCheck.OrderByDescending(o => o.createtime).ToList();
+                    sortID = false;
+                    sortDate = true;
+                }
+            }
             ShowDelicts();
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
