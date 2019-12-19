@@ -65,6 +65,16 @@ namespace WijkAgent2.Modals
                 Personen.Items.Add(p1);
             }
         }
+        bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+
+            return true;
+        }
         private void AddPersonButton(object sender, RoutedEventArgs e)
         {
             string bsnTextField = bsnfield.Text;
@@ -72,7 +82,7 @@ namespace WijkAgent2.Modals
             int BSNNumber;
             string errorMessage = "";
             bool error = false;
-            if (bsnTextField.Length == 9 && int.TryParse(bsnTextField, out value))
+            if (bsnTextField.Length == 9 && int.TryParse(bsnTextField, out value) && IsDigitsOnly(bsnTextField))
             {
                 BSNNumber = value;
             }

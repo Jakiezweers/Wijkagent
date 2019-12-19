@@ -101,7 +101,6 @@ namespace WijkAgent2.Pages.delicten
                         d1.createtime = (DateTime)dataReader["date"];
 
                         d1.firstnamecount = count;
-                        Console.WriteLine($"{dataReader["street"]}");
                         delictenlist.Add(d1);
                     }
                 }
@@ -389,7 +388,6 @@ namespace WijkAgent2.Pages.delicten
                         {
                             MessageBox.Show("ERROR:" + ex.Message);
                         }
-                        Console.WriteLine("ID: " + myValue);
                     }
                 }
                 var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
@@ -456,9 +454,6 @@ namespace WijkAgent2.Pages.delicten
                         {
                             MessageBox.Show("ERROR:" + ex.Message);
                         }
-
-                        Console.WriteLine("ID: " + myValue);
-
                     }
                 }
                 var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
