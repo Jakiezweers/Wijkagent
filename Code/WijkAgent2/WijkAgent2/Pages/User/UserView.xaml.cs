@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -22,35 +19,31 @@ using WijkAgent2.Database;
 namespace WijkAgent2.Pages.User
 {
     /// <summary>
-    /// Interaction logic for User_List.xaml
+    /// Interaction logic for UserView.xaml
     /// </summary>
-    public partial class User_List : Page
+    public partial class UserView : Page
     {
-        private MainWindow mw;
-        public User_List(MainWindow MW)
+        MainWindow Mw;
+        int UserID;
+        public UserView(MainWindow MW, int userID)
         {
+            UserID = userID;
             int rolid;
             string rolname;
-            mw = MW;
+            Mw = MW;
             InitializeComponent();
 
-           
-            
             Connection cn = new Connection();
             cn.OpenConection();
-            SqlDataReader sq = cn.DataReader("select us.*, up.upload_path, r.rol_name " +
-                "from[dbo].[User] us " +
-                "join[dbo].[uploads] up on us.upload_id = up.upload_id " + 
-                "join[dbo].[rol] r on us.rol_id = r.rol_id");
+            SqlDataReader sq = cn.DataReader("select us.*, up.upload_path, r.rol_name from[dbo].[User] us join[dbo].[uploads] up on us.upload_id = up.upload_id join[dbo].[rol] r on us.rol_id = r.rol_id where us.user_id = " + UserID);
+
+            Wijkagent2.Classes.User user = new Wijkagent2.Classes.User();
 
             while (sq.Read())
             {
                 rolid = (int)sq["rol_id"];
                 rolname = (string)sq["rol_name"];
                 int id = Convert.ToInt32(sq["user_id"]);
-                Wijkagent2.Classes.User user = new Wijkagent2.Classes.User();
-
-                Console.WriteLine(rolname + rolid);
 
                 user.UserId = id;
                 user.Role = new Roles(rolname, rolid);
@@ -59,30 +52,29 @@ namespace WijkAgent2.Pages.User
                 user.PhoneNumber = (string)sq["tel"];
                 user.ProfilePicture = new Uploads(Convert.ToInt32(sq["upload_id"]), (string)sq["upload_path"]);
 
-
-                UserList.Items.Add(user);
             }
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(user.ProfilePicture.Path);
+            bitmap.EndInit();
+
+            UserImage.Source = bitmap;
+            UserName.Content += ": " + user.Name;
+            UserIDV.Content += ": " + user.UserId;
+            Role.Content += ": " + user.Role;
+            BadgeId.Content += ": " + user.BadgeId;
+            PhoneNumber.Content += ": " + user.PhoneNumber;
         }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-
+            Mw.EditUser(UserID);
         }
 
-        private void BtnAddUser_Click(object sender, RoutedEventArgs e)
+        private void Terug_Click(object sender, RoutedEventArgs e)
         {
-            mw.AddUser();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            mw.LoadHomeScreen();
-        }
-
-        private void Inzien_Click(object sender, RoutedEventArgs e) 
-        {
-            var UserID = (int)((System.Windows.Controls.Button)sender).Tag;
-            mw.UserView(UserID);
+            Mw.ShowUserList();
         }
     }
 }
