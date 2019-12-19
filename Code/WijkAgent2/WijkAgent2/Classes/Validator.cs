@@ -21,7 +21,7 @@ namespace WijkAgent2.Classes
                                             "JOIN rol r on us.rol_id = r.rol_id " +
                                             "JOIN permission_rol perrol on r.rol_id = perrol.rol_id " +
                                             "JOIN permission p on perrol.permission_id = p.permission_id " +
-                                            "WHERE us.user_id = '" + logged_in_user_id + "'; ");
+                                            "WHERE us.user_id = '" + logged_in_user_id + "'; "); ;
             bool found = false;
             while (sq.Read())
             {

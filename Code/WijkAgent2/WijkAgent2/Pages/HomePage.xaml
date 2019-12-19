@@ -25,7 +25,7 @@
         <Border x:Name="labelsVis6" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="256" Margin="1252,585,-1113,-374" VerticalAlignment="Top" Width="651" Visibility="Hidden"/>
         <Label x:Name="labelsVis5" Content="Delict" HorizontalAlignment="Left" Height="23" Margin="1277,602,-610,-158" VerticalAlignment="Top" Width="123" FontWeight="Bold" Visibility="Hidden"/>
         <Label x:Name="delictDate"  HorizontalAlignment="Left" Height="100" Margin="1429,601,-739,-234" VerticalAlignment="Top" Width="100" FontWeight="Bold"/>
-        <TextBox x:Name="ZIPfield" HorizontalAlignment="Left" Height="22" Margin="22,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="ZIPfield" HorizontalAlignment="Left" MaxLength="6" Height="22" Margin="22,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="categoryBox" HorizontalAlignment="Left" Margin="22,179,0,0" VerticalAlignment="Top" Width="120"/>
         <CheckBox x:Name="checkBox" Content="Zoeken op één datum" HorizontalAlignment="Left" Margin="20,380,0,0" VerticalAlignment="Top" Click="checkClick"/>
         <DatePicker x:Name="endDate" HorizontalAlignment="Left" Margin="18,334,0,0" VerticalAlignment="Top" Width="134"/>
@@ -49,7 +49,7 @@
         <Label x:Name="delictZip"  HorizontalAlignment="Left" Height="100" Margin="1598,653,-908,-286" VerticalAlignment="Top" Width="100"/>
         <Button x:Name="labelsVis7" Content="X" HorizontalAlignment="Left" Margin="1851,589,-1108,-154" VerticalAlignment="Top" Width="47" Click="Close_window" Visibility="Hidden"/>
         <Button Content="Verwijder Filter" HorizontalAlignment="Left" Margin="12,539,0,-104" VerticalAlignment="Top" Width="136" Click="Button_Click"/>
-        <ListView x:Name="listview" HorizontalAlignment="Left" Height="267" Margin="16,619,0,-419" VerticalAlignment="Top" Width="142">
+        <ListView x:Name="listview" HorizontalAlignment="Left" Height="267" Margin="16,619,0,-419" VerticalAlignment="Top" MinWidth="142">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
