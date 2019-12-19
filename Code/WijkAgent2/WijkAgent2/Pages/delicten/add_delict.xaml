@@ -24,8 +24,8 @@
         <TextBox TabIndex="5" FontSize="18" x:Name="HuisnummerTB" Height="35" Margin="0,158,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
         <TextBox TabIndex="4" FontSize="18" x:Name="StraatTB" Height="35" Margin="0,63,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
         <Label FontSize="18" Content="Straat" Margin="0,29,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
-        <Label FontSize="18" Content="Huisnummer" Margin="0,119,77,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="83"/>
-        <Label FontSize="18" Content="Postcode" Margin="0,210,87,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="73"/>
+        <Label FontSize="18" Content="Huisnummer" Margin="0,119,18,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
+        <Label FontSize="18" Content="Postcode" Margin="0,210,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
         <DatePicker TabIndex="3" FontSize="18" x:Name="DatumTB" HorizontalAlignment="Right" Height="35" Margin="0,158,250,0" VerticalAlignment="Top" Width="147" FirstDayOfWeek="Monday" RenderTransformOrigin="0.542,2.75"/>
         <TextBox TabIndex="7" FontSize="18" x:Name="OmschijvingTB" AcceptsReturn="True" Margin="41,249,310,10" TextWrapping="Wrap" Text="" BorderThickness="1" BorderBrush="#89000000"/>
         <Label FontSize="18" Content="Categorie" HorizontalAlignment="Left" Margin="41,29,0,0" VerticalAlignment="Top"/>
