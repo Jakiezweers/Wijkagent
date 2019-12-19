@@ -41,24 +41,6 @@
                 <DataGridTextColumn Header="Badge NR" Binding="{Binding BadgeId}" Width="auto"/>
                 <DataGridTextColumn Header="Tel" Binding="{Binding PhoneNumber}" Width="auto"/>
 
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-
-                        <DataTemplate>
-                            <Button x:Name="knop" Click="Archiveren" >Archiveren</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-
-                        <DataTemplate>
-                            <Button Click="ViewDelict" Tag="{Binding id}" >Inzien</Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
         

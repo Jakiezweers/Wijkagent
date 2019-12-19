@@ -152,7 +152,7 @@ namespace WijkAgent2
         public void ShowDelictenArchive()
         {
             MainFrame.Navigate(new delicten_list(this,false));
-            TopHeader.Text = "Wijkagent - Delicten Archive";
+            TopHeader.Text = "Wijkagent - Delicten Archief";
         }
 
         public void AddDelict()

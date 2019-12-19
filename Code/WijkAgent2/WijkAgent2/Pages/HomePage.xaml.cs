@@ -353,6 +353,44 @@ namespace WijkAgent2.Pages
 
         private void filterMap(object sender, RoutedEventArgs e)
         {
+            for (int i = 0; i < ZIPfield.Text.Length; i++)
+            {
+                if (i < 4)
+                {
+                    char nummers = ZIPfield.Text[i];
+                    bool result = Char.IsDigit(nummers);
+
+                    if (result == false)
+                    {
+                        mw.ShowDialog("Postcode verkeerd ingevoerd");
+                        return;
+                    }
+                }
+                else
+                {
+                    char nummers = ZIPfield.Text[i];
+                    bool result = Char.IsUpper(nummers);
+                    if (result == false)
+                    {
+                        mw.ShowDialog("Postcode verkeerd ingevoerd");
+                        return;
+                    }
+
+
+                }
+
+            }
+            if (startDate.SelectedDate != null && endDate.SelectedDate != null)
+            {
+                DateTime startdate = Convert.ToDateTime(startDate.Text);
+                DateTime enddate = Convert.ToDateTime(endDate.Text);
+                if (startdate > enddate)
+                {
+                    mw.ShowDialog("De startdatum is later dan de einddatum");
+                    return;
+                }
+            }
+
             delictList.Items.Clear();
             listview.Items.Clear();
             overlay.Graphics.Clear();
@@ -651,6 +689,7 @@ namespace WijkAgent2.Pages
             delictenlist.Clear();
             delictList.Items.Clear();
             LoadMap();
+            categoryBox.SelectedItem = null;
         }
 
 

@@ -76,7 +76,7 @@
                         <ListBoxItem x:Name="LBArchive">
                             <Grid>
                                 <Image Margin="0,0,0,0" HorizontalAlignment="Left" Width="24" Height="24" Source="Images/archive.png"/>
-                                <Label Margin="40,10,0,10" Content="Archive"/>
+                                <Label Margin="40,10,0,10" Content="Delicten Archief"/>
                             </Grid>
                         </ListBoxItem>
                         <ListBoxItem x:Name="LBGebruikers">

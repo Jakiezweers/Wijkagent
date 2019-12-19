@@ -33,8 +33,6 @@ namespace WijkAgent2.Pages.User
             string rolname;
             mw = MW;
             InitializeComponent();
-
-           
             
             Connection cn = new Connection();
             cn.OpenConection();
