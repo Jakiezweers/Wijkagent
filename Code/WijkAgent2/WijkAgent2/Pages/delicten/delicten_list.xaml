@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
       mc:Ignorable="d" d:DesignWidth="1700"
       Title="lijst"
-      PreviewKeyDown="KeyDownEvent"
+      PreviewKeyDown="Window_KeyDown"
       >
 
     <Grid>
@@ -59,15 +59,21 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="590" Margin="1242,72,0,0" VerticalAlignment="Top" Width="210" />
-        <Button Content="Terug" Margin="1580,620,0,0" Click="Button_Click" Height="32" HorizontalAlignment="Left" Width="75" VerticalAlignment="Top"/>
+        <ListBox FontSize="18" Name="testListbox" HorizontalAlignment="Left" Height="203" Margin="1242,72,0,0" VerticalAlignment="Top" Width="210" />
+        <Button Content="Terug" Margin="0,0,45,42" Click="Button_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
         <ListBox x:Name="personnames" HorizontalAlignment="Left" Height="240" Margin="803,620,0,-166" VerticalAlignment="Top" Width="197"/>
-        <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="297,630,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
-        <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="78,630,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
+        <Button x:Name="NextButton" Content="Volgende" HorizontalAlignment="Left" Margin="297,630,0,0" VerticalAlignment="Top" Width="75" Click="NextDelictsPage"/>
+        <Button x:Name="PreviousButton" Content="Vorige" HorizontalAlignment="Left" Margin="78,630,0,0" VerticalAlignment="Top" Width="100" Click="PreviousDelictsPage"/>
         <Label x:Name="PageLabel" Content="Pagina: 1" HorizontalAlignment="Left" Margin="193,630,0,0" VerticalAlignment="Top" Height="32" Width="87"/>
         <Label x:Name="DelictCountLabel" HorizontalAlignment="Left" Margin="1107,0,0,0" VerticalAlignment="Top" Height="32" Width="140"/>
         <Label Content="Filter op categorie" HorizontalAlignment="Left" Margin="1252,0,0,0" VerticalAlignment="Top" Height="27" Width="200"/>
         <Button x:Name="AddDelictBtn" Content="Nieuw delict aanmaken" HorizontalAlignment="Left" Margin="1580,32,-94,0" VerticalAlignment="Top" Width="214" Height="68" Click="AddDelict_Click"/>
         <Button x:Name="DelictListSwapBTN" Content="Gearchiveerde delicten lijst" HorizontalAlignment="Left" Margin="67,796,0,-166" VerticalAlignment="Top" Width="213" Height="64" Click="Button_Click_1"/>
+        <DatePicker Focusable="False" SelectedDateChanged="StartDateChanged" x:Name="StartDateDP" HorizontalAlignment="Left" Margin="1247,314,0,0" VerticalAlignment="Top" Width="150"/>
+        <DatePicker Focusable="False" SelectedDateChanged="EndDateChanged" x:Name="EndDateDP" HorizontalAlignment="Left" Margin="1247,458,0,0" VerticalAlignment="Top" Width="150"/>
+        <Label Content="Startdatum" HorizontalAlignment="Left" Margin="1247,288,0,0" VerticalAlignment="Top" Width="195"/>
+        <Label Content="Einddatum" HorizontalAlignment="Left" Margin="1247,433,0,0" VerticalAlignment="Top" Width="195"/>
+        <CheckBox IsEnabled="False" x:Name="DateCB" Content="Zoek op startdatum" HorizontalAlignment="Left" Margin="1252,354,0,0" VerticalAlignment="Top" Height="25" Click="DateCB_Click"/>
+        <Button x:Name="ResetFilterBTN" IsEnabled="False" Content="Verwijder Datum Filter" HorizontalAlignment="Left" Margin="1252,516,0,0" VerticalAlignment="Top" Width="190" Click="RemoveFilter_Click"/>
     </Grid>
 </Page>
