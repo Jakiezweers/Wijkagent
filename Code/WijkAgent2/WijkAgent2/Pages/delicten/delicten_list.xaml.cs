@@ -32,6 +32,9 @@ namespace WijkAgent2.Pages.delicten
 
         bool currPageIsActivated = true;
 
+        bool sortID = false;
+        bool sortDate = false;
+
         List<CategoryList> categoryList = new List<CategoryList>();
         List<String> emptylist = new List<String>();
         static int pageCounter = 1;
@@ -86,7 +89,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ";
+                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ORDER BY delict.delict_id DESC";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -132,7 +135,7 @@ namespace WijkAgent2.Pages.delicten
                 DbCommand command = factory.CreateCommand();
 
                 command.Connection = connection;
-                command.CommandText = "SELECT d.delict_id, u.badge_nr, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id";
+                command.CommandText = "SELECT d.delict_id, u.badge_nr, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id DESC";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -186,6 +189,10 @@ namespace WijkAgent2.Pages.delicten
                 NextButton.IsEnabled = true;
             }
             PageLabel.Content = "Pagina: " + pageCounter + " / " + Math.Ceiling(delictenlistCheck.Count() / delictsPerPage);
+            if(delictCount == 0)
+            {
+                mw.ShowMessage("Geen delicten gevonden");
+            }
         }
 
         private void NextDelictsPage(object sender, RoutedEventArgs e) //next
@@ -479,8 +486,6 @@ namespace WijkAgent2.Pages.delicten
             BindListBOX();
             ShowDelicts();
         }
-        bool sortID = false;
-        bool sortDate = false;
         private void CustomSort(object sender, DataGridSortingEventArgs e)
         {
             e.Handled = true;
@@ -540,6 +545,106 @@ namespace WijkAgent2.Pages.delicten
                 UncheckAllCategories();
                 return;
             }
+        }
+
+        private void DateCB_Click(object sender, RoutedEventArgs e)
+        {
+            if (DateCB.IsChecked == true)
+            {
+                EndDateDP.IsEnabled = false;
+                EndDateChanged(sender, e);
+                if(StartDateDP.SelectedDate == null && EndDateDP.SelectedDate == null)
+                {
+                    ResetFilterBTN.IsEnabled = false;
+                }
+/*                EndDateDP.SelectedDate = null;
+                StartDateDP.DisplayDateEnd = EndDateDP.SelectedDate;*/
+            }
+            else
+            {
+                EndDateDP.IsEnabled = true;
+                EndDateChanged(sender, e);
+                if (StartDateDP == null && EndDateDP == null)
+                {
+                    ResetFilterBTN.IsEnabled = false;
+                }
+                /*                EndDateDP.SelectedDate = null;
+                                StartDateDP.DisplayDateEnd = EndDateDP.SelectedDate;*/
+            }
+        }
+
+        private void StartDateChanged(object sender, RoutedEventArgs e)
+        {
+            DateCB.IsEnabled = true;
+            ResetFilterBTN.IsEnabled = true;
+            delictenlistCheck.Clear();
+            foreach (var item in delictenlist)
+            {
+                delictenlistCheck.Add(item);
+            }
+            if (DateCB.IsChecked == true)
+            {
+                foreach (var item in delictenlist)
+                {
+                    if (item.createtime != StartDateDP.SelectedDate)
+                    {
+                        delictenlistCheck.Remove(item);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in delictenlist)
+                {
+                    if (item.createtime < StartDateDP.SelectedDate)
+                    {
+                        delictenlistCheck.Remove(item);
+                    }
+                    if(EndDateDP.SelectedDate != null)
+                    {
+                        foreach (var var in delictenlist)
+                        {
+                            if (var.createtime > EndDateDP.SelectedDate && DateCB.IsChecked == false)
+                            {
+                                delictenlistCheck.Remove(var);
+                            }
+                        }
+                    }
+                }
+            }
+            EndDateDP.DisplayDateStart = StartDateDP.SelectedDate;
+            pageCounter = 1;
+            ShowDelicts();
+        }
+
+        private void EndDateChanged(object sender, RoutedEventArgs e)
+        {
+            ResetFilterBTN.IsEnabled = true;
+            foreach (var item in delictenlist)
+            {
+                if (item.createtime > EndDateDP.SelectedDate && DateCB.IsChecked == false)
+                {
+                    delictenlistCheck.Remove(item);
+                }
+            }
+            StartDateDP.DisplayDateEnd = EndDateDP.SelectedDate;
+            StartDateChanged(sender, e);
+        }
+
+        private void RemoveFilter_Click(object sender, RoutedEventArgs e)
+        {
+            StartDateDP.SelectedDate = null;
+            EndDateDP.SelectedDate = null;
+            DateCB.IsChecked = false;
+
+            delictenlistCheck.Clear();
+            foreach (var item in delictenlist)
+            {
+                delictenlistCheck.Add(item);
+            }
+            DateCB_Click(sender, e);
+            DateCB.IsEnabled = false;
+            ResetFilterBTN.IsEnabled = false;
         }
     }
 }
