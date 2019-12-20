@@ -1,0 +1,34 @@
+﻿<Page x:Class="WijkAgent2.Pages.User.Edit_User"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WijkAgent2.Pages.User"
+      mc:Ignorable="d" 
+      Title="EditUser" Width="1041.619" d:DesignHeight="290.182">
+
+    <Grid Margin="0,0,0,-41">
+        <Image MaxWidth="256" MaxHeight="256" x:Name="UserImage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="256" Width="256"/>
+        <Label FontSize="18" Content="Gebruikersnaam: " x:Name="UserName" HorizontalAlignment="Left" Margin="271,10,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Badge Id: " x:Name="BadgeId" HorizontalAlignment="Left" Margin="271,78,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Rol: " x:Name="Role" HorizontalAlignment="Left" Margin="271,109,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Telefoonnummer: " x:Name="PhoneNumber" HorizontalAlignment="Left" Margin="271,143,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="User Id: " x:Name="UserIDV" HorizontalAlignment="Left" Margin="271,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.523,0.641"/>
+        <Label FontSize="18" Content="Functie: " x:Name="Function" HorizontalAlignment="Left" Margin="271,182,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.523,0.641"/>
+        <Label FontSize="18" Content="Kazerne id: " x:Name="KazerneId" HorizontalAlignment="Left" Margin="271,216,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.523,0.641"/>
+        <Label FontSize="18" Content="Eenheid id: " x:Name="EenheidId" HorizontalAlignment="Left" Margin="271,250,0,-18" VerticalAlignment="Top" RenderTransformOrigin="0.523,0.641"/>
+
+        <ComboBox FontSize="18" Name="RoleCB" ItemsSource="{Binding Roles}" HorizontalAlignment="Left" Margin="315,112,0,0" VerticalAlignment="Top" Width="260"></ComboBox>
+        <ComboBox FontSize="18" Name="FunctieCB" ItemsSource="{Binding Functions}" HorizontalAlignment="Left" Margin="346,177,0,0" VerticalAlignment="Top" Width="260"></ComboBox>
+        <TextBox x:Name="UserNameTB" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="416,14,0,0"/>
+        <Label x:Name="BadgeIdTB" FontSize="18" HorizontalAlignment="Left" Height="30" Content="" VerticalAlignment="Top" Width="204" Margin="356,82,0,0"/>
+        <TextBox PreviewTextInput="NumberValidationTextBox" x:Name="PhoneNumberTB" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="416,147,0,0"/>
+        <TextBox PreviewTextInput="NumberValidationTextBox" x:Name="KazerneIdTB" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="371,220,0,0"/>
+        <TextBox PreviewTextInput="NumberValidationTextBox" x:Name="EenheidIdTB" FontSize="18" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="204" Margin="373,254,0,0"/>
+        <Label x:Name="UserIDTB" FontSize="18" HorizontalAlignment="Left" Height="30"  VerticalAlignment="Top" Width="204" Margin="346,48,0,0"/>
+
+        <Button FontSize="18" Content="Terug" Margin="0,250,10,0" Click="Terug_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Right" Width="85"/>
+        <Button FontSize="18" Content="Opslaan" Margin="0,250,100,0" Click="Opslaan_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100"/>
+        <Button x:Name="BtnTakeImage" Content="Selecteer" Margin="10,284,776,0" MaxHeight="40" Click="BtnTakeImage_Click" VerticalAlignment="Top"/>
+    </Grid>
+</Page>

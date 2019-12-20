@@ -88,5 +88,11 @@ namespace WijkAgent2.Pages.User
         {
             mw.LoadHomeScreen();
         }
+
+        private void Inzien_Click(object sender, RoutedEventArgs e) 
+        {
+            var UserID = (int)((System.Windows.Controls.Button)sender).Tag;
+            mw.UserView(UserID);
+        }
     }
 }

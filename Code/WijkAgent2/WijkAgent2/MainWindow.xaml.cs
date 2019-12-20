@@ -149,6 +149,7 @@ namespace WijkAgent2
             MainFrame.Navigate(new user_registratie(this));
             TopHeader.Text = "Wijkagent - Gebruiker toevoegen";
         }
+
         public void ShowDelictenArchive()
         {
             MainFrame.Navigate(new delicten_list(this,false));
@@ -158,6 +159,12 @@ namespace WijkAgent2
         public void AddDelict()
         {
             MainFrame.Navigate(new add_delict(this));
+            TopHeader.Text = "Wijkagent - Delict toevoegen";
+        }
+
+        public void UserView(int id)
+        {
+            MainFrame.Navigate(new UserView(this, id));
             TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
 
@@ -178,6 +185,12 @@ namespace WijkAgent2
         public void EditDelict(int delictID, int previousPage)
         {
             MainFrame.Navigate(new edit_delict(this, delictID, previousPage));
+        }
+
+        public void EditUser(int userId, string fname, int fid)
+        {
+            MainFrame.Navigate(new Edit_User(this, userId, fname, fid));
+            TopHeader.Text = "Wijkagent - Gebruiker " + userId;
         }
 
         public void close()
