@@ -286,7 +286,7 @@ namespace WijkAgent2.Pages.delicten
                     }   
                 }
             }
-            mw.LoadHomeScreen();
+            mw.ShowDelictenList(true);
         }
 
         private bool CheckCategorie()
