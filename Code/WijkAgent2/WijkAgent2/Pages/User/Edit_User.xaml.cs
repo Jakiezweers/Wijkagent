@@ -126,6 +126,9 @@ namespace WijkAgent2.Pages.User
 
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
+            PhoneNumberTB.BorderBrush = System.Windows.Media.Brushes.Red;
+            return;
+
             Int32 upload_id;
             string SaveImage = "INSERT into [dbo].[uploads]" +
                 "(upload_path)" +
