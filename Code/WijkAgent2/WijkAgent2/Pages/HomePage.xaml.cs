@@ -275,8 +275,7 @@ namespace WijkAgent2.Pages
             {
                 try
                 {
-                    SimpleMarkerSymbol marker1 = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
-                    a.Symbol = marker1;
+                    a.Symbol = marker;
                     Console.WriteLine(a.Attributes.ContainsKey(x.Text));
 
                     if (a.Attributes.ContainsKey(x.Text))
@@ -351,11 +350,51 @@ namespace WijkAgent2.Pages
 
         private void filterMap(object sender, RoutedEventArgs e)
         {
+             for(int i = 0; i < ZIPfield.Text.Length; i++)
+            {
+                if(i < 4)
+                {
+                    char nummers = ZIPfield.Text[i];
+                    bool result = Char.IsDigit(nummers);
+
+                    if(result == false)
+                    {
+                        mw.ShowDialog("Postcode verkeerd ingevoerd");
+                        return;
+                    }
+                }
+                else
+                {
+                    char nummers = ZIPfield.Text[i];
+                    bool result = Char.IsUpper(nummers);
+                    if(result == false)
+                    {
+                        mw.ShowDialog("Postcode verkeerd ingevoerd");
+                        return;
+                    }
+
+                    
+                }
+
+            }
+            if (startDate.SelectedDate != null && endDate.SelectedDate != null)
+            {
+                DateTime startdate = Convert.ToDateTime(startDate.Text);
+                DateTime enddate = Convert.ToDateTime(endDate.Text);
+                if (startdate > enddate)
+                {
+                    mw.ShowDialog("De startdatum is later dan de einddatum");
+                    return;
+                }
+            }
+
             delictList.Items.Clear();
             listview.Items.Clear();
             overlay.Graphics.Clear();
             delictenlist1.Clear();
 
+
+           
             if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate == null)
             {
                 listview.Items.Add(ZIPfield.Text);
@@ -579,6 +618,7 @@ namespace WijkAgent2.Pages
                 if (endDate.SelectedDate == null || disablefield == true)
                 {
                     cn.OpenConection();
+                    Console.WriteLine("ASD");
                     DateTime startdate = Convert.ToDateTime(startDate.Text);
                     listview.Items.Add(startDate.Text);
 
@@ -649,6 +689,8 @@ namespace WijkAgent2.Pages
             listview.Items.Clear();
             delictenlist.Clear();
             delictList.Items.Clear();
+            categoryBox.SelectedItem = null;
+
             LoadMap();
         }
 

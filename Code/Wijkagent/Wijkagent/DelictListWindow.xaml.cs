@@ -25,6 +25,7 @@ namespace Wijkagent
         public DelictListWindow()
         {
             InitializeComponent();
+<<<<<<< HEAD
 
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
@@ -80,6 +81,9 @@ namespace Wijkagent
         {
             var myValue = ((System.Windows.Controls.Button)sender).Tag;
             Console.WriteLine("ID: " + myValue);
+=======
+            
+>>>>>>> cdd1651fb30f803bf92cb4f94727c36e78c5a78f
         }
     }
 }
