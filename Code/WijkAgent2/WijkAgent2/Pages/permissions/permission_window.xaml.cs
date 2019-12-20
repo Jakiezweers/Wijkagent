@@ -68,7 +68,7 @@ namespace WijkAgent2.Pages.permissions
                 {
                     while (dataReader.Read())
                     {
-                        role.Add(Convert.ToString(dataReader["name"]));
+                        role.Add(Convert.ToString(dataReader["rol_name"]));
                         role_idList.Add(Convert.ToInt32(dataReader["rol_id"]));
                     }
                 }
@@ -118,7 +118,7 @@ namespace WijkAgent2.Pages.permissions
                 }
 
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[rol] WHERE name = '" + val + "';";
+                command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[rol] WHERE rol_name = '" + val + "';";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
@@ -273,7 +273,7 @@ namespace WijkAgent2.Pages.permissions
         {
             Connection CN = new Connection();
             CN.OpenConection();
-            CN.ExecuteQueries("INSERT INTO [Wijkagent].[dbo].[rol] (name) values ('" + Rolbox.Text + "');");
+            CN.ExecuteQueries("INSERT INTO [Wijkagent].[dbo].[rol] (rol_name) values ('" + Rolbox.Text + "');");
             CN.CloseConnection();
             Rolbox.Clear();
             mw.ShowDialog("rol is toegevoegd");

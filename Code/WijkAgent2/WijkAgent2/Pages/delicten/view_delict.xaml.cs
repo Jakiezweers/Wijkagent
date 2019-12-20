@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,8 +16,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tweetinvi;
+using Tweetinvi.Models;
+using Tweetinvi.Parameters;
 using WijkAgent2.Classes;
 using WijkAgent2.Database;
+using WijkAgent2.Modals;
 
 namespace WijkAgent2.Pages.delicten
 {
@@ -28,12 +33,65 @@ namespace WijkAgent2.Pages.delicten
         MainWindow mw;
         int viewDelictID;
         private Connection cn = new Connection();
-        public view_delict(MainWindow MW, int delictID)
+        int returnPage = 0;
+        public view_delict(MainWindow MW, int delictID, int originalPage)
         {
             viewDelictID = delictID;
             InitializeComponent();
             LoadDelict(delictID);
             mw = MW;
+            returnPage = originalPage;
+        }
+
+        private void Get_Tweets()
+        {
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                Modals.Tweet tmp = new Modals.Tweet();
+                tmp.User.Text = "Een moment geduld....";
+                tmp.Date.Text = "";
+                tmp.tweet_text.Text = "";
+                tmp.Date.Visibility = Visibility.Hidden;
+                tmp.tweet_text.Visibility = Visibility.Hidden;
+                tmp.BtnShowTweet.Visibility = Visibility.Hidden;
+                List_Tweets.Children.Add(tmp);
+            }));
+
+            Thread.Sleep(450);
+            // Set up your credentials (https://apps.twitter.com)
+            Auth.SetUserCredentials("itpO8X73ey8dkZTyGJVsIx5sI", "WKs54HvEZJdxnKkNm8apcyhIEcqCEKcYaKbvpxyoKnhSx6RZMc", "3374540458-5LHiTuas6A4PCrWQKkzYhf71MlEbUekNq1PPw7E", "DArMiCPh51mCi0BywNplin9rRvRZayixrUqnUnYpgXfs9");
+
+
+            var searchParameter = new SearchTweetsParameters("")
+            {
+                GeoCode = new GeoCode(52.516773, 6.083022, 1, DistanceMeasure.Kilometers),
+                MaximumNumberOfResults = 100,
+                SearchType = SearchResultType.Recent,
+                Until = new DateTime(2019, 12, 20),
+            };
+
+            var tweets = Search.SearchTweets(searchParameter);
+            Thread.Sleep(800);
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                List_Tweets.Children.Clear();
+            }));
+
+            List<ITweet> tweet_list = tweets.ToList();
+            foreach (ITweet tweet in tweet_list)
+            {
+                if (!tweet.IsRetweet)
+                {
+                    Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        Modals.Tweet t = new Modals.Tweet();
+                        t.User.Text = tweet.CreatedBy.ScreenName;
+                        t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
+                        t.tweet_text.Text = tweet.FullText;
+                        List_Tweets.Children.Add(t);
+                    }));
+                }
+            }
         }
 
         private void LoadDelict(int viewDelictID)
@@ -83,14 +141,33 @@ namespace WijkAgent2.Pages.delicten
                 PersonenListbox.Items.Add(text);
             }
             cn.CloseConnection();
+
+            Thread thr = new Thread(Get_Tweets);
+            thr.IsBackground = true;
+            thr.Start();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            mw.ShowDelictenList();
+            if(returnPage == 1)
+            {
+                mw.ShowDelictenList(true);
+                return;
+            }
+            if (returnPage == 2)
+            {
+                mw.ShowDelictenArchive();
+                return;
+            }
+            if (returnPage == 3)
+            {
+                mw.LoadHomeScreen();
+                return;
+            }
+            mw.LoadHomeScreen();
         }
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-            mw.EditDelict(viewDelictID);
+            mw.EditDelict(viewDelictID,returnPage);
         }
     }
 }

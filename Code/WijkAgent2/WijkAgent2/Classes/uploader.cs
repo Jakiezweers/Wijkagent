@@ -36,11 +36,8 @@ namespace Wijkagent2.Classes
                 System.Diagnostics.Debug.WriteLine("Values set");
 
                 int limit = 2000;
-
                 StringContent content = new StringContent(values.Aggregate(new StringBuilder(), (sb, nxt) => {
-
                     StringBuilder sbInternal = new StringBuilder();
-
                     if (sb.Length > 0)
                     {
                         sb.Append("&");

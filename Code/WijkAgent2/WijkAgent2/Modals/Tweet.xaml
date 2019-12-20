@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="WijkAgent2.Modals.Tweet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WijkAgent2.Modals"
+             Margin="7"
+             mc:Ignorable="d">
+    <Border Background="#66CCFF" BorderBrush="Gainsboro" BorderThickness="1">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.25*" />
+                <ColumnDefinition Width="1.25*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBox Background="Transparent"
+                     Name="User" VerticalAlignment="Top" x:FieldModifier="public" HorizontalAlignment="Left"
+                     BorderThickness="0"
+                     Margin="5"
+                     Text="{Binding Text, Mode=OneWay}"
+                     FontSize="15"
+                     Foreground="White"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap" FontWeight="Bold" />
+            <TextBox Background="Transparent"
+                     BorderThickness="0"
+                     Margin="5"
+                     Name="Date" Grid.Column="1" x:FieldModifier="public" HorizontalAlignment="Right" VerticalAlignment="Top"
+                     Text="{Binding Text, Mode=OneWay}"
+                     Foreground="White"
+                     FontSize="15"
+                     FontWeight="Bold"
+                     Grid.ColumnSpan="2"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap" />
+            <TextBox Background="Transparent"
+                     BorderThickness="0"
+                     Margin="5"
+                     Name="tweet_text" Grid.Row="1" x:FieldModifier="public" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top"
+                     Text="{Binding Text, Mode=OneWay}"
+                     Foreground="White"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap" />
+            <Button x:Name="BtnShowTweet" x:FieldModifier="public" Content="Inzien" Grid.Row="1" Grid.Column="2" Width="100" MaxHeight="50" />
+        </Grid>
+    </Border>
+</UserControl>

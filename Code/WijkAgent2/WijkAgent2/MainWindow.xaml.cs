@@ -138,9 +138,9 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Gebruiker lijst";
         }
 
-        public void ShowDelictenList()
+        public void ShowDelictenList(bool activeDelicts)
         {
-            MainFrame.Navigate(new delicten_list(this));
+            MainFrame.Navigate(new delicten_list(this, activeDelicts));
             TopHeader.Text = "Wijkagent - Delicten lijst";
         }
 
@@ -149,15 +149,22 @@ namespace WijkAgent2
             MainFrame.Navigate(new user_registratie(this));
             TopHeader.Text = "Wijkagent - Gebruiker toevoegen";
         }
+
         public void ShowDelictenArchive()
         {
-            MainFrame.Navigate(new delict_archive(this));
-            TopHeader.Text = "Wijkagent - Delicten Archive";
+            MainFrame.Navigate(new delicten_list(this,false));
+            TopHeader.Text = "Wijkagent - Delicten Archief";
         }
 
         public void AddDelict()
         {
             MainFrame.Navigate(new add_delict(this));
+            TopHeader.Text = "Wijkagent - Delict toevoegen";
+        }
+
+        public void UserView(int id)
+        {
+            MainFrame.Navigate(new UserView(this, id));
             TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
 
@@ -170,14 +177,20 @@ namespace WijkAgent2
             TopHeader.Text = "Wijkagent - Login";
         }
 
-        public void ShowDelict(int delictID)
+        public void ShowDelict(int delictID, int originalPage)
         {
-            MainFrame.Navigate(new view_delict(this,delictID));
+            MainFrame.Navigate(new view_delict(this,delictID,originalPage));
             TopHeader.Text = "Wijkagent - Delict " + delictID;
         }
-        public void EditDelict(int delictID)
+        public void EditDelict(int delictID, int previousPage)
         {
-            MainFrame.Navigate(new edit_delict(this, delictID));
+            MainFrame.Navigate(new edit_delict(this, delictID, previousPage));
+        }
+
+        public void EditUser(int userId, string fname, int fid)
+        {
+            MainFrame.Navigate(new Edit_User(this, userId, fname, fid));
+            TopHeader.Text = "Wijkagent - Gebruiker " + userId;
         }
 
         public void close()
@@ -203,14 +216,20 @@ namespace WijkAgent2
                     case "LBHome":
                         LoadHomeScreen();
                         break;
+                    case "LBAddDelict":
+                        AddDelict();
+                        break;
                     case "LBDelicten":
-                        ShowDelictenList();
+                        ShowDelictenList(true);
                         break;
                     case "LBGebruikers":
                         ShowUserList();
                         break;
                     case "LBArchive":
                         ShowDelictenArchive();
+                        break;
+                    case "LBPermissions":
+                        LoadPermissionPage();
                         break;
                     case "LBLogout":
                         Logout();

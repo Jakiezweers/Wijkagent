@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,17 @@ namespace Wijkagent2.Classes
         public string PhoneNumber { get; set; }
         internal Unit Unit { get; set; }
         public Roles Role { get; set; }
+        public string Rolenamel { get; set; }
+        public List<string> Rolenamelist = new List<string>();
         internal Function Function { get; set; }
         public Uploads ProfilePicture { get; set; }
 
+        public ObservableCollection<Roles> Roleslist = new ObservableCollection<Roles>() {
+            new Roles() { rol_id = 1, RoleName = "admin" },
+            new Roles() { rol_id = 2, RoleName = "politie" },
+            new Roles() { rol_id = 3, RoleName = "wijkagent" } };
+
+        public List<Permissions> permission_list { get; set; }
         public User()
         {
 
@@ -29,7 +38,9 @@ namespace Wijkagent2.Classes
             BadgeId = badgeId;
             Name = name;
             PhoneNumber = phoneNumber;
-            Role = role;
+            Role = role; 
+            
+            Rolenamel = Role.RoleName;
         }
     }
 }
