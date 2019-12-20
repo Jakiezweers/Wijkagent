@@ -44,7 +44,7 @@ namespace WijkAgent2.Pages.User
         int Functionid = 0;
         string FunctionName = null;
         string Image_Uploaded = "";
-
+        bool NewPhoto = false;
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -126,25 +126,31 @@ namespace WijkAgent2.Pages.User
 
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
-            PhoneNumberTB.BorderBrush = System.Windows.Media.Brushes.Red;
-            return;
-
-            Int32 upload_id;
-            string SaveImage = "INSERT into [dbo].[uploads]" +
-                "(upload_path)" +
-                "OUTPUT INSERTED.upload_id " +
-                "VALUES (@upload_path)";
-
-            using (SqlCommand querySaveStaff = new SqlCommand(SaveImage))
+            if (PhoneNumberTB.Text.Length > 10)
             {
-                cn.OpenConection();
-                querySaveStaff.Connection = cn.GetConnection();
-                querySaveStaff.Parameters.Add("@upload_path", SqlDbType.VarChar, 64).Value = Image_Uploaded.ToString().Trim();
-
-                upload_id = (Int32)querySaveStaff.ExecuteScalar();
-                cn.CloseConnection();
+                PhoneNumberTB.BorderBrush = System.Windows.Media.Brushes.Red;
+                
+                return;
             }
 
+            Int32 upload_id = 0;
+            if (NewPhoto == true)
+            {
+                string SaveImage = "INSERT into [dbo].[uploads]" +
+                    "(upload_path)" +
+                    "OUTPUT INSERTED.upload_id " +
+                    "VALUES (@upload_path)";
+
+                using (SqlCommand querySaveStaff = new SqlCommand(SaveImage))
+                {
+                    cn.OpenConection();
+                    querySaveStaff.Connection = cn.GetConnection();
+                    querySaveStaff.Parameters.Add("@upload_path", SqlDbType.VarChar, 64).Value = Image_Uploaded.ToString().Trim();
+
+                    upload_id = (Int32)querySaveStaff.ExecuteScalar();
+                    cn.CloseConnection();
+                }
+            }
             cn.OpenConection();
             int rolid = 0;
             SqlDataReader sq = cn.DataReader("select * from [DBO].[rol] where rol_name = '" + RoleCB.SelectedItem + "'");
@@ -164,9 +170,17 @@ namespace WijkAgent2.Pages.User
             cn.CloseConnection();
 
             cn.OpenConection();
-            cn.ExecuteQueries("UPDATE [dbo].[USER]" + 
-                "set rol_id = " + rolid + ", name = '" +  UserNameTB.Text + "', tel = '" + PhoneNumberTB.Text + "', functie_id = " + Functionid + ", kazerne_id = " + KazerneIdTB.Text + ", eenheid_id = " + EenheidIdTB.Text + ", upload_id = " + upload_id +
-                " Where user_id = " + user.UserId);
+            if (NewPhoto == true)
+            {
+                cn.ExecuteQueries("UPDATE [dbo].[USER]" +
+                    "set rol_id = " + rolid + ", name = '" + UserNameTB.Text + "', tel = '" + PhoneNumberTB.Text + "', functie_id = " + Functionid + ", kazerne_id = " + KazerneIdTB.Text + ", eenheid_id = " + EenheidIdTB.Text + ", upload_id = " + upload_id +
+                    " Where user_id = " + user.UserId);
+            } else
+            {
+                cn.ExecuteQueries("UPDATE [dbo].[USER]" +
+                    "set rol_id = " + rolid + ", name = '" + UserNameTB.Text + "', tel = '" + PhoneNumberTB.Text + "', functie_id = " + Functionid + ", kazerne_id = " + KazerneIdTB.Text + ", eenheid_id = " + EenheidIdTB.Text +
+                    " Where user_id = " + user.UserId);
+            }
             cn.CloseConnection();
 
             Mw.UserView(user.UserId);
@@ -182,6 +196,7 @@ namespace WijkAgent2.Pages.User
                 sendFileAsync(file);
             }
             BtnTakeImage.Content = "Select";
+            NewPhoto = true;
         }
 
         private async void set_image(string file)
