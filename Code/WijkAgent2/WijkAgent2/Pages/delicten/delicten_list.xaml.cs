@@ -68,7 +68,6 @@ namespace WijkAgent2.Pages.delicten
                 GetArchivedDelicts();
             }
         }
-
         public void GetActiveDelicts()
         {
             delictenlistCheck.Clear();
@@ -532,6 +531,18 @@ namespace WijkAgent2.Pages.delicten
                 DelictListSwapBTN.Content = "Actieve delicten lijst";
                 GetArchivedDelicts();
                 UncheckAllCategories();
+                StartDateDP.SelectedDate = null;
+                EndDateDP.SelectedDate = null;
+                DateCB.IsChecked = false;
+
+                delictenlistCheck.Clear();
+                foreach (var item in delictenlist)
+                {
+                    delictenlistCheck.Add(item);
+                }
+                DateCB_Click(sender, e);
+                DateCB.IsEnabled = false;
+                ResetFilterBTN.IsEnabled = false;
                 return;
             }
             if(currPageIsActivated == false)
@@ -543,6 +554,18 @@ namespace WijkAgent2.Pages.delicten
                 DelictListSwapBTN.Content = "Gearchiveerde delicten lijst";
                 GetActiveDelicts();
                 UncheckAllCategories();
+                StartDateDP.SelectedDate = null;
+                EndDateDP.SelectedDate = null;
+                DateCB.IsChecked = false;
+
+                delictenlistCheck.Clear();
+                foreach (var item in delictenlist)
+                {
+                    delictenlistCheck.Add(item);
+                }
+                DateCB_Click(sender, e);
+                DateCB.IsEnabled = false;
+                ResetFilterBTN.IsEnabled = false;
                 return;
             }
         }
