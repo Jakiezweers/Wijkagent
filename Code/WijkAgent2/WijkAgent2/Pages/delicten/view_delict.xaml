@@ -5,27 +5,51 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
       mc:Ignorable="d"
-      Title="view_delict" Width="1041.619"
-      >
+      Title="view_delict">
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Width="1032" Height="662">
-        <Button FontSize="18" Content="Terug" Margin="0,0,39,10" Click="Button_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
-        <Label FontSize="18" Content="Delict ID" x:Name="DelictIDLabel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictPlaceLabel" Content="Plaats" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictStreetLabel" Content="Straat" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictZipcodeLabel" Content="Postcode" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="0,452,0,0" Padding="5,5,5,5" HorizontalAlignment="Left" Width="658" Height="200" VerticalAlignment="Top">
-            <ScrollViewer>
-                <TextBlock FontSize="18" x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,-6,-6,-3" TextWrapping="Wrap" Text="" Width="653"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0">
+            <Button FontSize="18" Content="Terug" Margin="0,0,39,10" Click="Button_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
+            <Label FontSize="18" Content="Delict ID" x:Name="DelictIDLabel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+            <Label FontSize="18" x:Name="DelictPlaceLabel" Content="Plaats" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+            <Label FontSize="18" x:Name="DelictStreetLabel" Content="Straat" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
+            <Label FontSize="18" x:Name="DelictZipcodeLabel" Content="Postcode" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"/>
+            <Label FontSize="18" x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
+            <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="0,452,0,0" Padding="5,5,5,5" HorizontalAlignment="Left" Width="450" Height="300" VerticalAlignment="Top">
+                <ScrollViewer>
+                    <TextBlock FontSize="18" x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,-6,-6,-3" TextWrapping="Wrap" Text="" Width="450"/>
+                </ScrollViewer>
+            </Border>
+            <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
+            <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
+            <ListBox FontSize="18" x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="729,44,0,0" VerticalAlignment="Top" Width="214"/>
+            <Label FontSize="18" Content="Personen:" HorizontalAlignment="Left" Margin="729,10,0,0" VerticalAlignment="Top"/>
+            <Button FontSize="18" Content="Pas delict aan" Margin="0,0,191,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>
+            <Label FontSize="18" x:Name="DelictHouseNumberLabel" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="4*" />
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0" MaxHeight="150" Margin="20" Source="/WijkAgent2;component/Images/twitter.jpg">
+            </Image>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" AllowDrop="False" Height="{Binding Path=ActualHeight, 
+           RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}">
+                <StackPanel Name="List_Tweets" 
+                            Margin="10"
+                Background="AliceBlue"  
+                Grid.Column ="1">
+                </StackPanel>
             </ScrollViewer>
-        </Border>
-        <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
-        <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
-        <ListBox FontSize="18" x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="729,44,0,0" VerticalAlignment="Top" Width="214"/>
-        <Label FontSize="18" Content="Personen:" HorizontalAlignment="Left" Margin="729,10,0,0" VerticalAlignment="Top"/>
-        <Button FontSize="18" Content="Pas delict aan" Margin="0,0,191,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>
-        <Label FontSize="18" x:Name="DelictHouseNumberLabel" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
+        </Grid>
     </Grid>
 </Page>

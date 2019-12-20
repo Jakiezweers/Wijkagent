@@ -107,7 +107,6 @@
 
                         <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
                                         x:Name="MenuToggleButton"/>
-
                         <Grid>
                             <TextBlock HorizontalAlignment="Center" x:Name="TopHeader" VerticalAlignment="Center" FontSize="22">Wijkagent - TOPPERS</TextBlock>
                             <Grid x:Name="UserInfo" HorizontalAlignment="Right">
@@ -122,14 +121,10 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ScrollViewer Grid.Row="1" 
-                                  HorizontalScrollBarVisibility="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.HorizontalScrollBarVisibilityRequirement}"
-                                  VerticalScrollBarVisibility="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.VerticalScrollBarVisibilityRequirement}" 
-                                  Padding="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.MarginRequirement}">
-                        <ContentControl>
-                            <Frame  x:Name="MainFrame" Content="Frame"/>
-                        </ContentControl>
-                    </ScrollViewer>
+
+                    <ContentControl Grid.Row="1" >
+                        <Frame  x:Name="MainFrame" Content="Frame"/>
+                    </ContentControl>
 
                     <materialDesign:DialogHost CloseOnClickAway="True" Identifier="MessageDialog" Grid.RowSpan="2" Margin="0,0,0,0">
                         <materialDesign:DialogHost.DialogContentTemplate>
