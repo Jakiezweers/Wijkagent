@@ -25,6 +25,11 @@ namespace WijkAgent2.Pages.User
     {
         MainWindow Mw;
         int UserID;
+        string FunctionName = null;
+        int functionid = 69;
+        int KazerneID = 0;
+        int EenheidID = 0;
+
         public UserView(MainWindow MW, int userID)
         {
             UserID = userID;
@@ -38,7 +43,6 @@ namespace WijkAgent2.Pages.User
             SqlDataReader sq = cn.DataReader("select us.*, up.upload_path, r.rol_name from[dbo].[User] us join[dbo].[uploads] up on us.upload_id = up.upload_id join[dbo].[rol] r on us.rol_id = r.rol_id where us.user_id = " + UserID);
 
             Wijkagent2.Classes.User user = new Wijkagent2.Classes.User();
-
             while (sq.Read())
             {
                 rolid = (int)sq["rol_id"];
@@ -51,7 +55,17 @@ namespace WijkAgent2.Pages.User
                 user.BadgeId = Convert.ToInt32(sq["badge_nr"]);
                 user.PhoneNumber = (string)sq["tel"];
                 user.ProfilePicture = new Uploads(Convert.ToInt32(sq["upload_id"]), (string)sq["upload_path"]);
+                functionid = (int)sq["functie_id"];
+                KazerneID = (int)sq["kazerne_id"];
+                EenheidID = (int)sq["eenheid_id"];
 
+            }
+            cn.CloseConnection();
+            cn.OpenConection();
+            SqlDataReader sq1 = cn.DataReader("Select * from [dbo].[Functie] where functie_id = " + functionid);
+            while (sq1.Read())
+            {
+                FunctionName = (string)sq1["name"];
             }
 
             BitmapImage bitmap = new BitmapImage();
@@ -65,11 +79,14 @@ namespace WijkAgent2.Pages.User
             Role.Content += ": " + user.Role;
             BadgeId.Content += ": " + user.BadgeId;
             PhoneNumber.Content += ": " + user.PhoneNumber;
+            Function.Content += ": " + FunctionName;
+            KazerneId.Content += ": " + KazerneID;
+            EenheidId.Content += ": " + EenheidID;
         }
 
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-            Mw.EditUser(UserID);
+            Mw.EditUser(UserID, FunctionName, functionid);
         }
 
         private void Terug_Click(object sender, RoutedEventArgs e)

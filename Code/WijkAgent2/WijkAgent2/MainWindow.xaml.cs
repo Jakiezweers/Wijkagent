@@ -187,9 +187,9 @@ namespace WijkAgent2
             MainFrame.Navigate(new edit_delict(this, delictID, previousPage));
         }
 
-        public void EditUser(int userId)
+        public void EditUser(int userId, string fname, int fid)
         {
-            MainFrame.Navigate(new Edit_User(this, userId));
+            MainFrame.Navigate(new Edit_User(this, userId, fname, fid));
             TopHeader.Text = "Wijkagent - Gebruiker " + userId;
         }
 

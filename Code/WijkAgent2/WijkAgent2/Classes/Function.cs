@@ -9,5 +9,7 @@ namespace Wijkagent2.Classes
     class Function
     {
         public string Name;
+        public int id;
+
     }
 }

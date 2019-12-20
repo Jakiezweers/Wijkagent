@@ -7,15 +7,18 @@
       mc:Ignorable="d" 
       Title="UserView" Width="1041.619">
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Width="1032" Height="662">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Width="1032" Height="279" Margin="5,0">
         <Image MaxWidth="256" MaxHeight="256" x:Name="UserImage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="256" Width="256"/>
         <Label FontSize="18" Content="Gebruikersnaam" x:Name="UserName" HorizontalAlignment="Left" Margin="271,10,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="Badge Id" x:Name="BadgeId" HorizontalAlignment="Left" Margin="271,78,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="Rol" x:Name="Role" HorizontalAlignment="Left" Margin="271,109,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="Telefoonnummer" x:Name="PhoneNumber" HorizontalAlignment="Left" Margin="271,143,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="User Id" x:Name="UserIDV" HorizontalAlignment="Left" Margin="271,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.523,0.641"/>
+        <Label FontSize="18" Content="Functie" x:Name="Function" HorizontalAlignment="Left" Margin="271,177,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Kazerne id" x:Name="KazerneId" HorizontalAlignment="Left" Margin="271,211,0,0" VerticalAlignment="Top"/>
+        <Label FontSize="18" Content="Eenheid id" x:Name="EenheidId" HorizontalAlignment="Left" Margin="271,242,0,0" VerticalAlignment="Top"/>
 
-        <Button FontSize="18" Content="Terug" Margin="0,0,39,10" Click="Terug_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
-        <Button FontSize="18" Content="Pas gebruiker aan" Margin="0,0,191,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>
+        <Button FontSize="18" Content="Terug" Margin="0,0,10,5" Click="Terug_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
+        <Button FontSize="18" Content="Pas gebruiker aan" Margin="0,0,95,5" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="182"/>
     </Grid>
 </Page>
