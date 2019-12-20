@@ -56,12 +56,10 @@ namespace WijkAgent2.Pages.delicten
                 tmp.BtnShowTweet.Visibility = Visibility.Hidden;
                 List_Tweets.Children.Add(tmp);
             }));
-
             Thread.Sleep(450);
             // Set up your credentials (https://apps.twitter.com)
             Auth.SetUserCredentials("itpO8X73ey8dkZTyGJVsIx5sI", "WKs54HvEZJdxnKkNm8apcyhIEcqCEKcYaKbvpxyoKnhSx6RZMc", "3374540458-5LHiTuas6A4PCrWQKkzYhf71MlEbUekNq1PPw7E", "DArMiCPh51mCi0BywNplin9rRvRZayixrUqnUnYpgXfs9");
-
-
+            
             var searchParameter = new SearchTweetsParameters("")
             {
                 GeoCode = new GeoCode(52.516773, 6.083022, 1, DistanceMeasure.Kilometers),

@@ -42,8 +42,7 @@
             </Grid.RowDefinitions>
             <Image Grid.Row="0" MaxHeight="150" Margin="20" Source="/WijkAgent2;component/Images/twitter.jpg">
             </Image>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" AllowDrop="False" Height="{Binding Path=ActualHeight, 
-           RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" AllowDrop="False" >
                 <StackPanel Name="List_Tweets" 
                             Margin="10"
                 Background="AliceBlue"  
