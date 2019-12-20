@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,8 +45,22 @@ namespace WijkAgent2.Pages.delicten
 
         private void Get_Tweets()
         {
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                Modals.Tweet tmp = new Modals.Tweet();
+                tmp.User.Text = "Een moment geduld....";
+                tmp.Date.Text = "";
+                tmp.tweet_text.Text = "";
+                tmp.Date.Visibility = Visibility.Hidden;
+                tmp.tweet_text.Visibility = Visibility.Hidden;
+                tmp.BtnShowTweet.Visibility = Visibility.Hidden;
+                List_Tweets.Children.Add(tmp);
+            }));
+
+            Thread.Sleep(450);
             // Set up your credentials (https://apps.twitter.com)
             Auth.SetUserCredentials("itpO8X73ey8dkZTyGJVsIx5sI", "WKs54HvEZJdxnKkNm8apcyhIEcqCEKcYaKbvpxyoKnhSx6RZMc", "3374540458-5LHiTuas6A4PCrWQKkzYhf71MlEbUekNq1PPw7E", "DArMiCPh51mCi0BywNplin9rRvRZayixrUqnUnYpgXfs9");
+
 
             var searchParameter = new SearchTweetsParameters("")
             {
@@ -56,20 +71,25 @@ namespace WijkAgent2.Pages.delicten
             };
 
             var tweets = Search.SearchTweets(searchParameter);
+            Thread.Sleep(800);
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                List_Tweets.Children.Clear();
+            }));
 
             List<ITweet> tweet_list = tweets.ToList();
-            Console.WriteLine(tweets.Count());
-            Console.WriteLine("---");
-
             foreach (ITweet tweet in tweet_list)
             {
                 if (!tweet.IsRetweet)
                 {
-                    Modals.Tweet t = new Modals.Tweet();
-                    t.User.Text = tweet.CreatedBy.ScreenName;
-                    t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
-                    t.tweet_text.Text = tweet.FullText;
-                    List_Tweets.Children.Add(t);
+                    Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        Modals.Tweet t = new Modals.Tweet();
+                        t.User.Text = tweet.CreatedBy.ScreenName;
+                        t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
+                        t.tweet_text.Text = tweet.FullText;
+                        List_Tweets.Children.Add(t);
+                    }));
                 }
             }
         }
@@ -121,7 +141,10 @@ namespace WijkAgent2.Pages.delicten
                 PersonenListbox.Items.Add(text);
             }
             cn.CloseConnection();
-            Get_Tweets();
+
+            Thread thr = new Thread(Get_Tweets);
+            thr.IsBackground = true;
+            thr.Start();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
