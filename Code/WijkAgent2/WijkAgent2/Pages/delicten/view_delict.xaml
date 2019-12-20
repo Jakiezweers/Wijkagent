@@ -15,7 +15,7 @@
         <Label FontSize="18" x:Name="DelictStreetLabel" Content="Straat" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" x:Name="DelictZipcodeLabel" Content="Postcode" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
+        <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
         <Border BorderBrush="Black" BorderThickness="1" Margin="0,452,0,0" Padding="5,5,5,5" HorizontalAlignment="Left" Width="658" Height="200" VerticalAlignment="Top">
             <ScrollViewer>
                 <TextBlock FontSize="18" x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,-6,-6,-3" TextWrapping="Wrap" Text="" Width="653"/>

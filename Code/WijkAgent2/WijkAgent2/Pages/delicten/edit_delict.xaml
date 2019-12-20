@@ -16,7 +16,7 @@
         <Label FontSize="18" Content="Straat" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="Postcode" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" x:Name="DelictDateLabel" Content="Datum aangemaakt" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
+        <Label FontSize="18" x:Name="DelictStatusLabel" Content="Status " HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="175"/>
         <TextBox FontSize="18" x:Name="DelictDescriptionTB" AcceptsReturn="True"  HorizontalAlignment="Left" Margin="-1,451,0,-3" TextWrapping="Wrap" Text="" Width="653" BorderThickness="1" BorderBrush="#89000000"/>
         <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
         <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
