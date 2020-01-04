@@ -34,6 +34,7 @@ namespace WijkAgent2.Pages.delicten
         int viewDelictID;
         private Connection cn = new Connection();
         int returnPage = 0;
+        
         public view_delict(MainWindow MW, int delictID, int originalPage)
         {
             viewDelictID = delictID;
@@ -41,6 +42,7 @@ namespace WijkAgent2.Pages.delicten
             LoadDelict(delictID);
             mw = MW;
             returnPage = originalPage;
+            LoadComments();
         }
 
         private void Get_Tweets()
@@ -166,6 +168,86 @@ namespace WijkAgent2.Pages.delicten
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
             mw.EditDelict(viewDelictID,returnPage);
+        }
+
+        /**Sending comment to database on the 'place comment' click*/
+        private void PlaceComment_Click(object sender, RoutedEventArgs e)
+        {
+
+            int user = mw.GetUserID();
+            int delict = viewDelictID;
+            string comment = WriteCommentTextBox.Text;
+            //DateTime date = DateTime.Today;
+            Console.WriteLine($"{user} | {delict} | {comment} |");
+
+            try
+            {
+                cn.OpenConection();
+                string query = $"INSERT INTO delict_comment (user_id, delict_id, comment, date_added) VALUES ({user}, {delict}, '{comment}', GETDATE())";
+
+                using (SqlCommand sqlCommand = new SqlCommand(query))
+                {
+                    sqlCommand.Connection = cn.GetConnection();
+                    sqlCommand.ExecuteScalar();
+                    // CommentTest.Content = "Comment verzonden";
+                }
+
+                cn.CloseConnection();
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
+        }
+
+        /**Fetching all comments from database and putting them in List*/
+        private List<Comment> GetCommentList()
+        {
+            List<Comment> comments = new List<Comment>();
+            string query = $"SELECT name, comment, date_added FROM delict_comment dc JOIN dbo.[User] u ON dc.user_id = u.user_id WHERE delict_id = {viewDelictID} ORDER BY date_added DESC";
+            try
+            {
+                cn.OpenConection();
+
+                SqlDataReader reader = cn.DataReader(query);
+                Console.WriteLine("Now reading . . .");
+                while (reader.Read())
+                {
+                    Comment c = new Comment();
+                    c.CommentPoster = (string)reader["name"];
+                    c.CommentText = (string)reader["comment"];
+                    c.CommentDate = (DateTime)reader["date_added"];
+                    comments.Add(c);
+                }
+                cn.CloseConnection();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return comments;
+        }
+
+        public void LoadComments()
+        {
+            GetCommentList();
+            
+
+            foreach (Comment comment in GetCommentList())
+            {
+                Console.WriteLine(comment);
+                Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    Modals.CommentLayout commentLayout = new Modals.CommentLayout();
+                    commentLayout.CommentTextLabel.Content = comment.CommentText;
+                    //commentLayout.CommentUserImage.Source =  
+                    commentLayout.CommentUserName.Content = comment.CommentPoster;
+                    commentLayout.CommentDateLabel.Content = comment.CommentDate.ToString();
+                    CommentListPanel.Children.Add(commentLayout);
+                }));
+
+            }
         }
     }
 }

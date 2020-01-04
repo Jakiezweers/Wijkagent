@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WijkAgent2.Pages.delicten"
       mc:Ignorable="d"
-      Title="view_delict">
+      Title="view_delict" Width="1709">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,7 +16,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Column="0">
-            <Button FontSize="18" Content="Terug" Margin="0,0,39,10" Click="Button_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
+            <Button FontSize="18" Content="Terug" Margin="0,0,407,10" Click="Button_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85" RenderTransformOrigin="-0.388,0.5"/>
             <Label FontSize="18" Content="Delict ID" x:Name="DelictIDLabel" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
             <Label FontSize="18" x:Name="DelictPlaceLabel" Content="Plaats" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
             <Label FontSize="18" x:Name="DelictStreetLabel" Content="Straat" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top"/>
@@ -28,26 +28,33 @@
                     <TextBlock FontSize="18" x:Name="DelictDescriptionTB" HorizontalAlignment="Left" Margin="-1,-6,-6,-3" TextWrapping="Wrap" Text="" Width="450"/>
                 </ScrollViewer>
             </Border>
-            <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="729,226,0,0" VerticalAlignment="Top"/>
-            <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="729,260,0,0" VerticalAlignment="Top" Width="214"/>
-            <ListBox FontSize="18" x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="729,44,0,0" VerticalAlignment="Top" Width="214"/>
-            <Label FontSize="18" Content="Personen:" HorizontalAlignment="Left" Margin="729,10,0,0" VerticalAlignment="Top"/>
-            <Button FontSize="18" Content="Pas delict aan" Margin="0,0,191,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>
+            <Label FontSize="18" Content="Categorieen:" HorizontalAlignment="Left" Margin="523,200,0,0" VerticalAlignment="Top"/>
+            <ListBox FontSize="18" x:Name="CategoryListbox" HorizontalAlignment="Left" Height="124" Margin="523,239,0,0" VerticalAlignment="Top" Width="214"/>
+            <ListBox FontSize="18" x:Name="PersonenListbox" HorizontalAlignment="Left" Height="124" Margin="523,59,0,0" VerticalAlignment="Top" Width="214"/>
+            <Label FontSize="18" Content="Personen:" HorizontalAlignment="Left" Margin="523,20,0,0" VerticalAlignment="Top"/>
+            <Button FontSize="18" Content="Pas delict aan" Margin="0,0,529,10" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="148"/>
             <Label FontSize="18" x:Name="DelictHouseNumberLabel" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
+
+            <Grid HorizontalAlignment="Left" Height="732" Margin="742,10,0,0" VerticalAlignment="Top" Width="387">
+                <ScrollViewer VerticalScrollBarVisibility="Visible" AllowDrop="False" Height="523" VerticalAlignment="Bottom">
+                    <StackPanel x:Name="CommentListPanel" HorizontalAlignment="Left" Height="562" VerticalAlignment="Top" Width="392" Background="AliceBlue" CanVerticallyScroll="True"/>
+                </ScrollViewer>
+                <TextBox x:Name="WriteCommentTextBox"  HorizontalAlignment="Left" Height="157" Margin="0,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="392" Background="AliceBlue"/>
+                <Button x:Name="PlaceCommentButton" Content="Plaats reactie" HorizontalAlignment="Left" Margin="261,172,0,0" VerticalAlignment="Top" Width="121" Click="PlaceComment_Click"/>
+            </Grid>
+
         </Grid>
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="1" Margin="10,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="4*" />
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" MaxHeight="150" Margin="20" Source="/WijkAgent2;component/Images/twitter.jpg">
+            <Image Grid.Row="0" MaxHeight="150" Margin="112,30,10,10" Source="/WijkAgent2;component/Images/twitter.jpg">
             </Image>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" AllowDrop="False" >
-                <StackPanel Name="List_Tweets" 
-                            Margin="10"
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" AllowDrop="False" Margin="112,0,0,0" >
+                <StackPanel Name="List_Tweets"
                 Background="AliceBlue"  
-                Grid.Column ="1">
-                </StackPanel>
+                Grid.Column ="1" Width="429"/>
             </ScrollViewer>
         </Grid>
     </Grid>
