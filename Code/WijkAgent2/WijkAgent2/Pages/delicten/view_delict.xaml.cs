@@ -34,6 +34,9 @@ namespace WijkAgent2.Pages.delicten
         MainWindow mw;
         int viewDelictID;
         private Connection cn = new Connection();
+        double longitude;
+        double latitutde;
+        DateTime Date;
         int returnPage = 0;
         public view_delict(MainWindow MW, int delictID, int originalPage)
         {
@@ -58,31 +61,48 @@ namespace WijkAgent2.Pages.delicten
                 List_Tweets.Children.Add(tmp);
             }));
 
+            TwitterConroller TC = new TwitterConroller();
+
+            List<ITweet> TweetList = TC.getTwitterBerichten(longitude, latitutde, Date);
+
             Thread.Sleep(800);
+
             Dispatcher.BeginInvoke((Action)(() =>
             {
                 List_Tweets.Children.Clear();
             }));
 
-            TwitterConroller TC = new TwitterConroller();
-
-            List<ITweet> TweetList = TC.getTwitterBerichten();
-
-
-            foreach (ITweet tweet in TweetList)
-            {
-                if (!tweet.IsRetweet)
+            if (TweetList.Count == 0) {
+                Dispatcher.BeginInvoke((Action)(() =>
                 {
-                    Dispatcher.BeginInvoke((Action)(() =>
+                    Modals.Tweet tmp = new Modals.Tweet();
+                    tmp.User.Text = "Geen berichten";
+                    tmp.Date.Text = "";
+                    tmp.tweet_text.Text = "";
+                    tmp.Date.Visibility = Visibility.Hidden;
+                    tmp.tweet_text.Visibility = Visibility.Hidden;
+                    tmp.BtnShowTweet.Visibility = Visibility.Hidden;
+                    List_Tweets.Children.Add(tmp);
+                }));
+            }
+            else
+            {
+                foreach (ITweet tweet in TweetList)
+                {
+                    if (!tweet.IsRetweet)
                     {
-                        Modals.Tweet t = new Modals.Tweet();
-                        t.User.Text = tweet.CreatedBy.ScreenName;
-                        t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
-                        t.tweet_text.Text = tweet.FullText;
-                        List_Tweets.Children.Add(t);
-                    }));
+                        Dispatcher.BeginInvoke((Action)(() =>
+                        {
+                            Modals.Tweet t = new Modals.Tweet();
+                            t.User.Text = tweet.CreatedBy.ScreenName;
+                            t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
+                            t.tweet_text.Text = tweet.FullText;
+                            List_Tweets.Children.Add(t);
+                        }));
+                    }
                 }
             }
+
         }
 
         private void LoadDelict(int viewDelictID)
@@ -109,6 +129,12 @@ namespace WijkAgent2.Pages.delicten
                 DelictStatusLabel.Content += ": " + status;
                 DelictDescriptionTB.Text = (string)sqc["description"];
                 DelictDateLabel.Content += ": " + sqc["added_date"];
+
+                longitude = (double)sqc["long"];
+                latitutde = (double)sqc["lat"];
+                Date = (DateTime)sqc["date"];
+                Console.WriteLine(Date);
+
             }
 
             cn.CloseConnection();

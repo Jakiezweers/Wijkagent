@@ -13,7 +13,7 @@ namespace WijkAgent2.Controllers
 {
     class TwitterConroller
     {
-        public List<ITweet> getTwitterBerichten()
+        public List<ITweet> getTwitterBerichten(double longitude, double latitutde, DateTime Date)
         {
             Thread.Sleep(450);
             // Set up your credentials (https://apps.twitter.com)
@@ -21,10 +21,10 @@ namespace WijkAgent2.Controllers
 
             var searchParameter = new SearchTweetsParameters("")
             {
-                GeoCode = new GeoCode(52.516773, 6.083022, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(longitude, latitutde, 1, DistanceMeasure.Kilometers),
                 MaximumNumberOfResults = 100,
                 SearchType = SearchResultType.Recent,
-                Until = new DateTime(2019, 12, 20),
+                Until = Date,
             };
 
             var tweets = Search.SearchTweets(searchParameter);
