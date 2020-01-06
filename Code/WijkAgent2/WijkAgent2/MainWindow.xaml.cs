@@ -61,6 +61,9 @@ namespace WijkAgent2
             if (validator.validate("list_delicten")) { LBDelicten.Visibility = Visibility.Visible; } else { LBDelicten.Visibility = Visibility.Collapsed; }
             if (validator.validate("list_archive")) { LBArchive.Visibility = Visibility.Visible; } else { LBArchive.Visibility = Visibility.Collapsed; }
             if (validator.validate("list_users")) { LBGebruikers.Visibility = Visibility.Visible; } else { LBGebruikers.Visibility = Visibility.Collapsed; }
+            if (validator.validate("Delicten_Aanmaken")) { LBAddDelict.Visibility = Visibility.Visible; } else { LBAddDelict.Visibility = Visibility.Collapsed; }
+            if (validator.validate("Permissies_Toewijzen")) { LBPermissions.Visibility = Visibility.Visible; } else { LBPermissions.Visibility = Visibility.Collapsed; }
+            if (validator.validate("Delicten_Inzien")) { LBDelicten.Visibility = Visibility.Visible; } else { LBDelicten.Visibility = Visibility.Collapsed; }
             NameHeader.Text = name;
             UserInfo.Visibility = Visibility.Visible;
             UserImage.Source = new BitmapImage(new Uri(Image_Url, UriKind.RelativeOrAbsolute));

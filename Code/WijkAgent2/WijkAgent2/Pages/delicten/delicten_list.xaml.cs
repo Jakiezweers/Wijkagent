@@ -41,6 +41,8 @@ namespace WijkAgent2.Pages.delicten
         private Connection cn = new Connection();
         public delicten_list(MainWindow MW, bool activeDelicts)
         {
+            
+            Validator validator = new Validator();
             mw = MW;
             InitializeComponent();
             currPageIsActivated = activeDelicts;
@@ -64,6 +66,11 @@ namespace WijkAgent2.Pages.delicten
                 DelictListSwapBTN.Content = "Actieve delicten lijst";
                 GetArchivedDelicts();
             }
+            //DelictArchiveBTN.Visibility = false;
+
+            
+            //validator.logged_in_user_id = user_id;
+            //if (validator.validate("Delicten_Aanmaken")) { LBAddDelict.Visibility = Visibility.Visible; } else { LBAddDelict.Visibility = Visibility.Collapsed; }
         }
 
         public void GetActiveDelicts()
