@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,15 @@ namespace WijkAgent2.Modals
         public Tweet()
         {
             InitializeComponent();
+        }
+
+        private void BtnShowTweet_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(Link.Text.ToString().Trim());
+            }
+            catch (Exception) { }
         }
     }
 }

@@ -103,6 +103,7 @@ namespace WijkAgent2.Pages.delicten
                             t.User.Text = tweet.CreatedBy.ScreenName;
                             t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
                             t.tweet_text.Text = tweet.FullText;
+                            t.Link.Text = tweet.Url;
                             List_Tweets.Children.Add(t);
                         }));
                     }
