@@ -40,11 +40,17 @@ namespace WijkAgent2.Pages.delicten
         int returnPage = 0;
         public view_delict(MainWindow MW, int delictID, int originalPage)
         {
+            Validator validator = new Validator();
+
             viewDelictID = delictID;
             InitializeComponent();
             LoadDelict(delictID);
             mw = MW;
             returnPage = originalPage;
+
+            int user_id = mw.GetUserID();
+            validator.logged_in_user_id = user_id;
+            if (validator.validate("Delicten_Wijzigen")) { BTNPasDelictAan.Visibility = Visibility.Visible; } else { BTNPasDelictAan.Visibility = Visibility.Hidden; }
         }
 
         private void Get_Tweets()

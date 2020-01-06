@@ -35,7 +35,7 @@
                     <DataGridTemplateColumn.CellTemplate>
 
                         <DataTemplate>
-                            <Button Click="Activate" Tag="{Binding id}" >Activeren</Button>
+                            <Button   Click="Activate" Tag="{Binding id}" >Activeren</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
 
