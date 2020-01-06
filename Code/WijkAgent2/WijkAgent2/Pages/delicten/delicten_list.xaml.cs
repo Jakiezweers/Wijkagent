@@ -66,11 +66,11 @@ namespace WijkAgent2.Pages.delicten
                 DelictListSwapBTN.Content = "Actieve delicten lijst";
                 GetArchivedDelicts();
             }
-            //DelictArchiveBTN.Visibility = false;
 
-            
-            //validator.logged_in_user_id = user_id;
-            //if (validator.validate("Delicten_Aanmaken")) { LBAddDelict.Visibility = Visibility.Visible; } else { LBAddDelict.Visibility = Visibility.Collapsed; }
+            int user_id = mw.GetUserID();
+            validator.logged_in_user_id = user_id;
+            if (validator.validate("Delicten_Archiveren")) { DelictArchiveBTN.Visibility = Visibility.Visible; } else { DelictArchiveBTN.Visibility = Visibility.Hidden; }
+            if (validator.validate("Delicten_Activeren")) { DelictActivateBTN.Visibility = Visibility.Visible; } else { DelictActivateBTN.Visibility = Visibility.Hidden; }
         }
 
         public void GetActiveDelicts()
