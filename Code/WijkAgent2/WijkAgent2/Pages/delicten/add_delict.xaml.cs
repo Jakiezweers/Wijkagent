@@ -38,6 +38,9 @@ namespace WijkAgent2.Pages.delicten
 
         private Connection cn = new Connection();
         int i = 0;
+        int state;
+        double longt = 0.0000;
+        double latt = 0.0000;
         private MainWindow mw;
         public add_delict(MainWindow MW)
         {
@@ -57,6 +60,40 @@ namespace WijkAgent2.Pages.delicten
                 categoryList.Add(obj);
             }
             cn.CloseConnection();
+            state = 1;
+        }
+
+        public add_delict(MainWindow MW, double lon, double lat)
+        {
+            this.mw = MW;
+            InitializeComponent();
+            categoryList = new List<CategoryList>();
+            BindCategroryDropDown();
+            DatumTB.SelectedDate = DateTime.Today;
+            AddNewPerson addperson = new AddNewPerson(mw);
+            AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
+
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("Select * from dbo.category");
+            while (sq.Read())
+            {
+                CategoryList obj = new CategoryList((int)sq["category_id"], (string)(sq["name"]));
+                categoryList.Add(obj);
+            }
+            cn.CloseConnection();
+            longt = lon;
+            latt = lat;
+
+            state = 3;
+            if(state == 3)
+            {
+                HuisnummerTB.Visibility = Visibility.Collapsed;
+                StraatTB.Visibility = Visibility.Collapsed;
+                PostcodeTB.Visibility = Visibility.Collapsed;
+                HuisnummerLB.Visibility = Visibility.Collapsed;
+                StraatLB.Visibility = Visibility.Collapsed;
+                PostcodeLB.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void BindCategroryDropDown()
@@ -102,15 +139,25 @@ namespace WijkAgent2.Pages.delicten
             string street = StraatTB.Text;
             string description = OmschijvingTB.Text;
             string date = DatumTB.Text;
-            double longCoord = 0.0000;
-            double latCoord = 0.0000;
+            double longCoord = longt;
+            double latCoord = latt;
             string checkCoord = street + ' ' + homeNumber + ' ' + placeName;
+            int status = state;
 
 
             StringBuilder homeNumbernum =
                   new StringBuilder();
             StringBuilder homeNumberLet =
                      new StringBuilder();
+            if(status == 3)
+            {
+                
+                    placeName = "nvt";
+                    zipCode = "nvt";
+                    homeNumber = "0";
+                street = "nvt";
+               
+            }
 
             for (int i = 0; i < homeNumber.Length; i++)
             {
@@ -148,27 +195,30 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Beschrijving, ";
                 errorBool = true;
             }
-            if (placeName == "")
+            if (state != 3)
             {
-                errorMessage += "Plaats, ";
-                errorBool = true;
+                if (placeName == "")
+                {
+                    errorMessage += "Plaats, ";
+                    errorBool = true;
+                }
+                if (zipCode == "" || zipCode.Length != 6 || zipCodeLet.Length != 2 || zipCodeNum.Length != 4)
+                {
+                    errorMessage += "Postcode, ";
+                    errorBool = true;
+                }
+                if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1)
+                {
+                    errorMessage += "Huisnummer, ";
+                    errorBool = true;
+                }
+                if (street == "")
+                {
+                    errorMessage += "Straat, ";
+                    errorBool = true;
+                }
             }
-            if (zipCode == "" || zipCode.Length != 6 || zipCodeLet.Length != 2 || zipCodeNum.Length != 4)
-            {
-                errorMessage += "Postcode, ";
-                errorBool = true;
-            }
-            if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1)
-            {
-                errorMessage += "Huisnummer, ";
-                errorBool = true;
-            }
-            if (street == "")
-            {
-                errorMessage += "Straat, ";
-                errorBool = true;
-            }
-
+           
             if (errorBool) //Hieronder alles wat gedaan moet worden als er iets fout gaat.
             {
                 string errorBoxText = errorMessage.Substring(0, errorMessage.Length - 2);
@@ -178,8 +228,12 @@ namespace WijkAgent2.Pages.delicten
             }
             else //Hieronder alles wat uitgevoerd moet worden als alles goed is. 
             {
-                SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), int.Parse(homeNumbernum.ToString()), homeNumberLet.ToString().ToUpper(), zipCode.ToUpper(), mw.FirstCharToUpper(street), description, longCoord, latCoord);
-                SearchCoord(checkCoord);
+                SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), int.Parse(homeNumbernum.ToString()), homeNumberLet.ToString().ToUpper(), zipCode.ToUpper(), mw.FirstCharToUpper(street), description, longCoord, latCoord, status);
+               if(status != 3)
+                {
+                    SearchCoord(checkCoord);
+                }
+                
                 mw.ShowMessage("Delict toegevoegd");
             }
         }
@@ -227,7 +281,7 @@ namespace WijkAgent2.Pages.delicten
             categoryCB.SelectedIndex = -1;
         }
 
-        private void SendDelictToDatabase(string date, string placeName, int homeNumberNumber, string homeNumberLetters, string zipCode, string street, string description, double longCoord, double latCoord)
+        private void SendDelictToDatabase(string date, string placeName, int homeNumberNumber, string homeNumberLetters, string zipCode, string street, string description, double longCoord, double latCoord, int status)
         {
             cn.OpenConection();
 
@@ -249,7 +303,7 @@ namespace WijkAgent2.Pages.delicten
                 cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
                 cmd.Parameters.Add("@seventh", SqlDbType.NVarChar).Value = longCoord;
                 cmd.Parameters.Add("@eight", SqlDbType.NVarChar).Value = latCoord;
-                cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = 1;
+                cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = status;
 
                 id = (int)cmd.ExecuteScalar();
             }
