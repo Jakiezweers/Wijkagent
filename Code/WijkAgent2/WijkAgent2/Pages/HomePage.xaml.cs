@@ -76,6 +76,9 @@ namespace WijkAgent2.Pages
         private async void LoadMap()
         {
 
+            mapview.LocationDisplay.IsEnabled = true;
+            mapview.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
+
             //Map inladen
             mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
             startingpoint = new Viewpoint(mapPoint, 50000);

@@ -164,11 +164,6 @@ namespace WijkAgent2
             MainFrame.Navigate(new add_delict(this));
             TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
-        public void AddDelict(double lon, double lat)
-        {
-            MainFrame.Navigate(new add_delict(this,lon,lat));
-            TopHeader.Text = "Wijkagent - Delict toevoegen";
-        }
 
         public void UserView(int id)
         {
