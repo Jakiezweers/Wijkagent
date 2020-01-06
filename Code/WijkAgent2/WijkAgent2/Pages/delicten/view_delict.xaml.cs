@@ -35,6 +35,7 @@ namespace WijkAgent2.Pages.delicten
         private Connection cn = new Connection();
         int returnPage = 0;
         
+        
         public view_delict(MainWindow MW, int delictID, int originalPage)
         {
             viewDelictID = delictID;
@@ -43,6 +44,7 @@ namespace WijkAgent2.Pages.delicten
             mw = MW;
             returnPage = originalPage;
             LoadComments();
+
         }
 
         private void Get_Tweets()
@@ -173,30 +175,41 @@ namespace WijkAgent2.Pages.delicten
         /**Sending comment to database on the 'place comment' click*/
         private void PlaceComment_Click(object sender, RoutedEventArgs e)
         {
-
+            
             int user = mw.GetUserID();
             int delict = viewDelictID;
             string comment = WriteCommentTextBox.Text;
+            string commentTrim = comment.Trim();
             //DateTime date = DateTime.Today;
             Console.WriteLine($"{user} | {delict} | {comment} |");
 
-            try
-            {
-                cn.OpenConection();
-                string query = $"INSERT INTO delict_comment (user_id, delict_id, comment, date_added) VALUES ({user}, {delict}, '{comment}', GETDATE())";
-
-                using (SqlCommand sqlCommand = new SqlCommand(query))
+            if (commentTrim.Length > 0) {
+                try
                 {
-                    sqlCommand.Connection = cn.GetConnection();
-                    sqlCommand.ExecuteScalar();
-                    // CommentTest.Content = "Comment verzonden";
-                }
+                    cn.OpenConection();
+                    string query = $"INSERT INTO delict_comment (user_id, delict_id, comment, date_added) VALUES ({user}, {delict}, '{comment}', GETDATE())";
 
-                cn.CloseConnection();
-            }
-            catch (Exception exc)
+                    using (SqlCommand sqlCommand = new SqlCommand(query))
+                    {
+                        sqlCommand.Connection = cn.GetConnection();
+                        sqlCommand.ExecuteScalar();
+                        // CommentTest.Content = "Comment verzonden";
+                    }
+
+                    cn.CloseConnection();
+                    CommentListPanel.Children.Clear();
+                    LoadComments();
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc);
+                }
+                CommentMeldingLabel.Content = "Bericht geplaatst!";
+                WriteCommentTextBox.Text = "";
+            } else
             {
-                Console.WriteLine(exc);
+                CommentMeldingLabel.Content = "Bericht mag niet leeg zijn!";
+                
             }
         }
 
@@ -205,6 +218,7 @@ namespace WijkAgent2.Pages.delicten
         {
             List<Comment> comments = new List<Comment>();
             string query = $"SELECT name, comment, date_added FROM delict_comment dc JOIN dbo.[User] u ON dc.user_id = u.user_id WHERE delict_id = {viewDelictID} ORDER BY date_added DESC";
+            
             try
             {
                 cn.OpenConection();
@@ -232,7 +246,9 @@ namespace WijkAgent2.Pages.delicten
         public void LoadComments()
         {
             GetCommentList();
-            
+            /*Login login;
+            BitmapImage userPicture = new BitmapImage();
+            userPicture.UriSource = login.ImageUrl;*/
 
             foreach (Comment comment in GetCommentList())
             {
@@ -241,7 +257,7 @@ namespace WijkAgent2.Pages.delicten
                 {
                     Modals.CommentLayout commentLayout = new Modals.CommentLayout();
                     commentLayout.CommentTextLabel.Content = comment.CommentText;
-                    //commentLayout.CommentUserImage.Source =  
+                    //commentLayout.CommentUserImage.Source = login.ImageUrl;
                     commentLayout.CommentUserName.Content = comment.CommentPoster;
                     commentLayout.CommentDateLabel.Content = comment.CommentDate.ToString();
                     CommentListPanel.Children.Add(commentLayout);

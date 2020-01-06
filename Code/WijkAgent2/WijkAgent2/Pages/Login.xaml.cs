@@ -25,6 +25,7 @@ namespace WijkAgent2.Pages
     public partial class Login : Page
     {
         private MainWindow mw;
+        public string ImageUrl { get; set; }
         public Login(MainWindow MW)
         {
             this.mw = MW;
@@ -64,6 +65,7 @@ namespace WijkAgent2.Pages
                 user_id = Convert.ToInt32(sq["user_id"]);
                 image_url = (string)sq["upload_path"];
             }
+            ImageUrl = image_url;
 
             if (!password_db.Equals("") && user_id != -1 && !name.Equals(""))
             {
