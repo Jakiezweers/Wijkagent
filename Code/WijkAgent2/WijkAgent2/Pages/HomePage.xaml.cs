@@ -11,6 +11,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -35,6 +36,7 @@ namespace WijkAgent2.Pages
         private Connection cn = new Connection();
         private Connection cn1 = new Connection();
         private Connection cn2 = new Connection();
+        System.Timers.Timer timer;
         bool disablefield = false;
         MapPoint mapPoint;
         Viewpoint startingpoint;
@@ -62,6 +64,7 @@ namespace WijkAgent2.Pages
                 categoryBox.Items.Add(sq["name"].ToString());
             }
             cn.CloseConnection();
+
         }
 
         //wanneer er geklikt wordt op een delict, focus op de juiste locatie
@@ -71,19 +74,29 @@ namespace WijkAgent2.Pages
             await mapview.SetViewpointCenterAsync(mapPoint);
 
         }
-
+  
         private async void LoadMap()
         {
+            //Locatie op map tonen
+            mapview.LocationDisplay.IsEnabled = true;
+            mapview.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
+            
 
             //Map inladen
             mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
+
+
             startingpoint = new Viewpoint(mapPoint, 50000);
             Map.InitialViewpoint = startingpoint;
             mapview.Map = Map;
 
+            //doubleclick afvangen
+            mapview.PreviewMouseDoubleClick += (s, e) => e.Handled = true;
+          //  mapview.LocationDisplay.LocationChanged += changed;
+
             //Delicten op map laden
             cn.OpenConection();
-            SqlDataReader sq = cn.DataReader("SELECT long, lat, delict.delict_id as id, date as date from delict");
+            SqlDataReader sq = cn.DataReader("SELECT long, lat, delict.delict_id as id, date as date, status as status from delict where status = 1 or status = 3");
            
             while (sq.Read())
             {
@@ -99,6 +112,8 @@ namespace WijkAgent2.Pages
                 StringBuilder persons = new StringBuilder();
                 int i = 0;
                 int delictid = Convert.ToInt32(sq["id"].ToString());
+                int status = Convert.ToInt32(sq["status"].ToString());
+
                 DateTime delicttime = Convert.ToDateTime(sq["date"].ToString());
 
                 //Categoriën bij delicten plaatsen
@@ -149,12 +164,16 @@ namespace WijkAgent2.Pages
 
                 //Elementen in lijst plaatsen
                     d.id = delictid;
+                    d.status = status;
                     d.category = categories.ToString();
                     d.person = persons.ToString();
                     d.datetime1 = delicttime.ToString("dd-MM-yyyy");
                 d.longitude = longitude;
                 d.lat = lat;
-                delictenlist.Add(d);
+                if (d.status == 1 || d.status == 3)
+                {
+                    delictenlist.Add(d);
+                }
 
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
@@ -178,6 +197,64 @@ namespace WijkAgent2.Pages
             IdentifyGraphicsOverlayResult identifyResults = await mapview.IdentifyGraphicsOverlayAsync(overlay, e.Position, 0, false, 1);
             if (identifyResults.Graphics.Count > 0)
             {
+                foreach(var i in identifyResults.Graphics)
+                {
+                    TextBlock x = new TextBlock();
+                    x.Text = i.Attributes.First().Key;
+                    setMarker(x);
+                    makeVisible();
+                    StringBuilder categories = new StringBuilder();
+                    StringBuilder persons = new StringBuilder();
+                    cn.OpenConection();
+                    Console.WriteLine("ID: " + x.Text);
+                    SqlDataReader sq = cn.DataReader("SELECT * FROM delict WHERE delict_id = " + x.Text);
+                    while (sq.Read())
+                    {
+                        delictName.Content = sq["delict_id"].ToString();
+                        delictDescription.Content = sq["description"].ToString();
+                        DateTime delicttime = Convert.ToDateTime(sq["date"].ToString());
+                        delictDate.Content = delicttime.ToString("dd-MM-yyyy");
+                        delictZip.Content = sq["zipcode"].ToString();
+                        delictCoordinatesX.Content = "X: " + sq["long"].ToString();
+                        delictCoordinatesY.Content = "Y: " + sq["lat"].ToString();
+                        double xcoor = double.Parse(sq["long"].ToString());
+                        double ycoor = double.Parse(sq["lat"].ToString());
+                        LoadMap(xcoor, ycoor);
+
+                    }
+                    cn.CloseConnection();
+
+                    //Categoriën bij delicten plaatsen
+                    cn1.OpenConection();
+                    SqlDataReader sq1 = cn1.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + x.Text);
+                    while (sq1.Read())
+                    {
+
+
+                        categories.Append(sq1["name"].ToString() + ", ");
+
+                    }
+                    cn1.CloseConnection();
+
+
+                    //Personen bij delicten plaatsen
+                    cn2.OpenConection();
+                    SqlDataReader sq2 = cn2.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + x.Text);
+                    while (sq2.Read())
+                    {
+                        persons.Append(' ' + sq2["firstname"].ToString() + " " + sq2["lastname"].ToString() + " (" + sq2["type"].ToString()[0] + ")  |");
+                        Console.WriteLine(sq2["firstname"]);
+                    }
+                    cn2.CloseConnection();
+                    if (persons.Length != 0)
+                    {
+                        persons.Length = persons.Length - 2;
+                    }
+
+                    delictCategory.Content = categories;
+                    delictPerson.Content = persons;
+
+                }
             }
             else
             {
@@ -187,7 +264,7 @@ namespace WijkAgent2.Pages
             }
         }
 
-        public void clickDelict(Object sender, System.Windows.Input.MouseButtonEventArgs e)
+        public void makeVisible()
         {
             DelictInzienBTN.IsEnabled = true;
             labelsVis.Visibility = Visibility.Visible;
@@ -206,7 +283,10 @@ namespace WijkAgent2.Pages
             delictCoordinatesY.Visibility = Visibility.Visible;
             delictPerson.Visibility = Visibility.Visible;
             delictZip.Visibility = Visibility.Visible;
-
+        }
+        public void clickDelict(Object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            makeVisible();
             StringBuilder categories = new StringBuilder();
             StringBuilder persons = new StringBuilder();
             
@@ -369,7 +449,8 @@ namespace WijkAgent2.Pages
                 else
                 {
                     char nummers = ZIPfield.Text[i];
-                    bool result = Char.IsUpper(nummers);
+                    char upper = Char.ToUpper(nummers);
+                    bool result = Char.IsUpper(upper);
                     if (result == false)
                     {
                         mw.ShowDialog("Postcode verkeerd ingevoerd");

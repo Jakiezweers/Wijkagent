@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Tasks.Geocoding;
+﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Tasks.Geocoding;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -8,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,6 +36,10 @@ namespace WijkAgent2.Pages.delicten
         List<string> personstype = new List<string>();
         List<int> person_id = new List<int>();
         LocatorTask _geocoder;
+        double longCoord = 0.0000;
+        double latCoord = 0.0000;
+        string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
+        bool errorBool = false;
         Uri _serviceUri = new Uri("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
 
         private Connection cn = new Connection();
@@ -92,20 +98,27 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
-        private void SaveDelict_Click(object sender, RoutedEventArgs e)
-        {
-            string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
-            bool errorBool = false;
-            string placeName = PlaatsTB.Text;
-            string zipCode = Regex.Replace(PostcodeTB.Text, @" ", "");
-            string homeNumber = HuisnummerTB.Text;
-            string street = StraatTB.Text;
-            string description = OmschijvingTB.Text;
-            string date = DatumTB.Text;
-            double longCoord = 0.0000;
-            double latCoord = 0.0000;
-            string checkCoord = street + ' ' + homeNumber + ' ' + placeName;
 
+        private async void Run_This()
+        {
+
+            string placeName = "";
+            string zipCode = "";
+            string homeNumber = "";
+            string street = "";
+            string description = "";
+            string date = "";
+            string checkCoord = "";
+            await Dispatcher.BeginInvoke((Action)(() =>
+              {
+                  placeName = PlaatsTB.Text;
+                  zipCode = Regex.Replace(PostcodeTB.Text, @" ", "");
+                  homeNumber = HuisnummerTB.Text;
+                  street = StraatTB.Text;
+                  description = OmschijvingTB.Text;
+                  date = DatumTB.Text;
+                  checkCoord = street + ' ' + homeNumber + ' ' + placeName;
+              }));
 
             StringBuilder homeNumbernum =
                   new StringBuilder();
@@ -168,50 +181,73 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Straat, ";
                 errorBool = true;
             }
-
+            await SearchCoordAsync(checkCoord, zipCode.ToUpper());
             if (errorBool) //Hieronder alles wat gedaan moet worden als er iets fout gaat.
             {
-                string errorBoxText = errorMessage.Substring(0, errorMessage.Length - 2);
-                string errorCaption = "Delict toevoegen mislukt.";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBox.Show(errorBoxText, errorCaption, button);
+                await Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    string errorBoxText = errorMessage.Substring(0, errorMessage.Length - 2);
+                    mw.ShowMessage(errorBoxText);
+                    errorBool = false;
+                    errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
+                }));
             }
             else //Hieronder alles wat uitgevoerd moet worden als alles goed is. 
             {
                 SendDelictToDatabase(date, mw.FirstCharToUpper(placeName), int.Parse(homeNumbernum.ToString()), homeNumberLet.ToString().ToUpper(), zipCode.ToUpper(), mw.FirstCharToUpper(street), description, longCoord, latCoord);
-                SearchCoord(checkCoord);
-                mw.ShowMessage("Delict toegevoegd");
             }
         }
 
-        private async void SearchCoord(string check)
+        private void SaveDelict_Click(object sender, RoutedEventArgs e)
         {
-            try {
+            Thread t = new Thread(Run_This);
+            t.Start();
+        }
+        // functie data controleren
+        private async Task SearchCoordAsync(string check, string zip)
+        {
+            try
+            {
                 _geocoder = await LocatorTask.CreateAsync(_serviceUri);
                 IReadOnlyList<SuggestResult> suggestions = await _geocoder.SuggestAsync(check);
                 SuggestResult firstsuggestion = suggestions.First();
                 IReadOnlyList<GeocodeResult> coords = await _geocoder.GeocodeAsync(firstsuggestion.Label);
-                if (coords.Count < 1) { return; } // GEEN RESULTATEN GEVONDEN!
+                if (coords.Count < 1) { Console.WriteLine(  "NOPE geen resultaten"); return; } // GEEN RESULTATEN GEVONDEN!
                 string xcoord = coords.First().DisplayLocation.X.ToString();
                 string ycoord = coords.First().DisplayLocation.Y.ToString();
                 double parseX = Double.Parse(xcoord);
                 double parseY = Double.Parse(ycoord);
-                cn.OpenConection();
-                string UpdatePerson = "UPDATE dbo.delict SET long = @X, lat = @Y WHERE delict_id = (SELECT max(delict_id) from dbo.delict)";
-                using (SqlCommand cmd = new SqlCommand(UpdatePerson))
+
+                MapPoint nieuwepoint = new MapPoint(coords.First().DisplayLocation.X, coords.First().DisplayLocation.Y);
+                ReverseGeocodeParameters parameters = new ReverseGeocodeParameters();
+                parameters.MaxResults = 1;
+                IReadOnlyList<GeocodeResult> adres = await _geocoder.ReverseGeocodeAsync(nieuwepoint, parameters);
+                GeocodeResult eerste = adres.First();
+                string ZIP = eerste.Attributes["Postal"].ToString();
+                string trimmed = ZIP.Replace(" ", string.Empty);
+                Console.WriteLine(trimmed);
+
+
+                if (zip != trimmed)
                 {
-                    cmd.Connection = cn.GetConnection();
-                    cmd.Parameters.Add("@X", SqlDbType.Float).Value = parseX;
-                    cmd.Parameters.Add("@Y", SqlDbType.Float).Value = parseY;
-                    cmd.ExecuteScalar();
+                    errorMessage += "Adres gegevens, ";
+                    errorBool = true;
+                    return;
+                }
+                else
+                {
+                    longCoord = parseX;
+                    latCoord = parseY;
                 }
 
 
 
             }
-            catch (Exception eas) { Console.WriteLine(eas);  }
+            catch (Exception eas) { Console.WriteLine(eas); }
             cn.CloseConnection();
-            }
+        
+        }
+    
 
         private void GetLat()
         {
@@ -247,8 +283,8 @@ namespace WijkAgent2.Pages.delicten
                 cmd.Parameters.Add("@fourth", SqlDbType.NVarChar).Value = zipCode;
                 cmd.Parameters.Add("@fifth", SqlDbType.NVarChar).Value = street;
                 cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
-                cmd.Parameters.Add("@seventh", SqlDbType.NVarChar).Value = longCoord;
-                cmd.Parameters.Add("@eight", SqlDbType.NVarChar).Value = latCoord;
+                cmd.Parameters.Add("@seventh", SqlDbType.Float).Value = longCoord;
+                cmd.Parameters.Add("@eight", SqlDbType.Float).Value = latCoord;
                 cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = 1;
 
                 id = (int)cmd.ExecuteScalar();
@@ -286,7 +322,13 @@ namespace WijkAgent2.Pages.delicten
                     }   
                 }
             }
-            mw.LoadHomeScreen();
+
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                mw.ShowMessage("Delict toegevoegd");
+                mw.LoadHomeScreen();
+            }));
+
         }
 
         private bool CheckCategorie()

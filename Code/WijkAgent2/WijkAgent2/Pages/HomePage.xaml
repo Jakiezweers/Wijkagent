@@ -11,7 +11,6 @@
 
     <Grid Margin="0,0,10,-17">
         <esri:MapView x:Name="mapview" Margin="166,2,657,-2">
-
         </esri:MapView>
         <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">
             <DataGrid.Columns>
@@ -49,7 +48,7 @@
         <Label x:Name="delictZip"  HorizontalAlignment="Left" Height="100" Margin="1598,653,-908,-286" VerticalAlignment="Top" Width="100"/>
         <Button x:Name="labelsVis7" Content="X" HorizontalAlignment="Left" Margin="1851,589,-1108,-154" VerticalAlignment="Top" Width="47" Click="Close_window" Visibility="Hidden"/>
         <Button Content="Verwijder Filter" HorizontalAlignment="Left" Margin="12,539,0,-104" VerticalAlignment="Top" Width="136" Click="Button_Click"/>
-        <ListView x:Name="listview" HorizontalAlignment="Left" Height="267" Margin="16,619,0,-419" VerticalAlignment="Top" MinWidth="142">
+        <ListView x:Name="listview" HorizontalAlignment="Left" Height="267" Margin="16,619,0,-419" VerticalAlignment="Top" MinWidth="142" Width="142">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
