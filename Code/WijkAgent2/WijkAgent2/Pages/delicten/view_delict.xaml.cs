@@ -256,7 +256,7 @@ namespace WijkAgent2.Pages.delicten
                 Dispatcher.BeginInvoke((Action)(() =>
                 {
                     Modals.CommentLayout commentLayout = new Modals.CommentLayout();
-                    commentLayout.CommentTextLabel.Content = comment.CommentText;
+                    commentLayout.CommentTextLabel.Text = comment.CommentText;
                     //commentLayout.CommentUserImage.Source = login.ImageUrl;
                     commentLayout.CommentUserName.Content = comment.CommentPoster;
                     commentLayout.CommentDateLabel.Content = comment.CommentDate.ToString();

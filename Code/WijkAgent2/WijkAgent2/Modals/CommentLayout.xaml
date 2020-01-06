@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:WijkAgent2.Modals"
              mc:Ignorable="d" 
 
-             d:DesignHeight="150" Width="392">
-    <Grid Background="White">
-        <Label x:Name="CommentTextLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Height="99" Width="392" Margin="0,0,-78,0"/>
+             d:DesignHeight="150" Width="394.591">
+    <Grid Background="White" Margin="0,0,-4,0">
+        <TextBox x:Name="CommentTextLabel" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" Height="99" Width="392" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
         <Image x:Name="CommentUserImage" HorizontalAlignment="Left" Height="25" Margin="9,99,0,0" VerticalAlignment="Top" Width="23"/>
         <Label x:Name="CommentUserName" Content="" HorizontalAlignment="Left" Margin="37,99,0,0" VerticalAlignment="Top" Width="181" Height="25"/>
-        <Label x:Name="CommentDateLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,99,0,0" Width="120" Height="25"/>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="99" VerticalAlignment="Top" Width="392" Margin="0,0,-78,0"/>
+        <Label x:Name="CommentDateLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="269,99,0,0" Width="120" Height="25"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="99" VerticalAlignment="Top" Width="392"/>
 
     </Grid>
 </UserControl>

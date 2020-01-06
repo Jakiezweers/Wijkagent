@@ -36,12 +36,12 @@
             <Label FontSize="18" x:Name="DelictHouseNumberLabel" Content="Huisnummer" HorizontalAlignment="Left" Margin="300,130,0,0" VerticalAlignment="Top"/>
 
             <Grid HorizontalAlignment="Left" Height="732" Margin="742,10,0,0" VerticalAlignment="Top" Width="387">
-                
+
                 <ScrollViewer VerticalScrollBarVisibility="Visible" AllowDrop="False" Height="547" VerticalAlignment="Bottom" Margin="0,0,-24,-24">
                     <StackPanel x:Name="CommentListPanel" Grid.Column="1" Width="411" Background="AliceBlue" CanVerticallyScroll="True"/>
                 </ScrollViewer>
-                <TextBox x:Name="WriteCommentTextBox"  HorizontalAlignment="Left" Height="157" Margin="0,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="392" Background="AliceBlue"/>
-                <Button x:Name="PlaceCommentButton" Content="Plaats reactie" HorizontalAlignment="Left" Margin="261,172,0,0" VerticalAlignment="Top" Width="121" Click="PlaceComment_Click"/>
+                <TextBox x:Name="WriteCommentTextBox"  HorizontalAlignment="Left" Height="157" Margin="0,10,-24,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="411" Background="AliceBlue" VerticalScrollBarVisibility="Auto"/>
+                <Button x:Name="PlaceCommentButton" Content="Plaats reactie" HorizontalAlignment="Left" Margin="290,172,-24,0" VerticalAlignment="Top" Width="121" Click="PlaceComment_Click"/>
                 <Label x:Name="CommentMeldingLabel" Content="" HorizontalAlignment="Left" Margin="0,172,0,0" VerticalAlignment="Top" Height="32" Width="256"/>
             </Grid>
 
