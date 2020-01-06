@@ -20,6 +20,7 @@ using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkAgent2.Classes;
+using WijkAgent2.Controllers;
 using WijkAgent2.Database;
 using WijkAgent2.Modals;
 
@@ -56,27 +57,19 @@ namespace WijkAgent2.Pages.delicten
                 tmp.BtnShowTweet.Visibility = Visibility.Hidden;
                 List_Tweets.Children.Add(tmp);
             }));
-            Thread.Sleep(450);
-            // Set up your credentials (https://apps.twitter.com)
-            Auth.SetUserCredentials("itpO8X73ey8dkZTyGJVsIx5sI", "WKs54HvEZJdxnKkNm8apcyhIEcqCEKcYaKbvpxyoKnhSx6RZMc", "3374540458-5LHiTuas6A4PCrWQKkzYhf71MlEbUekNq1PPw7E", "DArMiCPh51mCi0BywNplin9rRvRZayixrUqnUnYpgXfs9");
-            
-            var searchParameter = new SearchTweetsParameters("")
-            {
-                GeoCode = new GeoCode(52.516773, 6.083022, 1, DistanceMeasure.Kilometers),
-                MaximumNumberOfResults = 100,
-                SearchType = SearchResultType.Recent,
-                Until = new DateTime(2019, 12, 20),
-            };
 
-            var tweets = Search.SearchTweets(searchParameter);
             Thread.Sleep(800);
             Dispatcher.BeginInvoke((Action)(() =>
             {
                 List_Tweets.Children.Clear();
             }));
 
-            List<ITweet> tweet_list = tweets.ToList();
-            foreach (ITweet tweet in tweet_list)
+            TwitterConroller TC = new TwitterConroller();
+
+            List<ITweet> TweetList = TC.getTwitterBerichten();
+
+
+            foreach (ITweet tweet in TweetList)
             {
                 if (!tweet.IsRetweet)
                 {
