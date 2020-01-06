@@ -139,8 +139,6 @@ namespace WijkAgent2.Pages.delicten
                 longitude = (double)sqc["long"];
                 latitutde = (double)sqc["lat"];
                 Date = (DateTime)sqc["date"];
-                Console.WriteLine(Date);
-
             }
 
             cn.CloseConnection();
