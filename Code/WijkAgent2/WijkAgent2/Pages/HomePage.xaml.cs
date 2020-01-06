@@ -36,6 +36,7 @@ namespace WijkAgent2.Pages
         private Connection cn = new Connection();
         private Connection cn1 = new Connection();
         private Connection cn2 = new Connection();
+        public bool mapmarking = false;
         System.Timers.Timer timer;
         bool disablefield = false;
         MapPoint mapPoint;
@@ -193,10 +194,15 @@ namespace WijkAgent2.Pages
 
         private async void Click(object sender, Esri.ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
-            MapPoint point = new MapPoint(e.Location.X, e.Location.Y);
+            MapPoint point = e.Location;
+           
+    
+            MapPoint pointlatlong = GeometryEngine.Project(point, SpatialReferences.Wgs84) as MapPoint;
             paint = new Graphic(point, marker);
             IdentifyGraphicsOverlayResult identifyResults = await mapview.IdentifyGraphicsOverlayAsync(overlay, e.Position, 0, false, 1);
-            if (identifyResults.Graphics.Count > 0)
+            double lon = pointlatlong.X;
+            double lat = pointlatlong.Y;
+            if (identifyResults.Graphics.Count > 0 && mapmarking == false)
             {
                 foreach (var i in identifyResults.Graphics)
                 {
@@ -255,13 +261,24 @@ namespace WijkAgent2.Pages
                     delictCategory.Content = categories;
                     delictPerson.Content = persons;
 
-                }
-            }
-            else
+                } 
+            }else if (mapmarking == true)
             {
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
                 mapview.GraphicsOverlays.Add(overlay);
+                MessageBoxResult dialogResult = MessageBox.Show("Wilt u een delict aanmaken?", "Aanmaken map delict", MessageBoxButton.YesNo);
+                if (dialogResult == MessageBoxResult.Yes)
+                {
+                    mw.AddDelict(lon, lat);
+
+                }
+                else if (dialogResult == MessageBoxResult.No)
+                {
+                    mapview.GraphicsOverlays.Remove(overlay);
+                    overlay.Graphics.Remove(paint);
+                    mapview.GraphicsOverlays.Add(overlay);
+                }
             }
         }
 
@@ -430,6 +447,21 @@ namespace WijkAgent2.Pages
             x.Text = "close";
             setMarker(x);
 
+        }
+
+        private void AddMarkerDelict(object sender, RoutedEventArgs e)
+        {
+           
+            if (mapmarking == false)
+            {
+                AddMarkerDelictBTN.Background = Brushes.Green;
+                mapmarking = true;
+            }
+            else
+            {
+                AddMarkerDelictBTN.Background = Brushes.Red;
+                mapmarking = false;
+            }
         }
 
         private void filterMap(object sender, RoutedEventArgs e)
