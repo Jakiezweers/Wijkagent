@@ -19,6 +19,6 @@
         <Label FontSize="18" Content="Eenheid id" x:Name="EenheidId" HorizontalAlignment="Left" Margin="271,242,0,0" VerticalAlignment="Top"/>
 
         <Button FontSize="18" Content="Terug" Margin="0,0,10,5" Click="Terug_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="85"/>
-        <Button FontSize="18" Content="Pas gebruiker aan" Margin="0,0,95,5" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="182"/>
+        <Button FontSize="18" x:Name="BTNPasGebruikerAan" Content="Pas gebruiker aan" Margin="0,0,95,5" Click="EditDelict_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="182"/>
     </Grid>
 </Page>
