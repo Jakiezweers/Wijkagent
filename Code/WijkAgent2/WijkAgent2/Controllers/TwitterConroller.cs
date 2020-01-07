@@ -21,7 +21,7 @@ namespace WijkAgent2.Controllers
 
             var searchParameter = new SearchTweetsParameters("")
             {
-                GeoCode = new GeoCode(latitutde, longitude, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(latitutde, longitude, 15, DistanceMeasure.Kilometers),
                 MaximumNumberOfResults = 100,
                 SearchType = SearchResultType.Recent,
                 Until = Date,
