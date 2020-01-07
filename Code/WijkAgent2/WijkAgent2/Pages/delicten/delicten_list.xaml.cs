@@ -72,8 +72,16 @@ namespace WijkAgent2.Pages.delicten
 
             int user_id = mw.GetUserID();
             validator.logged_in_user_id = user_id;
-            if (validator.validate("Delicten_Archiveren")) { DelictArchiveBTN.Visibility = Visibility.Visible; } else { DelictArchiveBTN.Visibility = Visibility.Hidden; }
-            if (validator.validate("Delicten_Activeren")) { DelictActivateBTN.Visibility = Visibility.Visible; } else { DelictActivateBTN.Visibility = Visibility.Hidden; }
+            if (activeDelicts)
+            {
+                DelictActivateBTN.Visibility = Visibility.Hidden;
+                if (validator.validate("Delicten_Archiveren")) { DelictArchiveBTN.Visibility = Visibility.Visible; } else { DelictArchiveBTN.Visibility = Visibility.Hidden; }
+            }
+            else
+            {
+                DelictArchiveBTN.Visibility = Visibility.Hidden;
+                if (validator.validate("Delicten_Activeren")) { DelictActivateBTN.Visibility = Visibility.Visible; } else { DelictActivateBTN.Visibility = Visibility.Hidden; }
+            }
         }
         public void GetActiveDelicts()
         {
