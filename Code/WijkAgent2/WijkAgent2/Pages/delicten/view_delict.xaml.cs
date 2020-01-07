@@ -118,14 +118,22 @@ namespace WijkAgent2.Pages.delicten
             SqlDataReader sqc = cn.DataReader("SELECT * FROM dbo.delict WHERE delict_id = " + viewDelictID);
             while (sqc.Read())
             {
-                string status;
+                string status = "";
                 if ((int)sqc["status"] == 1)
                 {
                     status = "Actief";
                 }
-                else
+                else if ((int)sqc["status"] == 0)
                 {
                     status = "Inactief";
+                }
+                else if ((int)sqc["status"] == 3)
+                {
+                    DelictZipcodeLabel.Visibility = Visibility.Collapsed;
+                    DelictHouseNumberLabel.Visibility = Visibility.Collapsed;
+                    DelictStreetLabel.Visibility = Visibility.Collapsed;
+                    DelictPlaceLabel.Visibility = Visibility.Collapsed;
+                    Status3LB.Visibility = Visibility.Visible;
                 }
 
                 DelictPlaceLabel.Content += ": " + sqc["place"];
