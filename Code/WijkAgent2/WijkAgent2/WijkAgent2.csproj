@@ -208,15 +208,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\delicten\delict_archive.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\delicten\EditDelict.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\delicten\view_delict.xaml">
+    <Page Include="Pages\delicten\ViewDelict.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -262,14 +258,11 @@
     <Compile Include="Pages\delicten\DelictList.xaml.cs">
       <DependentUpon>DelictList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\delict_archive.xaml.cs">
-      <DependentUpon>delict_archive.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\delicten\EditDelict.xaml.cs">
       <DependentUpon>EditDelict.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\view_delict.xaml.cs">
-      <DependentUpon>view_delict.xaml</DependentUpon>
+    <Compile Include="Pages\delicten\ViewDelict.xaml.cs">
+      <DependentUpon>ViewDelict.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>

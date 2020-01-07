@@ -187,7 +187,7 @@ namespace WijkAgent2
 
         public void ShowDelict(int delictID, int originalPage)
         {
-            MainFrame.Navigate(new view_delict(this,delictID,originalPage));
+            MainFrame.Navigate(new ViewDelict(this,delictID,originalPage));
             TopHeader.Text = "Wijkagent - Delict " + delictID;
         }
         public void EditDelict(int delictID, int previousPage)
