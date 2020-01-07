@@ -25,7 +25,7 @@ namespace WijkAgent2.Pages.delicten
     /// </summary>
     public partial class delict_archive : Page
     {
-        private MainWindow mw;
+       /* private MainWindow mw;
         public delict_archive(MainWindow MW)
         {
             mw = MW;
@@ -184,6 +184,6 @@ namespace WijkAgent2.Pages.delicten
         {
             var DelictID = (int)((System.Windows.Controls.Button)sender).Tag;
             mw.ShowDelict(DelictID,2);
-        }
+        }*/
     }
 }

@@ -1,0 +1,19 @@
+﻿<Window x:Class="Wijkagent.Permissions"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wijkagent"
+        mc:Ignorable="d"
+        Title="Permissions" Height="450" Width="800">
+    <Grid>
+      <DataGrid Name="DataGrid" ItemsSource="{Binding DataGrid}" AutoGenerateColumns="False" Margin="190,10,190,0" SelectionChanged="DataGrid_SelectionChanged" >
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Naam"  Binding="{Binding Naam}" Width="130"/>
+          <DataGridTextColumn Header="Leeftijd" Binding="{Binding Leeftijd}" Width="90" />
+          <DataGridTextColumn Header="BadgeID" Binding="{Binding BadgeID}" Width="70" />
+          <DataGridComboBoxColumn Header="Rol" SelectedItemBinding="{Binding Rol}" Width="130"/>
+        </DataGrid.Columns>
+      </DataGrid>
+    </Grid>
+</Window>

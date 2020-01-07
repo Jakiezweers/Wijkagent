@@ -61,6 +61,9 @@ namespace WijkAgent2
             if (validator.validate("list_delicten")) { LBDelicten.Visibility = Visibility.Visible; } else { LBDelicten.Visibility = Visibility.Collapsed; }
             if (validator.validate("list_archive")) { LBArchive.Visibility = Visibility.Visible; } else { LBArchive.Visibility = Visibility.Collapsed; }
             if (validator.validate("list_users")) { LBGebruikers.Visibility = Visibility.Visible; } else { LBGebruikers.Visibility = Visibility.Collapsed; }
+            if (validator.validate("Delicten_Aanmaken")) { LBAddDelict.Visibility = Visibility.Visible; } else { LBAddDelict.Visibility = Visibility.Collapsed; }
+            if (validator.validate("Permissies_Toewijzen")) { LBPermissions.Visibility = Visibility.Visible; } else { LBPermissions.Visibility = Visibility.Collapsed; }
+            if (validator.validate("Delicten_Inzien")) { LBDelicten.Visibility = Visibility.Visible; } else { LBDelicten.Visibility = Visibility.Collapsed; }
             NameHeader.Text = name;
             UserInfo.Visibility = Visibility.Visible;
             UserImage.Source = new BitmapImage(new Uri(Image_Url, UriKind.RelativeOrAbsolute));
@@ -140,7 +143,7 @@ namespace WijkAgent2
 
         public void ShowDelictenList(bool activeDelicts)
         {
-            MainFrame.Navigate(new delicten_list(this, activeDelicts));
+            MainFrame.Navigate(new DelictList(this, activeDelicts));
             TopHeader.Text = "Wijkagent - Delicten lijst";
         }
 
@@ -152,13 +155,18 @@ namespace WijkAgent2
 
         public void ShowDelictenArchive()
         {
-            MainFrame.Navigate(new delicten_list(this,false));
+            MainFrame.Navigate(new DelictList(this,false));
             TopHeader.Text = "Wijkagent - Delicten Archief";
         }
 
         public void AddDelict()
         {
             MainFrame.Navigate(new add_delict(this));
+            TopHeader.Text = "Wijkagent - Delict toevoegen";
+        }
+        public void AddDelict(double lon, double lat)
+        {
+            MainFrame.Navigate(new add_delict(this,lon,lat));
             TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
 
@@ -184,7 +192,7 @@ namespace WijkAgent2
         }
         public void EditDelict(int delictID, int previousPage)
         {
-            MainFrame.Navigate(new edit_delict(this, delictID, previousPage));
+            MainFrame.Navigate(new EditDelict(this, delictID, previousPage));
         }
 
         public void EditUser(int userId, string fname, int fid)

@@ -23,13 +23,13 @@
         <TextBox TabIndex="6" FontSize="18" x:Name="PostcodeTB" Height="35" Margin="0,249,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="0.494,1.71" HorizontalAlignment="Right" Width="142"/>
         <TextBox TabIndex="5" FontSize="18" x:Name="HuisnummerTB" Height="35" Margin="0,158,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
         <TextBox TabIndex="4" FontSize="18" x:Name="StraatTB" Height="35" Margin="0,63,18,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
-        <Label FontSize="18" Content="Straat" Margin="0,29,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
-        <Label FontSize="18" Content="Huisnummer" Margin="0,119,18,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
-        <Label FontSize="18" Content="Postcode" Margin="0,210,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
+        <Label FontSize="18" x:Name="StraatLB" Content="Straat" Margin="0,29,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
+        <Label FontSize="18" x:Name="HuisnummerLB" Content="Huisnummer" Margin="0,119,18,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="142"/>
+        <Label FontSize="18" x:Name="PostcodeLB" Content="Postcode" Margin="0,210,48,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112"/>
         <DatePicker TabIndex="3" FontSize="18" x:Name="DatumTB" HorizontalAlignment="Right" Height="35" Margin="0,158,250,0" VerticalAlignment="Top" Width="147" FirstDayOfWeek="Monday" RenderTransformOrigin="0.542,2.75"/>
         <TextBox TabIndex="7" FontSize="18" x:Name="OmschijvingTB" AcceptsReturn="True" Margin="41,249,310,10" TextWrapping="Wrap" Text="" BorderThickness="1" BorderBrush="#89000000"/>
         <Label FontSize="18" Content="Categorie" HorizontalAlignment="Left" Margin="41,29,0,0" VerticalAlignment="Top"/>
-        <Label FontSize="18" Content="Plaats" Margin="0,29,341,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56"/>
+        <Label FontSize="18" x:Name="PlaatsLB" Content="Plaats" Margin="0,29,341,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="56"/>
         <Label FontSize="18" Content="Datum" Margin="0,123,322,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="74">
             <Label.RenderTransform>
                 <TransformGroup>

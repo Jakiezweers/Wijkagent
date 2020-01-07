@@ -22,31 +22,36 @@ using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.delicten
 {
-    public partial class delicten_list : Page
+    public partial class DelictList : Page
     {
-        MainWindow mw;
-        int i;
-        int j;
-        List<Delict> delictenlist = new List<Delict>();
-        List<Delict> delictenlistCheck = new List<Delict>();
+        readonly MainWindow mw; //Required mainwindow
 
-        bool currPageIsActivated = true;
+        readonly List<Delict> delictenlist = new List<Delict>(); //List containing all delicts.
+        List<Delict> sortedDelictList = new List<Delict>(); //List containing the sorted delicts. <- This list gets shown in the table.
 
-        bool sortID = false;
-        bool sortDate = false;
+        bool currPageIsActiveDelicts = true; //If bool is true, it gets only active delicts. If false it gets archived delicts.
 
-        List<CategoryList> categoryList = new List<CategoryList>();
-        List<String> emptylist = new List<String>();
-        static int pageCounter = 1;
-        decimal delictsPerPage = 10;
+        bool sortID = false; //Bool if list is sorted on ID.
+        bool sortDate = false; //Bool if list is sorted on Date.
+
+        readonly List<CategoryList> categoryList = new List<CategoryList>(); //List containing all categories on wich the delicts can be sorted.
+
+        List<String> emptylist = new List<String>(); //List to selected category.
+
+        static int pageCounter = 1; //Number of the current page ur on.
+        readonly decimal delictsPerPage = 10; //Amount of delicts one page is allowed to show.
 
 
-        private Connection cn = new Connection();
-        public delicten_list(MainWindow MW, bool activeDelicts)
+        private readonly Connection cn = new Connection();
+
+        //Constructor retrieves all categories for filtering, Also retrieves the correct list based on currPageIsActiveDelicts state.
+        public DelictList(MainWindow MW, bool activeDelicts)
         {
+
+            Validator validator = new Validator();
             mw = MW;
             InitializeComponent();
-            currPageIsActivated = activeDelicts;
+            currPageIsActiveDelicts = activeDelicts;
 
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("Select * from dbo.category");
@@ -57,7 +62,7 @@ namespace WijkAgent2.Pages.delicten
             }
             cn.CloseConnection();
             BindCategroryDropDown();
-            if (currPageIsActivated)
+            if (currPageIsActiveDelicts)
             {
                 DelictListSwapBTN.Content = "Gearchiveerde delicten lijst";
                 GetActiveDelicts();
@@ -67,112 +72,103 @@ namespace WijkAgent2.Pages.delicten
                 DelictListSwapBTN.Content = "Actieve delicten lijst";
                 GetArchivedDelicts();
             }
+
+            int user_id = mw.GetUserID();
+            validator.logged_in_user_id = user_id;
+            if (activeDelicts)
+            {
+                DelictActivateBTN.Visibility = Visibility.Hidden;
+                if (validator.validate("Delicten_Archiveren")) { DelictArchiveBTN.Visibility = Visibility.Visible; } else { DelictArchiveBTN.Visibility = Visibility.Hidden; }
+            }
+            else
+            {
+                DelictArchiveBTN.Visibility = Visibility.Hidden;
+                if (validator.validate("Delicten_Activeren")) { DelictActivateBTN.Visibility = Visibility.Visible; } else { DelictActivateBTN.Visibility = Visibility.Hidden; }
+            }
+            cn.CloseConnection();
         }
+
+        //Method to retrieve active delicts.
         public void GetActiveDelicts()
         {
-            delictenlistCheck.Clear();
+            sortedDelictList.Clear();
             delictenlist.Clear();
-            currPageIsActivated = true;
+            currPageIsActiveDelicts = true;
             mw.TopHeader.Text = "Wijkagent - Delicten lijst";
             DelictArchiveBTN.Visibility = Visibility.Visible;
             DelictActivateBTN.Visibility = Visibility.Hidden;
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-            using (DbConnection connection = factory.CreateConnection())
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ORDER BY delict.delict_id DESC");
+            while (sq.Read())
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
+                int id = Convert.ToInt32(sq["delict_id"]);
+                int count = Convert.ToInt32(sq["firstname"]);
+                Delict d1 = new Delict();
+                d1.id = id;
+                d1.street = GetDelictCategory(id);
 
-                command.Connection = connection;
-                command.CommandText = "SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ORDER BY delict.delict_id DESC";
+                d1.createtime = (DateTime)sq["date"];
 
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        int id = Convert.ToInt32(dataReader["delict_id"]);
-                        int count = Convert.ToInt32(dataReader["firstname"]);
-                        Delict d1 = new Delict();
-                        d1.id = id;
-                        d1.street = GetDelictCategory(id);
-
-                        d1.createtime = (DateTime)dataReader["date"];
-
-                        d1.firstnamecount = count;
-                        delictenlist.Add(d1);
-                    }
-                }
-                foreach (var item in delictenlist)
-                {
-                    delictenlistCheck.Add(item);
-                }
-                ShowDelicts();
+                d1.firstnamecount = count;
+                delictenlist.Add(d1);
             }
+            cn.CloseConnection();
+
+            foreach (var item in delictenlist)
+            {
+                sortedDelictList.Add(item);
+            }
+            ShowDelicts();
         }
 
+        //Method to retrieve archived delicts.
         public void GetArchivedDelicts()
         {
-            delictenlistCheck.Clear();
+            sortedDelictList.Clear();
             delictenlist.Clear();
-            currPageIsActivated = false;
+            currPageIsActiveDelicts = false;
             mw.TopHeader.Text = "Wijkagent - Delicten archief lijst";
             DelictActivateBTN.Visibility = Visibility.Visible;
             DelictArchiveBTN.Visibility = Visibility.Hidden;
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-            using (DbConnection connection = factory.CreateConnection())
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("SELECT d.delict_id, u.badge_nr, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id DESC");
+            while (sq.Read())
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-
-                command.Connection = connection;
-                command.CommandText = "SELECT d.delict_id, u.badge_nr, d.description, a.date_added FROM dbo.archive as a JOIN dbo.delict as d ON a.delict_id = d.delict_id JOIN dbo.[User] as u ON a.user_id = u.user_id WHERE d.status = 0 ORDER BY a.delict_id DESC";
-
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        int id = Convert.ToInt32(dataReader["delict_id"]);
-                        Delict d1 = new Delict();
-                        d1.id = id;
-                        d1.street = GetDelictCategory(id);
-                        d1.changedBy = Convert.ToInt32(dataReader["badge_nr"]);
-                        d1.addedDate = (DateTime)dataReader["date_added"];
-                        delictenlist.Add(d1);
-                    }
-                }
-                foreach (var item in delictenlist)
-                {
-                    delictenlistCheck.Add(item);
-                }
-                ShowDelicts();
+                int id = Convert.ToInt32(sq["delict_id"]);
+                Delict d1 = new Delict();
+                d1.id = id;
+                d1.street = GetDelictCategory(id);
+                d1.changedBy = Convert.ToInt32(sq["badge_nr"]);
+                d1.addedDate = (DateTime)sq["date_added"];
+                delictenlist.Add(d1);
             }
+            cn.CloseConnection();
+
+            foreach (var item in delictenlist)
+            {
+                sortedDelictList.Add(item);
+            }
+            ShowDelicts();
         }
 
-
+        //Method to show delicts that are retrieved in the table.
         public void ShowDelicts()
         {
             Delicten.Items.Clear();
-            DelictCountLabel.Content = "Resultaten: " + delictenlistCheck.Count();
+            DelictCountLabel.Content = "Resultaten: " + sortedDelictList.Count();
             int counter = pageCounter * 10;
-            decimal delictCount = delictenlistCheck.Count();
+            decimal delictCount = sortedDelictList.Count();
             for (int i = counter - 10; i < counter; i++)
             {
-                if (delictenlistCheck.ElementAtOrDefault(i) != null)
+                if (sortedDelictList.ElementAtOrDefault(i) != null)
                 {
-                    Delicten.Items.Add(delictenlistCheck[i]);
+                    Delicten.Items.Add(sortedDelictList[i]);
                 }
             }
 
-            if(pageCounter == 1)
+            if (pageCounter == 1)
             {
                 PreviousButton.IsEnabled = false;
             }
@@ -180,100 +176,85 @@ namespace WijkAgent2.Pages.delicten
             {
                 PreviousButton.IsEnabled = true;
             }
-            if (pageCounter >= Math.Ceiling(delictCount / delictsPerPage)){
+            if (pageCounter >= Math.Ceiling(delictCount / delictsPerPage))
+            {
                 NextButton.IsEnabled = false;
             }
             else
             {
                 NextButton.IsEnabled = true;
             }
-            PageLabel.Content = "Pagina: " + pageCounter + " / " + Math.Ceiling(delictenlistCheck.Count() / delictsPerPage);
-            if(delictCount == 0)
+            PageLabel.Content = "Pagina: " + pageCounter + " / " + Math.Ceiling(sortedDelictList.Count() / delictsPerPage);
+            if (delictCount == 0)
             {
                 mw.ShowMessage("Geen delicten gevonden");
             }
         }
 
+        //Method to view the next 10 (Depends on amount of delicts per page) delicts if possible.
         private void NextDelictsPage(object sender, RoutedEventArgs e) //next
         {
             pageCounter++;
             ShowDelicts();
         }
 
+        //Method to view the previous 10 (Depends on amount of delicts per page) delicts if possible.
         private void PreviousDelictsPage(object sender, RoutedEventArgs e) //previous
         {
             pageCounter--;
             ShowDelicts();
         }
 
+        //Method to get categories connected to delicts.
         private string GetDelictCategory(int delictID)
         {
             string returnString = "";
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-            using (DbConnection connection = factory.CreateConnection())
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("SELECT name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID);
+            while (sq.Read())
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-
-                command.Connection = connection;
-                command.CommandText = "SELECT name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + delictID;
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        returnString += dataReader["name"];
-                        returnString += ", ";
-                    }
-                }
-                if (returnString.Length > 2)
-                {
-                    return returnString.Substring(0, returnString.Length - 2);
-                }
-                return returnString;
+                returnString += sq["name"];
+                returnString += ", ";
             }
+            cn.CloseConnection();
+
+            if (returnString.Length > 2)
+            {
+                return returnString.Substring(0, returnString.Length - 2);
+            }
+            return returnString;
         }
 
+        //Method to view a certain delict.
         private void ViewDelict(object sender, RoutedEventArgs e)
         {
             var DelictID = (int)((System.Windows.Controls.Button)sender).Tag;
-            mw.ShowDelict(DelictID,1);
+            mw.ShowDelict(DelictID, 1);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        //Method to go back to homescreen.
+        private void Back_Button(object sender, RoutedEventArgs e)
         {
             mw.LoadHomeScreen();
         }
+
+        //Method to retrieve persons connected to the selected delict.
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
             var iddelict = Delicten.SelectedItem as Delict;
             if (iddelict != null)
             {
-                DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-                using (DbConnection connection = factory.CreateConnection())
+                cn.OpenConection();
+                SqlDataReader sq = cn.DataReader("SELECT firstname, lastname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id);
+                personnames.Items.Clear();
+                while (sq.Read())
                 {
-                    connection.ConnectionString = connectionstring;
-                    connection.Open();
-                    DbCommand command = factory.CreateCommand();
-                    command.Connection = connection;
-                    command.CommandText = "SELECT firstname, lastname FROM dbo.person JOIN dbo.delict_person ON person.person_id = delict_person.person_id WHERE delict_person.delict_id =" + iddelict.id;
-                    personnames.Items.Clear();
-                    using (DbDataReader dataReader = command.ExecuteReader())
-                    {
-                        while (dataReader.Read())
-                        {
-                            personnames.Items.Add(dataReader["firstname"] + " " + dataReader["lastname"]);
-                        }
-                    }
+                    personnames.Items.Add(sq["firstname"] + " " + sq["lastname"]);
                 }
+                cn.CloseConnection();
             }
         }
+
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Right && NextButton.IsEnabled == true)
@@ -286,67 +267,14 @@ namespace WijkAgent2.Pages.delicten
                 PreviousDelictsPage(sender, e);
             }
         }
+
+        //Method to open the AddDelict screen.
         private void AddDelict_Click(object sender, RoutedEventArgs e)
         {
             mw.AddDelict();
         }
 
-        // ---- Combobox ---- //
-        private void BindCategroryDropDown()
-        {
-            categoryCB.ItemsSource = categoryList;
-        }
-
-        private void category_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!categoryCB.IsDropDownOpen)
-            {
-                categoryCB.IsDropDownOpen = true;
-            }
-            var t = categoryCB.SelectedIndex;
-            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
-        }
-
-        private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
-        {
-            BindListBOX();
-        }
-
-        private void BindListBOX()
-        {
-            testListbox.Items.Clear();
-            delictenlistCheck.Clear();
-            foreach (var category in categoryList)
-            {
-                if (category.Check_Status == true)
-                {
-                    testListbox.Items.Add(category.Category_Name);
-                    categoryCB.Text = "";
-                    foreach(var item in delictenlist)
-                    {
-                        bool alreadyExists = delictenlistCheck.Any(x => x.id == item.id);
-                        if (item.street.Contains(category.Category_Name) && !alreadyExists)
-                        {
-                            delictenlistCheck.Add(item);
-                        }
-                    }
-                }
-            }
-            if (testListbox.Items.Count == 0)
-            {
-                foreach (var item in delictenlist)
-                {
-                    delictenlistCheck.Add(item);
-                }
-            }
-
-            ShowDelicts();
-        }
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            categoryCB.SelectedIndex = -1;
-        }
-
+        //Method to archive archived delicts. Button is shown in the "Actie" column in the table.
         private void Archiveren(object sender, RoutedEventArgs e)
         {
             MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict archiveren?", "Archiveren", MessageBoxButton.YesNo);
@@ -397,7 +325,7 @@ namespace WijkAgent2.Pages.delicten
                     }
                 }
                 var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
-                delictenlistCheck.RemoveAt(currentRowIndex);
+                sortedDelictList.RemoveAt(currentRowIndex);
                 mw.ShowMessage("Delict succesvol gearchiveerd.");
                 ShowDelicts();
             }
@@ -407,6 +335,7 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
+        //Method to activate archived delicts. Button is shown in the "Actie" column in the table.
         private void Activate(object sender, RoutedEventArgs e)
         {
             MessageBoxResult dialogResult = MessageBox.Show("Wilt u dit delict activeren?", "Activeren", MessageBoxButton.YesNo);
@@ -429,7 +358,6 @@ namespace WijkAgent2.Pages.delicten
                     string archive = "UPDATE delict " +
                                      "SET status = 1 " +
                                      "WHERE delict_id = @delictID";
-                    //TODO add use id 
                     string toActivate = "DELETE FROM dbo.archive " +
                                          "WHERE delict_id = @delictID";
                     using (SqlConnection cnn = new SqlConnection(connectionstring))
@@ -452,9 +380,6 @@ namespace WijkAgent2.Pages.delicten
 
 
                             }
-                            //Delicten_archief.
-
-
                         }
                         catch (Exception ex)
                         {
@@ -463,7 +388,7 @@ namespace WijkAgent2.Pages.delicten
                     }
                 }
                 var currentRowIndex = Delicten.Items.IndexOf(Delicten.CurrentItem);
-                delictenlistCheck.RemoveAt(currentRowIndex);
+                sortedDelictList.RemoveAt(currentRowIndex);
                 mw.ShowMessage("Delict succesvol geactiveerd.");
                 ShowDelicts();
             }
@@ -472,6 +397,8 @@ namespace WijkAgent2.Pages.delicten
                 //do something else
             }
         }
+
+        //Method to uncheck all categories previously checked for filtering. (Gets fired when swapping to and from archived and active delict list)
         public void UncheckAllCategories()
         {
             foreach (var item in categoryList)
@@ -479,12 +406,14 @@ namespace WijkAgent2.Pages.delicten
                 item.Check_Status = false;
             }
             categoryCB.ItemsSource = emptylist;
-            testListbox.Items.Clear();
-            delictenlistCheck.Clear();
+            categorieListBox.Items.Clear();
+            sortedDelictList.Clear();
             BindCategroryDropDown();
             BindListBOX();
             ShowDelicts();
         }
+
+        //Method for custom sorting the table wich the delicts are placed in.
         private void CustomSort(object sender, DataGridSortingEventArgs e)
         {
             e.Handled = true;
@@ -492,37 +421,39 @@ namespace WijkAgent2.Pages.delicten
             {
                 if (sortID)
                 {
-                    delictenlistCheck = delictenlistCheck.OrderBy(o => o.id).ToList();
+                    sortedDelictList = sortedDelictList.OrderBy(o => o.id).ToList();
                     sortDate = false;
                     sortID = false;
                 }
                 else
                 {
-                    delictenlistCheck = delictenlistCheck.OrderByDescending(o => o.id).ToList();
+                    sortedDelictList = sortedDelictList.OrderByDescending(o => o.id).ToList();
                     sortDate = false;
                     sortID = true;
                 }
             }
-            if(e.Column.Header.ToString() == "Aanmaakdatum")
+            if (e.Column.Header.ToString() == "Aanmaakdatum")
             {
                 if (sortDate)
                 {
-                    delictenlistCheck = delictenlistCheck.OrderBy(o => o.createtime).ToList();
+                    sortedDelictList = sortedDelictList.OrderBy(o => o.createtime).ToList();
                     sortID = false;
                     sortDate = false;
                 }
                 else
                 {
-                    delictenlistCheck = delictenlistCheck.OrderByDescending(o => o.createtime).ToList();
+                    sortedDelictList = sortedDelictList.OrderByDescending(o => o.createtime).ToList();
                     sortID = false;
                     sortDate = true;
                 }
             }
             ShowDelicts();
         }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+
+        //Method to swap between active and archived delicts.
+        private void SwapDelictList(object sender, RoutedEventArgs e)
         {
-            if(currPageIsActivated == true)
+            if (currPageIsActiveDelicts == true)
             {
                 ActivelistCreatedtime.Visibility = Visibility.Hidden;
                 ActivelistFirstnamecount.Visibility = Visibility.Hidden;
@@ -535,17 +466,17 @@ namespace WijkAgent2.Pages.delicten
                 EndDateDP.SelectedDate = null;
                 DateCB.IsChecked = false;
 
-                delictenlistCheck.Clear();
+                sortedDelictList.Clear();
                 foreach (var item in delictenlist)
                 {
-                    delictenlistCheck.Add(item);
+                    sortedDelictList.Add(item);
                 }
                 DateCB_Click(sender, e);
                 DateCB.IsEnabled = false;
                 ResetFilterBTN.IsEnabled = false;
                 return;
             }
-            if(currPageIsActivated == false)
+            if (currPageIsActiveDelicts == false)
             {
                 ActivelistCreatedtime.Visibility = Visibility.Visible;
                 ActivelistFirstnamecount.Visibility = Visibility.Visible;
@@ -558,10 +489,10 @@ namespace WijkAgent2.Pages.delicten
                 EndDateDP.SelectedDate = null;
                 DateCB.IsChecked = false;
 
-                delictenlistCheck.Clear();
+                sortedDelictList.Clear();
                 foreach (var item in delictenlist)
                 {
-                    delictenlistCheck.Add(item);
+                    sortedDelictList.Add(item);
                 }
                 DateCB_Click(sender, e);
                 DateCB.IsEnabled = false;
@@ -570,18 +501,17 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
+        //Method to only filter on the first selected date.
         private void DateCB_Click(object sender, RoutedEventArgs e)
         {
             if (DateCB.IsChecked == true)
             {
                 EndDateDP.IsEnabled = false;
                 EndDateChanged(sender, e);
-                if(StartDateDP.SelectedDate == null && EndDateDP.SelectedDate == null)
+                if (StartDateDP.SelectedDate == null && EndDateDP.SelectedDate == null)
                 {
                     ResetFilterBTN.IsEnabled = false;
                 }
-/*                EndDateDP.SelectedDate = null;
-                StartDateDP.DisplayDateEnd = EndDateDP.SelectedDate;*/
             }
             else
             {
@@ -591,19 +521,19 @@ namespace WijkAgent2.Pages.delicten
                 {
                     ResetFilterBTN.IsEnabled = false;
                 }
-                /*                EndDateDP.SelectedDate = null;
-                                StartDateDP.DisplayDateEnd = EndDateDP.SelectedDate;*/
             }
         }
 
+        //Method to make sure the user cant selected certain dates the user shouldn't be able to select.
+        // EXAMPLE: Start date : 1-1-2020 with End date : 12-12-2019   <-- Cant happen
         private void StartDateChanged(object sender, RoutedEventArgs e)
         {
             DateCB.IsEnabled = true;
             ResetFilterBTN.IsEnabled = true;
-            delictenlistCheck.Clear();
+            sortedDelictList.Clear();
             foreach (var item in delictenlist)
             {
-                delictenlistCheck.Add(item);
+                sortedDelictList.Add(item);
             }
             if (DateCB.IsChecked == true)
             {
@@ -611,7 +541,7 @@ namespace WijkAgent2.Pages.delicten
                 {
                     if (item.createtime != StartDateDP.SelectedDate)
                     {
-                        delictenlistCheck.Remove(item);
+                        sortedDelictList.Remove(item);
                     }
                 }
             }
@@ -621,15 +551,15 @@ namespace WijkAgent2.Pages.delicten
                 {
                     if (item.createtime < StartDateDP.SelectedDate)
                     {
-                        delictenlistCheck.Remove(item);
+                        sortedDelictList.Remove(item);
                     }
-                    if(EndDateDP.SelectedDate != null)
+                    if (EndDateDP.SelectedDate != null)
                     {
                         foreach (var var in delictenlist)
                         {
                             if (var.createtime > EndDateDP.SelectedDate && DateCB.IsChecked == false)
                             {
-                                delictenlistCheck.Remove(var);
+                                sortedDelictList.Remove(var);
                             }
                         }
                     }
@@ -640,6 +570,8 @@ namespace WijkAgent2.Pages.delicten
             ShowDelicts();
         }
 
+        //Method to make sure the user cant selected certain dates the user shouldn't be able to select.
+        // EXAMPLE: Start date : 1-1-2020 with End date : 12-12-2019   <-- Cant happen
         private void EndDateChanged(object sender, RoutedEventArgs e)
         {
             ResetFilterBTN.IsEnabled = true;
@@ -647,27 +579,91 @@ namespace WijkAgent2.Pages.delicten
             {
                 if (item.createtime > EndDateDP.SelectedDate && DateCB.IsChecked == false)
                 {
-                    delictenlistCheck.Remove(item);
+                    sortedDelictList.Remove(item);
                 }
             }
             StartDateDP.DisplayDateEnd = EndDateDP.SelectedDate;
             StartDateChanged(sender, e);
         }
 
+        //Method to reset filters and show every delict in the list again.
         private void RemoveFilter_Click(object sender, RoutedEventArgs e)
         {
             StartDateDP.SelectedDate = null;
             EndDateDP.SelectedDate = null;
             DateCB.IsChecked = false;
 
-            delictenlistCheck.Clear();
+            sortedDelictList.Clear();
             foreach (var item in delictenlist)
             {
-                delictenlistCheck.Add(item);
+                sortedDelictList.Add(item);
             }
             DateCB_Click(sender, e);
             DateCB.IsEnabled = false;
             ResetFilterBTN.IsEnabled = false;
+        }
+
+        // ---- Combobox ---- //
+
+        //Method that gives the dropdown the right list containing all the categories.
+        private void BindCategroryDropDown()
+        {
+            categoryCB.ItemsSource = categoryList;
+        }
+
+        //Method that makes the user able to search for categories.
+        private void category_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!categoryCB.IsDropDownOpen)
+            {
+                categoryCB.IsDropDownOpen = true;
+            }
+            var t = categoryCB.SelectedIndex;
+            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
+        }
+
+        //Method that fires whenever a categories gets checked or unchecked
+        private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
+        {
+            BindListBOX();
+        }
+
+        //Shows selected categories in a list box and filters the table
+        private void BindListBOX()
+        {
+            categorieListBox.Items.Clear();
+            sortedDelictList.Clear();
+            foreach (var category in categoryList)
+            {
+                if (category.Check_Status == true)
+                {
+                    categorieListBox.Items.Add(category.Category_Name);
+                    categoryCB.Text = "";
+                    foreach (var item in delictenlist)
+                    {
+                        bool alreadyExists = sortedDelictList.Any(x => x.id == item.id);
+                        if (item.street.Contains(category.Category_Name) && !alreadyExists)
+                        {
+                            sortedDelictList.Add(item);
+                        }
+                    }
+                }
+            }
+            if (categorieListBox.Items.Count == 0)
+            {
+                foreach (var item in delictenlist)
+                {
+                    sortedDelictList.Add(item);
+                }
+            }
+
+            ShowDelicts();
+        }
+
+        //Method to fix a known combobox bug in WPF.
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            categoryCB.SelectedIndex = -1;
         }
     }
 }

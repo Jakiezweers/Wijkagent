@@ -17,6 +17,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <TextBlock x:Name="Link" Visibility="Hidden" />
             <TextBox Background="Transparent"
                      Name="User" VerticalAlignment="Top" x:FieldModifier="public" HorizontalAlignment="Left"
                      BorderThickness="0"
@@ -45,7 +46,7 @@
                      Foreground="White"
                      IsReadOnly="True"
                      TextWrapping="Wrap" />
-            <Button x:Name="BtnShowTweet" x:FieldModifier="public" Content="Inzien" Grid.Row="1" Grid.Column="2" Width="100" MaxHeight="50" />
+            <Button x:Name="BtnShowTweet" x:FieldModifier="public" Content="Inzien" Grid.Row="1" Grid.Column="2" Width="100" MaxHeight="50" Click="BtnShowTweet_Click" />
         </Grid>
     </Border>
 </UserControl>
