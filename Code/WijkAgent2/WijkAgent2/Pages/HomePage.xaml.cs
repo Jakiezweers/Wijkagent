@@ -221,7 +221,6 @@ namespace WijkAgent2.Pages
                         double xcoor = double.Parse(sq["long"].ToString());
                         double ycoor = double.Parse(sq["lat"].ToString());
                         LoadMap(xcoor, ycoor);
-
                     }
                     cn.CloseConnection();
 
