@@ -267,7 +267,7 @@ namespace WijkAgent2.Pages.permissions
             }
         }
 
-        
+
 
         private void Button_ClickR(object sender, RoutedEventArgs e)
         {
@@ -279,15 +279,5 @@ namespace WijkAgent2.Pages.permissions
             mw.ShowDialog("rol is toegevoegd");
 
         }
-        private void Button_ClickP(object sender, RoutedEventArgs e)
-        {
-
-            Connection CN = new Connection();
-            CN.OpenConection();
-            CN.ExecuteQueries("INSERT INTO [Wijkagent].[dbo].[permission] (name, act) values ('" + permissiebox.Text + "', '" + permissiebox.Text + "');");
-            CN.CloseConnection();
-            permissiebox.Clear();
-            mw.ShowDialog("permissie is toegevoegd");
-        }    
     }
 }
