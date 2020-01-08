@@ -32,7 +32,7 @@ namespace WijkAgent2.Pages.delicten
     public partial class add_delict : Page
     {
         List<CategoryList> categoryList = new List<CategoryList>();
-        List<int> personsbsn = new List<int>();
+        public List<int> personsbsn = new List<int>();
         List<string> personstype = new List<string>();
         List<int> person_id = new List<int>();
         LocatorTask _geocoder;
@@ -309,11 +309,7 @@ namespace WijkAgent2.Pages.delicten
 
         private void SendDelictToDatabase(string date, string placeName, int homeNumberNumber, string homeNumberLetters, string zipCode, string street, string description, double longCoord, double latCoord)
         {
-            cn.OpenConection();
-
             string sqlDelictInsert = "insert into dbo.delict (date, place, housenumber,housenumberAddition, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.delict_id values(@first,@second,@third,@thirdAddition,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
-            string sqlPersonInsert = "insert into dbo.delict_person (delict_id, person_id, type) values (@delictID, @person_id, @type)";
-            string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
 
             int id = 0;
             int status = state;
@@ -326,63 +322,88 @@ namespace WijkAgent2.Pages.delicten
             {
                 status = 1;
             }
-
-            using (SqlCommand cmd = new SqlCommand(sqlDelictInsert))
+            using(SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["connectionString"]))
             {
-                cmd.Connection = cn.GetConnection();
-                cmd.Parameters.Add("@first", SqlDbType.DateTime).Value = date;
-                cmd.Parameters.Add("@second", SqlDbType.NVarChar).Value = placeName;
-                cmd.Parameters.Add("@third", SqlDbType.Int).Value = homeNumberNumber;
-                cmd.Parameters.Add("@thirdAddition", SqlDbType.NVarChar).Value = homeNumberLetters;
-                cmd.Parameters.Add("@fourth", SqlDbType.NVarChar).Value = zipCode;
-                cmd.Parameters.Add("@fifth", SqlDbType.NVarChar).Value = street;
-                cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
-                cmd.Parameters.Add("@seventh", SqlDbType.Float).Value = longCoord;
-                cmd.Parameters.Add("@eight", SqlDbType.Float).Value = latCoord;
-                cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = status;
+                connection.Open();
+                SqlCommand command = connection.CreateCommand();
+                SqlTransaction transaction;
 
-                id = (int)cmd.ExecuteScalar();
-            }
+                transaction = connection.BeginTransaction("Delict Creation Transaction");
 
-            if (personsbsn != null)
-            {
-                //insert personen in database
-                foreach (var item in person_id)
+                command.Connection = connection;
+                command.Transaction = transaction;
+
+                try
                 {
-                    using (SqlCommand cmd = new SqlCommand(sqlPersonInsert))
+                    command.CommandText = "insert into dbo.delict (date, place, housenumber,housenumberAddition, zipcode, street, description, long, lat, status, added_date) OUTPUT INSERTED.delict_id values(@first,@second,@third,@thirdAddition,@fourth,@fifth,@sixth,@seventh,@eight,@ninth,GETDATE())";
+                    command.Parameters.Add("@first", SqlDbType.DateTime).Value = date;
+                    command.Parameters.Add("@second", SqlDbType.NVarChar).Value = placeName;
+                    command.Parameters.Add("@third", SqlDbType.Int).Value = homeNumberNumber;
+                    command.Parameters.Add("@thirdAddition", SqlDbType.NVarChar).Value = homeNumberLetters;
+                    command.Parameters.Add("@fourth", SqlDbType.NVarChar).Value = zipCode;
+                    command.Parameters.Add("@fifth", SqlDbType.NVarChar).Value = street;
+                    command.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
+                    command.Parameters.Add("@seventh", SqlDbType.Float).Value = longCoord;
+                    command.Parameters.Add("@eight", SqlDbType.Float).Value = latCoord;
+                    command.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = status;
+
+                    id = (int)command.ExecuteScalar();
+
+                    if (personsbsn != null)
                     {
-                        cmd.Connection = cn.GetConnection();
-                        cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
-                        cmd.Parameters.Add("@person_id", SqlDbType.NVarChar).Value = person_id[i];
-                        cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
-                        cmd.ExecuteNonQuery();
-                        i++;
+                        foreach (var item in person_id)
+                        {
+                            command.Parameters.Clear();
+                            command.CommandText = "insert into dbo.delict_person (delict_id, person_id, type) values (@delictIDPerson, @person_id, @type)";
+                            command.Parameters.Add("@delictIDPerson", SqlDbType.NVarChar).Value = id;
+                            command.Parameters.Add("@person_id", SqlDbType.NVarChar).Value = person_id[i];
+                            command.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
+                            command.ExecuteNonQuery();
+                            i++;
+                        }
                     }
 
-                }
-            }
-
-            //Insert delict met gekoppelde categorieen in de database.
-            foreach (var item in categoryList)
-            {
-                if (item.Check_Status == true)
-                {
-                    using (SqlCommand cmd = new SqlCommand(sqlCategoryInsert))
+                    foreach (var item in categoryList)
                     {
-                        cmd.Connection = cn.GetConnection();
-                        cmd.Parameters.Add("@delictID", SqlDbType.NVarChar).Value = id;
-                        cmd.Parameters.Add("@categoryID", SqlDbType.NVarChar).Value = item.Category_ID;
-                        cmd.ExecuteNonQuery();
+                        if (item.Check_Status == true)
+                        {
+                            command.Parameters.Clear();
+                            command.CommandText = "insert into dbo.category_delict (delict_id, category_id) values (@delictIDCat,@categoryID)";
+                            command.Parameters.Add("@delictIDCat", SqlDbType.NVarChar).Value = id;
+                            command.Parameters.Add("@categoryID", SqlDbType.NVarChar).Value = item.Category_ID;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    // Attempt to commit the transaction.
+                    transaction.Commit();
+                    Console.WriteLine("Both records are written to database.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Commit Exception Type: {0}", ex.GetType());
+                    Console.WriteLine("  Message: {0}", ex.Message);
+
+                    // Attempt to roll back the transaction.
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        // This catch block will handle any errors that may have occurred
+                        // on the server that would cause the rollback to fail, such as
+                        // a closed connection.
+                        Console.WriteLine("Rollback Exception Type: {0}", ex2.GetType());
+                        Console.WriteLine("  Message: {0}", ex2.Message);
                     }
                 }
             }
-
             Dispatcher.BeginInvoke((Action)(() =>
             {
                 mw.ShowMessage("Delict toegevoegd");
                 mw.LoadHomeScreen();
             }));
-
+            cn.CloseConnection();
         }
 
         private bool CheckCategorie()
