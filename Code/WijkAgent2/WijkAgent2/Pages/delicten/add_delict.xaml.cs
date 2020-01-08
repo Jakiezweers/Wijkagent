@@ -38,6 +38,9 @@ namespace WijkAgent2.Pages.delicten
         LocatorTask _geocoder;
         double longCoord = 0.0000;
         double latCoord = 0.0000;
+        int state;
+        double longt = 0.0000;
+        double latt = 0.0000;
         string errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
         bool errorBool = false;
         Uri _serviceUri = new Uri("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
@@ -64,7 +67,40 @@ namespace WijkAgent2.Pages.delicten
             }
             cn.CloseConnection();
         }
+        public add_delict(MainWindow MW, double lon, double lat)
+        {
+            this.mw = MW;
+            InitializeComponent();
+            categoryList = new List<CategoryList>();
+            BindCategroryDropDown();
+            DatumTB.SelectedDate = DateTime.Today;
+            AddNewPerson addperson = new AddNewPerson(mw);
+            AddPersonButton.Click += (sender, EventArgs) => { AddPerson_Click(sender, EventArgs, addperson); };
 
+            cn.OpenConection();
+            SqlDataReader sq = cn.DataReader("Select * from dbo.category");
+            while (sq.Read())
+            {
+                CategoryList obj = new CategoryList((int)sq["category_id"], (string)(sq["name"]));
+                categoryList.Add(obj);
+            }
+            cn.CloseConnection();
+            longt = lon;
+            latt = lat;
+
+            state = 3;
+            if (state == 3)
+            {
+                HuisnummerTB.Visibility = Visibility.Collapsed;
+                StraatTB.Visibility = Visibility.Collapsed;
+                PostcodeTB.Visibility = Visibility.Collapsed;
+                HuisnummerLB.Visibility = Visibility.Collapsed;
+                StraatLB.Visibility = Visibility.Collapsed;
+                PostcodeLB.Visibility = Visibility.Collapsed;
+                PlaatsLB.Visibility = Visibility.Collapsed;
+                PlaatsTB.Visibility = Visibility.Collapsed;
+            }
+        }
         private void BindCategroryDropDown()
         {
             categoryCB.ItemsSource = categoryList;
@@ -109,6 +145,7 @@ namespace WijkAgent2.Pages.delicten
             string description = "";
             string date = "";
             string checkCoord = "";
+            int status = state;
             await Dispatcher.BeginInvoke((Action)(() =>
             {
                 placeName = PlaatsTB.Text;
@@ -118,12 +155,23 @@ namespace WijkAgent2.Pages.delicten
                 description = OmschijvingTB.Text;
                 date = DatumTB.Text;
                 checkCoord = street + ' ' + homeNumber + ' ' + placeName;
-              }));
+
+            }));
 
             StringBuilder homeNumbernum =
                   new StringBuilder();
             StringBuilder homeNumberLet =
                      new StringBuilder();
+
+            if (status == 3)
+            {
+
+                placeName = "nvt";
+                zipCode = "nvt";
+                homeNumber = "0";
+                street = "nvt";
+
+            }
 
             for (int i = 0; i < homeNumber.Length; i++)
             {
@@ -161,27 +209,33 @@ namespace WijkAgent2.Pages.delicten
                 errorMessage += "Beschrijving, ";
                 errorBool = true;
             }
-            if (placeName == "")
+            if (state != 3)
             {
-                errorMessage += "Plaats, ";
-                errorBool = true;
+                if (placeName == "")
+                {
+                    errorMessage += "Plaats, ";
+                    errorBool = true;
+                }
+                if (zipCode == "" || zipCode.Length != 6 || zipCodeLet.Length != 2 || zipCodeNum.Length != 4)
+                {
+                    errorMessage += "Postcode, ";
+                    errorBool = true;
+                }
+                if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1)
+                {
+                    errorMessage += "Huisnummer, ";
+                    errorBool = true;
+                }
+                if (street == "")
+                {
+                    errorMessage += "Straat, ";
+                    errorBool = true;
+                }
             }
-            if (zipCode == "" || zipCode.Length != 6 || zipCodeLet.Length != 2 || zipCodeNum.Length != 4)
+            if (status != 3)
             {
-                errorMessage += "Postcode, ";
-                errorBool = true;
+                await SearchCoordAsync(checkCoord, zipCode.ToUpper());
             }
-            if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1)
-            {
-                errorMessage += "Huisnummer, ";
-                errorBool = true;
-            }
-            if (street == "")
-            {
-                errorMessage += "Straat, ";
-                errorBool = true;
-            }
-            await SearchCoordAsync(checkCoord, zipCode.ToUpper());
             if (errorBool) //Hieronder alles wat gedaan moet worden als er iets fout gaat.
             {
                 await Dispatcher.BeginInvoke((Action)(() =>
@@ -227,7 +281,6 @@ namespace WijkAgent2.Pages.delicten
                 string trimmed = ZIP.Replace(" ", string.Empty);
                 Console.WriteLine(trimmed);
 
-
                 if (zip != trimmed)
                 {
                     errorMessage += "Adres gegevens, ";
@@ -249,15 +302,6 @@ namespace WijkAgent2.Pages.delicten
         }
 
 
-        private void GetLat()
-        {
-
-        }
-        private void GetLong()
-        {
-
-        }
-
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             categoryCB.SelectedIndex = -1;
@@ -272,6 +316,16 @@ namespace WijkAgent2.Pages.delicten
             string sqlCategoryInsert = "insert into dbo.category_delict (delict_id, category_id) values (@delictID,@categoryID)";
 
             int id = 0;
+            int status = state;
+            if (status == 3)
+            {
+                longCoord = longt;
+                latCoord = latt;
+            }
+            else
+            {
+                status = 1;
+            }
 
             using (SqlCommand cmd = new SqlCommand(sqlDelictInsert))
             {
@@ -285,7 +339,7 @@ namespace WijkAgent2.Pages.delicten
                 cmd.Parameters.Add("@sixth", SqlDbType.NVarChar).Value = description;
                 cmd.Parameters.Add("@seventh", SqlDbType.Float).Value = longCoord;
                 cmd.Parameters.Add("@eight", SqlDbType.Float).Value = latCoord;
-                cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = 1;
+                cmd.Parameters.Add("@ninth", SqlDbType.NVarChar).Value = status;
 
                 id = (int)cmd.ExecuteScalar();
             }

@@ -103,6 +103,7 @@ namespace WijkAgent2.Pages.delicten
                             t.User.Text = tweet.CreatedBy.ScreenName;
                             t.Date.Text = tweet.CreatedAt.ToString("dd-MM-yyyy h:mm tt");
                             t.tweet_text.Text = tweet.FullText;
+                            t.Link.Text = tweet.Url;
                             List_Tweets.Children.Add(t);
                         }));
                     }
@@ -117,14 +118,22 @@ namespace WijkAgent2.Pages.delicten
             SqlDataReader sqc = cn.DataReader("SELECT * FROM dbo.delict WHERE delict_id = " + viewDelictID);
             while (sqc.Read())
             {
-                string status;
+                string status = "";
                 if ((int)sqc["status"] == 1)
                 {
                     status = "Actief";
                 }
-                else
+                else if ((int)sqc["status"] == 0)
                 {
                     status = "Inactief";
+                }
+                else if ((int)sqc["status"] == 3)
+                {
+                    DelictZipcodeLabel.Visibility = Visibility.Collapsed;
+                    DelictHouseNumberLabel.Visibility = Visibility.Collapsed;
+                    DelictStreetLabel.Visibility = Visibility.Collapsed;
+                    DelictPlaceLabel.Visibility = Visibility.Collapsed;
+                    Status3LB.Visibility = Visibility.Visible;
                 }
 
                 DelictPlaceLabel.Content += ": " + sqc["place"];
@@ -139,8 +148,6 @@ namespace WijkAgent2.Pages.delicten
                 longitude = (double)sqc["long"];
                 latitutde = (double)sqc["lat"];
                 Date = (DateTime)sqc["date"];
-                Console.WriteLine(Date);
-
             }
 
             cn.CloseConnection();

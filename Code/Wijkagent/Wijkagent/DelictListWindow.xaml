@@ -5,30 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wijkagent"
         mc:Ignorable="d"
-        Title="Delicten Lijst" Height="450" Width="800">
-    <Grid Margin="10,0,-0.4,0">
-        <Grid HorizontalAlignment="Left" Height="400" Margin="0,10,0,0" VerticalAlignment="Top" Width="603">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="251*"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="1" HorizontalAlignment="Left" Margin="54,64,0,103" Width="527">
-                <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="231" VerticalAlignment="Top" Width="500"/>
-                <DataGrid HorizontalAlignment="Left" Height="233" VerticalAlignment="Top" Width="500">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Delict" Width="120"/>
-                        <DataGridTextColumn Header="Categorie" Width="120"/>
-                        <DataGridTextColumn Header="Status" Width="140" />
-                        <DataGridTextColumn Header="Archiveren" Width="120"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </Grid>
-        <Grid HorizontalAlignment="Left" Height="400" Margin="0,10,0,0" VerticalAlignment="Top" Width="50"/>
-        <Image Name="HomescreenButton" HorizontalAlignment="Left" Source="https://image.flaticon.com/icons/png/512/69/69524.png" Height="50" Margin="0,10,0,0" VerticalAlignment="Top" Width="50"/>
-        <Grid HorizontalAlignment="Left" Height="50" Margin="55,10,0,0" VerticalAlignment="Top" Width="548">
-            <Label Content="DELICTEN LIJST" FontSize="30" FontWeight="DemiBold" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="377" Height="50"/>
-        </Grid>
+        Title="DelictListWindow" Height="450" Width="800">
+    <Grid>
+        <DataGrid x:Name="Delicten" HorizontalAlignment="Left" Height="304" Margin="174,58,0,0" VerticalAlignment="Top" Width="454" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"  Width="150"/>
+                <DataGridTextColumn Header="Categorie" Binding="{Binding street}" Width="150"/>
+                <DataGridTextColumn Header="Aanmaakdatum" Binding="{Binding createtime}"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
 
+                        <DataTemplate>
+                            <Button Click="Activate" Tag="{Binding id}" >Activeren</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

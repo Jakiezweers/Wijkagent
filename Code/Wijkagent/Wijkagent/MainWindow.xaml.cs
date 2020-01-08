@@ -12,6 +12,7 @@ namespace Wijkagent
 
         public MainWindow()
         {
+<<<<<<< HEAD
             InitializeComponent();
             
         }
@@ -72,6 +73,13 @@ namespace Wijkagent
         {
             RegisterWindow register = new RegisterWindow();
             register.Show();
+=======
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+>>>>>>> cdd1651fb30f803bf92cb4f94727c36e78c5a78f
         }
         
     }

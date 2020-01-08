@@ -5,39 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wijkagent"
         mc:Ignorable="d"
-        Title="Wijkagent Login" Height="450" Width="820.4">
-    <Grid Margin="0,0,-0.4,0">
-        <Grid HorizontalAlignment="Left" Height="400" Margin="545,10,-0.2,0" VerticalAlignment="Top" Width="270">
-            <Grid HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="252">
-                <Label Content="Inloggen" FontSize="28" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Height="50" Width="145"/>
-            </Grid>
-            <Grid HorizontalAlignment="Left" Height="80" Margin="0,50,0,0" VerticalAlignment="Top" Width="260">
-                <Grid HorizontalAlignment="Left" Height="40" Margin="0,40,0,0" VerticalAlignment="Top" Width="252">
-                    <TextBox HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0"/>
-                </Grid>
-                <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
-                    <Label Content="Badge ID" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,-1" VerticalAlignment="Top" Height="26" Width="72"/>
-                </Grid>
-            </Grid>
-            <Grid HorizontalAlignment="Left" Height="80" Margin="0,130,0,0" VerticalAlignment="Top" Width="260">
-                <Grid HorizontalAlignment="Left" Height="40" Margin="0,40,0,0" VerticalAlignment="Top" Width="252">
-                    <TextBox HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Margin="10,0,0,0"/>
-                </Grid>
-                <Grid HorizontalAlignment="Left" Height="35" Margin="170,0,0,0" VerticalAlignment="Top" Width="82">
-                    <Label Content="Wachtwoord" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="25" Width="82"/>
-                </Grid>
-            </Grid>
-            <Grid HorizontalAlignment="Left" Height="173" Margin="10,215,0,0" VerticalAlignment="Top" Width="250">
-                <Grid HorizontalAlignment="Left" Height="50" Margin="111,0,0,0" VerticalAlignment="Top" Width="129">
-                    <Button Content="Log in" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="109" Height="40"/>
-                </Grid>
-            </Grid>
-        </Grid>
-        <Grid HorizontalAlignment="Left" Height="400" Margin="10,10,0,0" VerticalAlignment="Top" Width="530">
-            <Grid HorizontalAlignment="Left" Height="250" Margin="10,10,0,0" VerticalAlignment="Top" Width="250">
-                <Image HorizontalAlignment="Left" Source="https://images-cdn.9gag.com/photo/aE28jVx_460s.jpg" Height="250" VerticalAlignment="Top" Width="250"/>
-            </Grid>
-        </Grid>
-
+        Title="Window1" Height="450" Width="800">
+    <Grid>
+        
     </Grid>
 </Window>
