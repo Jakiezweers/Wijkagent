@@ -196,6 +196,43 @@ namespace WijkAgent2.Pages.permissions
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
+            List<int> checkedPermissionList = new List<int>();
+
+            foreach (Permission permission in LBPermissions.Items)
+            {
+                if (permission.Checked) {
+                    checkedPermissionList.Add(permission.Permission_id);
+                }
+            }
+
+            if (checkedPermissionList.Contains(2) && !checkedPermissionList.Contains(1))
+            {
+                MessageBoxResult dialogResult = MessageBox.Show("Weet u zeker dat delicten kunnen worden gewijzigd, zonder dat deze kunnen worden ingezien?", "Permissies", MessageBoxButton.YesNo);
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            if (checkedPermissionList.Contains(18) && !checkedPermissionList.Contains(14))
+            {
+                MessageBoxResult dialogResult = MessageBox.Show("Weet u zeker dat u gebruikers kunnen worden aangepast, zonder dat deze kunnen worden ingezien?", "Permissies", MessageBoxButton.YesNo);
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            if ((checkedPermissionList.Contains(4) || checkedPermissionList.Contains(5)) && !checkedPermissionList.Contains(16))
+            {
+                MessageBoxResult dialogResult = MessageBox.Show("Weet u zeker dat u delicten kan archiveren/activeren, zonder dat de lijst kan worden getoond?", "Permissies", MessageBoxButton.YesNo);
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
             string provider = ConfigurationManager.AppSettings["provider"];
             string connectionstring = ConfigurationManager.AppSettings["connectionString"];
 

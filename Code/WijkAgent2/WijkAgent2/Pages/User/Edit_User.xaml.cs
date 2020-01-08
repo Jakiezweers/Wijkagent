@@ -33,6 +33,7 @@ namespace WijkAgent2.Pages.User
         string FunctionName = null;
         string Image_Uploaded = "";
         bool NewPhoto = false;
+        string userRoleName;
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -101,6 +102,7 @@ namespace WijkAgent2.Pages.User
             PhoneNumberTB.Text += user.PhoneNumber;
             RoleCB.ItemsSource = RolesList;
             RoleCB.SelectedItem = user.Role.RoleName;
+            userRoleName = user.Role.RoleName;
             KazerneIdTB.Text += KazerneID;
             EenheidIdTB.Text += EenheidID;
             FunctieCB.ItemsSource = FunctieList;
@@ -114,6 +116,14 @@ namespace WijkAgent2.Pages.User
 
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
+            if (RoleCB.SelectedItem != "Admin" && userRoleName == "Admin") {
+                MessageBoxResult dialogResult = MessageBox.Show("Weet u zeker dat u de admin rol wil veranderen?", "Gebruiker", MessageBoxButton.YesNo);
+                if (dialogResult == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
             if (PhoneNumberTB.Text.Length > 10)
             {
                 PhoneNumberTB.BorderBrush = System.Windows.Media.Brushes.Red;
@@ -145,6 +155,7 @@ namespace WijkAgent2.Pages.User
             while (sq.Read()) 
             { 
                 rolid = (int)sq["rol_id"];
+                userRoleName = (string)sq["rol_name"];
                 Console.WriteLine((int)sq["rol_id"]);
             }
             cn.CloseConnection();
@@ -170,7 +181,6 @@ namespace WijkAgent2.Pages.User
                     " Where user_id = " + user.UserId);
             }
             cn.CloseConnection();
-
             Mw.UserView(user.UserId);
         }
 
