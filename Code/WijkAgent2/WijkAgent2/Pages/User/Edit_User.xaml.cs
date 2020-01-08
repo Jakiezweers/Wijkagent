@@ -27,7 +27,7 @@ namespace WijkAgent2.Pages.User
         List<string> FunctieList = new List<string>();
         Wijkagent2.Classes.User user = new Wijkagent2.Classes.User();
         Connection cn = new Connection();
-        int KazerneID = 0;
+        int kazerneID = 0;
         int EenheidID = 0;
         int Functionid = 0;
         string FunctionName = null;
@@ -67,7 +67,7 @@ namespace WijkAgent2.Pages.User
                 user.BadgeId = Convert.ToInt32(sq["badge_nr"]);
                 user.PhoneNumber = (string)sq["tel"];
                 user.ProfilePicture = new Uploads(Convert.ToInt32(sq["upload_id"]), (string)sq["upload_path"]);
-                KazerneID = (int)sq["kazerne_id"];
+                kazerneID = (int)sq["kazerne_id"];
                 EenheidID = (int)sq["eenheid_id"];
 
             }
@@ -103,7 +103,7 @@ namespace WijkAgent2.Pages.User
             RoleCB.ItemsSource = RolesList;
             RoleCB.SelectedItem = user.Role.RoleName;
             userRoleName = user.Role.RoleName;
-            KazerneIdTB.Text += KazerneID;
+            KazerneIdTB.Text += kazerneID;
             EenheidIdTB.Text += EenheidID;
             FunctieCB.ItemsSource = FunctieList;
             FunctieCB.SelectedItem = FunctionName;
