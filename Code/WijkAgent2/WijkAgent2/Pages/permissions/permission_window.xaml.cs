@@ -19,19 +19,17 @@ using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.permissions
 {
-    /// <summary>
-    /// Interaction logic for permission_window.xaml
-    /// </summary>
     public partial class permission_window : Page
     {
         private int role_id;
         public List<string> role = new List<string>();
         public List<int> role_idList = new List<int>();
-        List<int> PermissionList = new List<int>();
+        List<int> permissionList = new List<int>();
         List<int> usedPermissionList = new List<int>();
         List<int> unusedPermissionList = new List<int>();
 
         MainWindow mw;
+        // main constructor
         public permission_window(MainWindow MW)
         {
             this.mw = MW;
@@ -40,6 +38,7 @@ namespace WijkAgent2.Pages.permissions
 
             DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
 
+            //testing the current connection
             using (DbConnection connection = factory.CreateConnection())
             {
                 if (connection == null)
@@ -62,6 +61,7 @@ namespace WijkAgent2.Pages.permissions
 
                 command.Connection = connection;
 
+                //getting all the available roles from the database
                 command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[rol];";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
@@ -81,6 +81,8 @@ namespace WijkAgent2.Pages.permissions
         public string val;
         public object Sender;
         public SelectionChangedEventArgs E;
+
+        // when the selection of the combobox with the roles has been changed, update the permissions selection
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Sender = sender;
@@ -89,7 +91,7 @@ namespace WijkAgent2.Pages.permissions
             Console.WriteLine(e);
             val = comboBox.SelectedValue.ToString();
             LBPermissions.Items.Clear();
-            PermissionList.Clear();
+            permissionList.Clear();
             usedPermissionList.Clear();
             unusedPermissionList.Clear();
             string provider = ConfigurationManager.AppSettings["provider"];
@@ -97,6 +99,7 @@ namespace WijkAgent2.Pages.permissions
 
             DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
 
+            // testing the current connection
             using (DbConnection connection = factory.CreateConnection())
             {
                 if (connection == null)
@@ -117,6 +120,7 @@ namespace WijkAgent2.Pages.permissions
                     return;
                 }
 
+                // getting the current id of the selected role
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[rol] WHERE rol_name = '" + val + "';";
 
@@ -128,16 +132,18 @@ namespace WijkAgent2.Pages.permissions
                     }
                 }
 
+                // getting all the available permissions
                 command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[permission];";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
                 {
                     while (dataReader.Read())
                     {
-                        PermissionList.Add(Convert.ToInt32(dataReader["permission_id"]));
+                        permissionList.Add(Convert.ToInt32(dataReader["permission_id"]));
                     }
                 }
 
+                // getting all the permissions that were already bound to the selected role
                 command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[permission_rol] WHERE rol_id = " + role_id + ";";
 
                 using (DbDataReader dataReader = command.ExecuteReader())
@@ -148,7 +154,8 @@ namespace WijkAgent2.Pages.permissions
                     }
                 }
 
-                foreach (var item in PermissionList)
+                // getting all the permissions that were not bound to the selected role
+                foreach (var item in permissionList)
                 {
                     if (!usedPermissionList.Contains(item)) 
                     {
@@ -156,9 +163,10 @@ namespace WijkAgent2.Pages.permissions
                     }
                 }
 
+                // for every used permission
                 foreach (var item in usedPermissionList)
                 {
-                    //WHERE permission_id = " + item + "
+                    //selecting the link per item
                     command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[permission] WHERE permission_id = " + item + ";";
 
                     using (DbDataReader dataReader = command.ExecuteReader())
@@ -168,15 +176,15 @@ namespace WijkAgent2.Pages.permissions
                             bool Checked = true;
                             string name = Convert.ToString(dataReader["name"]);
                             Permission perm = new Permission(name, true, item);
-
+                            // adding the permission to the list of permissions in the xaml window
                             LBPermissions.Items.Add(perm);
                         }
                     }
                 }
 
+                // for every unused permission
                 foreach (var item in unusedPermissionList)
                 {
-                    //WHERE permission_id = " + item + "
                     command.CommandText = "SELECT * FROM [Wijkagent].[dbo].[permission] WHERE permission_id = " + item + ";";
 
                     using (DbDataReader dataReader = command.ExecuteReader())
@@ -194,11 +202,13 @@ namespace WijkAgent2.Pages.permissions
             }
         }
 
+        // saving the permissions
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            // a list for every checked permission
             List<int> checkedPermissionList = new List<int>();
 
+            // adding the checked permissions to the list
             foreach (Permission permission in LBPermissions.Items)
             {
                 if (permission.Checked) {
@@ -206,6 +216,7 @@ namespace WijkAgent2.Pages.permissions
                 }
             }
 
+            // several checks for the user if certain permissions are checked but others are not
             if (checkedPermissionList.Contains(2) && !checkedPermissionList.Contains(1))
             {
                 MessageBoxResult dialogResult = MessageBox.Show("Weet u zeker dat delicten kunnen worden gewijzigd, zonder dat deze kunnen worden ingezien?", "Permissies", MessageBoxButton.YesNo);
@@ -238,6 +249,7 @@ namespace WijkAgent2.Pages.permissions
 
             DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
 
+            //checking the current connection
             using (DbConnection connection = factory.CreateConnection())
             {
                 if (connection == null)
@@ -258,9 +270,9 @@ namespace WijkAgent2.Pages.permissions
                     return;
                 }
 
-
                 Connection CN = new Connection();
                 CN.OpenConection();
+                // deleting all the current links from the database
                 CN.ExecuteQueries("DELETE FROM [Wijkagent].[dbo].[permission_rol] where rol_id = " + role_id + ";");
                 CN.CloseConnection();
 
@@ -270,6 +282,7 @@ namespace WijkAgent2.Pages.permissions
                     {
 
                         CN.OpenConection();
+                        // inserting the new links into the database
                         CN.ExecuteQueries("INSERT INTO [Wijkagent].[dbo].[permission_rol](permission_id, rol_id)" +
                                 " VALUES (" + permission.Permission_id + "," + role_id + ");");
                         CN.CloseConnection();
@@ -279,6 +292,7 @@ namespace WijkAgent2.Pages.permissions
             }
         }
 
+        // the permission class
         public class Permission
         {
             public Permission(string name, bool checkedd, int id)
