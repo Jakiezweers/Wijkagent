@@ -479,6 +479,11 @@ namespace WijkAgent2.Pages
         {
 
             //check if zipcode is correctly filled in, make uppercase
+            if(ZIPfield.Text.Length != 6)
+            { 
+                mw.ShowDialog("Postcode verkeerd ingevoerd");
+                return;
+            }
             for (int i = 0; i < ZIPfield.Text.Length; i++)
             {
                 if (i < 4)
@@ -486,7 +491,7 @@ namespace WijkAgent2.Pages
                     char nummers = ZIPfield.Text[i];
                     bool result = Char.IsDigit(nummers);
 
-                    if (result == false)
+                    if (result == false || ZIPfield.Text[i].Equals(" "))
                     {
                         mw.ShowDialog("Postcode verkeerd ingevoerd");
                         return;
