@@ -158,7 +158,7 @@ namespace WijkAgent2
         //Show delicten list page
         public void ShowDelictenList(bool activeDelicts)
         {
-            MainFrame.Navigate(new delicten_list(this, activeDelicts));
+            MainFrame.Navigate(new DelictList(this, activeDelicts));
             TopHeader.Text = "Wijkagent - Delicten lijst";
         }
 
@@ -172,20 +172,20 @@ namespace WijkAgent2
         //Show delicten Archive page
         public void ShowDelictenArchive()
         {
-            MainFrame.Navigate(new delicten_list(this,false));
+            MainFrame.Navigate(new DelictList(this,false));
             TopHeader.Text = "Wijkagent - Delicten Archief";
         }
 
         //Show delict add page
         public void AddDelict()
         {
-            MainFrame.Navigate(new add_delict(this));
+            MainFrame.Navigate(new AddDelict(this));
             TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
         //Show delict add page with custom Long and Lat
         public void AddDelict(double lon, double lat)
         {
-            MainFrame.Navigate(new add_delict(this,lon,lat));
+            MainFrame.Navigate(new AddDelict(this,lon,lat));
             TopHeader.Text = "Wijkagent - Delict toevoegen";
         }
         //Show user information page.
@@ -208,14 +208,14 @@ namespace WijkAgent2
         //Show delict information page.
         public void ShowDelict(int delictID, int originalPage)
         {
-            MainFrame.Navigate(new view_delict(this,delictID,originalPage));
+            MainFrame.Navigate(new ViewDelict(this,delictID,originalPage));
             TopHeader.Text = "Wijkagent - Delict " + delictID;
         }
 
         //Show edit delict page.
         public void EditDelict(int delictID, int previousPage)
         {
-            MainFrame.Navigate(new edit_delict(this, delictID, previousPage));
+            MainFrame.Navigate(new EditDelict(this, delictID, previousPage));
         }
 
         //Show edit user page.

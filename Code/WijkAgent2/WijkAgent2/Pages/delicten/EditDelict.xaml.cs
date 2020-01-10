@@ -18,23 +18,28 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WijkAgent2.Classes;
+using WijkAgent2.Database;
 using WijkAgent2.Modals;
 
 namespace WijkAgent2.Pages.delicten
 {
     /// <summary>
-    /// Interaction logic for edit_delict.xaml
+    /// Interaction logic for EditDelict.xaml
     /// </summary>
-    public partial class edit_delict : Page
+    public partial class EditDelict : Page
     {
-        MainWindow mw;
-        int currDelictID;
-        List<CategoryList> categoryList = new List<CategoryList>();
-        List<int> personsbsn = new List<int>();
-        List<string> personstype = new List<string>();
-        List<int> person_id = new List<int>();
-        int returnPage;
-        public edit_delict(MainWindow MW, int delictID, int previousPage)
+        readonly MainWindow mw; //Required mainwindow
+
+        readonly int currDelictID; //Delict id of opened delict
+        readonly List<CategoryList> categoryList = new List<CategoryList>(); //List containing all categories.
+        List<int> personBSN = new List<int>(); //List containing the BSN number of a person
+        List<string> personType = new List<string>(); //List containing the type / categorie of a person (verdachte, slachtoffer etc...)
+        List<int> personID = new List<int>(); //List containing personID's connected to the delict.
+        readonly int returnPage; //Return page number for pathing.
+
+        private readonly Connection cn = new Connection();
+
+        public EditDelict(MainWindow MW, int delictID, int previousPage)
         {
             InitializeComponent();
             mw = MW;
@@ -43,134 +48,77 @@ namespace WijkAgent2.Pages.delicten
             returnPage = previousPage;
         }
 
+        //Loads all data connected to delicts (Delict itself, Categories connected to delict and persons connected to the delict.
         private void LoadDelict(int currDelictID)
         {
-            string provider = ConfigurationManager.AppSettings["provider"];
-            string connectionstring = ConfigurationManager.AppSettings["connectionString"];
-
-            DbProviderFactory factory = DbProviderFactories.GetFactory(provider);
-
-            using (DbConnection connection = factory.CreateConnection())
+            cn.OpenConection();
+            SqlDataReader sqDel = cn.DataReader("SELECT * FROM dbo.delict WHERE delict_id = " + currDelictID);
+            while (sqDel.Read())
             {
-                connection.ConnectionString = connectionstring;
-                connection.Open();
-                DbCommand command = factory.CreateCommand();
-
-                command.Connection = connection;
-                command.CommandText = "SELECT * FROM dbo.delict WHERE delict_id = " + currDelictID;
-
-                using (DbDataReader dataReader = command.ExecuteReader())
+                string status = "";
+                if ((int)sqDel["status"] == 1)
                 {
-                    while (dataReader.Read())
-                    {
-                        string status = "";
-                        if ((int)dataReader["status"] == 1)
-                        {
-                            status = "Actief";
-                        }
-                        else
-                        {
-                            status = "Inactief";
-                        }
-                        DelictPlaceLabel.Text = (string)dataReader["place"];
-                        DelictIDLabel.Content += ": " + currDelictID;
-                        DelictStreetLabel.Text = (string)dataReader["street"];
-                        DelictHouseNumberLabel.Text = "" + dataReader["housenumber"] + " " + dataReader["housenumberAddition"];
-                        DelictZipcodeLabel.Text = (string)dataReader["zipcode"];
-                        DelictStatusLabel.Content += ": " + status;
-                        DelictDescriptionTB.Text = (string)dataReader["description"];
-                        DelictDateLabel.Content += ": " + dataReader["added_date"];
-                    }
+                    status = "Actief";
                 }
-
-                command.CommandText = "Select * from dbo.category";
-
-                using (DbDataReader dataReader = command.ExecuteReader())
+                else
                 {
-                    while (dataReader.Read())
-                    {
-                        CategoryList obj = new CategoryList((int)dataReader["category_id"], (string)(dataReader["name"]));
-                        categoryList.Add(obj);
-                    }
+                    status = "Inactief";
                 }
-
-                command.CommandText = "SELECT category.category_id FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id =" + currDelictID;
-                using (DbDataReader dataReader = command.ExecuteReader())
+                DelictPlaceLabel.Text = (string)sqDel["place"];
+                DelictIDLabel.Content += ": " + currDelictID;
+                DelictStreetLabel.Text = (string)sqDel["street"];
+                DelictHouseNumberLabel.Text = "" + sqDel["housenumber"] + " " + sqDel["housenumberAddition"];
+                DelictZipcodeLabel.Text = (string)sqDel["zipcode"];
+                DelictStatusLabel.Content += ": " + status;
+                DelictDescriptionTB.Text = (string)sqDel["description"];
+                DelictDateLabel.Content += ": " + sqDel["added_date"];
+            }
+            cn.CloseConnection();
+            cn.OpenConection();
+            SqlDataReader sqCat = cn.DataReader("Select * from dbo.category");
+            while (sqCat.Read())
+            {
+                CategoryList obj = new CategoryList((int)sqCat["category_id"], (string)(sqCat["name"]));
+                categoryList.Add(obj);
+            }
+            cn.CloseConnection();
+            cn.OpenConection();
+            SqlDataReader sqCatActive = cn.DataReader("SELECT category.category_id FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id =" + currDelictID);
+            while (sqCatActive.Read())
+            {
+                foreach (var item in categoryList)
                 {
-                    while (dataReader.Read())
+                    if (item.Category_ID == (int)sqCatActive["category_id"])
                     {
-                        foreach (var item in categoryList)
-                        {
-                            if (item.Category_ID == (int)dataReader["category_id"])
-                            {
-                                item.Check_Status = true;
-                            }
-                        }
-                    }
-                }
-                BindCategoryDropDown();
-                BindListBOX();
-                command.CommandText = "SELECT dp.person_id, p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID;
-                using (DbDataReader dataReader = command.ExecuteReader())
-                {
-                    while (dataReader.Read())
-                    {
-                        person_id.Add((int)dataReader["person_id"]);
-                        personsbsn.Add((int)dataReader["bsn"]);
-                        personstype.Add((string)dataReader["type"]);
-                        RefreshPersonList();
+                        item.Check_Status = true;
                     }
                 }
             }
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            mw.ShowDelict(currDelictID,returnPage);
-        }
-        private void category_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!categoryCB.IsDropDownOpen)
-            {
-                categoryCB.IsDropDownOpen = true;
-            }
-            var t = categoryCB.SelectedIndex;
-            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
-        }
-        private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
-        {
+            cn.CloseConnection();
+            cn.OpenConection();
+
+            BindCategoryDropDown();
             BindListBOX();
-        }
-        private void BindListBOX()
-        {
-            CategoryListbox.Items.Clear();
-            foreach (var category in categoryList)
+
+            SqlDataReader sqPerson = cn.DataReader("SELECT dp.person_id, p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID);
+            while (sqPerson.Read())
             {
-                if (category.Check_Status == true)
-                {
-                    CategoryListbox.Items.Add(category.Category_Name);
-                    categoryCB.Text = "";
-                }
+                personID.Add((int)sqPerson["person_id"]);
+                personBSN.Add((int)sqPerson["bsn"]);
+                personType.Add((string)sqPerson["type"]);
+                RefreshPersonList();
             }
+            cn.CloseConnection();
         }
-        private bool CheckCategorie()
+
+
+        //Button click to go back.
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in categoryList)
-            {
-                if (item.Check_Status)
-                {
-                    return true;
-                }
-            }
-            return false;
+            mw.ShowDelict(currDelictID, returnPage);
         }
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            categoryCB.SelectedIndex = -1;
-        }
-        private void BindCategoryDropDown()
-        {
-            categoryCB.ItemsSource = categoryList;
-        }
+
+        //Method that fires on save, Checks all fields. If everything is allright it fires the UploadToDatabase method.
         private void SaveEditDelict_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult dialogResult = MessageBox.Show("Wil u dit delict wijzigen?", "Opslaan", MessageBoxButton.YesNo);
@@ -237,7 +185,7 @@ namespace WijkAgent2.Pages.delicten
                     errorMessage += "Postcode, ";
                     errorBool = true;
                 }
-                if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1 )
+                if (homeNumber.Length == 0 || homeNumbernum.Length == 0 || homeNumberLet.Length > 1)
                 {
                     errorMessage += "Huisnummer, ";
                     errorBool = true;
@@ -268,6 +216,7 @@ namespace WijkAgent2.Pages.delicten
             }
         }
 
+        //Method to update the rows in the database.
         private void UploadToDatabase(string placeName, int homeNumberNumber, string homeNumberLetters, string zipCode, string street, string description)
         {
             string provider = ConfigurationManager.AppSettings["provider"];
@@ -318,13 +267,13 @@ namespace WijkAgent2.Pages.delicten
                     }
 
                     string sqlPersonInsert = "insert into delict_person (delict_id, person_id, type) values (@delictID, @personID,@type)";
-                    for (int i = 0; i < person_id.Count; i++)
+                    for (int i = 0; i < personID.Count; i++)
                     {
                         using (SqlCommand cmd = new SqlCommand(sqlPersonInsert, cnn))
                         {
                             cmd.Parameters.Add("@delictID", SqlDbType.Int).Value = currDelictID;
-                            cmd.Parameters.Add("@personID", SqlDbType.Int).Value = person_id[i];
-                            cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personstype[i];
+                            cmd.Parameters.Add("@personID", SqlDbType.Int).Value = personID[i];
+                            cmd.Parameters.Add("@type", SqlDbType.NVarChar).Value = personType[i];
 
                             cmd.ExecuteNonQuery();
                         }
@@ -334,29 +283,79 @@ namespace WijkAgent2.Pages.delicten
                 {
                     MessageBox.Show("ERROROR?:!" + ex.Message);
                 }
-                mw.ShowDelict(currDelictID,returnPage);
+                mw.ShowDelict(currDelictID, returnPage);
                 mw.ShowMessage("Delict succesvol gewijzigd");
             }
         }
 
+        //Opens the AddNewPerson modal to edit persons connected to the current delict.
         private void AddPerson_Click(object sender, RoutedEventArgs e)
         {
-            AddNewPerson addperson = new AddNewPerson(mw, personstype, personsbsn, person_id);
+            AddNewPerson addperson = new AddNewPerson(mw, personType, personBSN, personID);
             addperson.RefreshData();
             addperson.ShowDialog();
-            personsbsn = addperson.bsnlist;
-            personstype = addperson.typelist;
-            person_id = addperson.person_idList;
+            personBSN = addperson.bsnlist;
+            personType = addperson.typelist;
+            personID = addperson.person_idList;
             RefreshPersonList();
         }
+
+        //Method to refresh the personlist.
         private void RefreshPersonList()
         {
             PersonenListbox.Items.Clear();
-            for (int i = 0; i < person_id.Count; i++)
+            for (int i = 0; i < personID.Count; i++)
             {
-                string text = personstype[i] + " - " + personsbsn[i];
+                string text = personType[i] + " - " + personBSN[i];
                 PersonenListbox.Items.Add(text);
             }
+        }
+
+        //---Combobox----//
+
+        private void Category_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!categoryCB.IsDropDownOpen)
+            {
+                categoryCB.IsDropDownOpen = true;
+            }
+            var t = categoryCB.SelectedIndex;
+            categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
+        }
+        private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
+        {
+            BindListBOX();
+        }
+        private void BindListBOX()
+        {
+            CategoryListbox.Items.Clear();
+            foreach (var category in categoryList)
+            {
+                if (category.Check_Status == true)
+                {
+                    CategoryListbox.Items.Add(category.Category_Name);
+                    categoryCB.Text = "";
+                }
+            }
+        }
+        private bool CheckCategorie()
+        {
+            foreach (var item in categoryList)
+            {
+                if (item.Check_Status)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            categoryCB.SelectedIndex = -1;
+        }
+        private void BindCategoryDropDown()
+        {
+            categoryCB.ItemsSource = categoryList;
         }
     }
 }
