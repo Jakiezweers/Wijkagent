@@ -11,11 +11,13 @@ namespace WijkAgent2.Classes
     public class PasswordHandler
     {
 
+        //Create a Password HASH
         public static string CreatePasswordHash(string pwd)
         {
             return CreatePasswordHash(pwd, CreateSalt());
         }
 
+        //Create a Password with custom SALT
         public static string CreatePasswordHash(string pwd, string salt)
         {
             string saltAndPwd = String.Concat(pwd, salt);
@@ -25,6 +27,7 @@ namespace WijkAgent2.Classes
             return hashedPwd;
         }
 
+        //Validate the password with a Hashed password
         public static bool Validate(string password, string passwordHash)
         {
             var saltPosition = 5;
@@ -34,6 +37,7 @@ namespace WijkAgent2.Classes
             return hashedPassword == passwordHash;
         }
 
+        //Create Salt
         private static string CreateSalt()
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
@@ -52,6 +56,7 @@ namespace WijkAgent2.Classes
             return salt.ToUpper();
         }
 
+        //Create a HASH
         private static string GetHashString(string password)
         {
             StringBuilder sb = new StringBuilder();
@@ -60,6 +65,7 @@ namespace WijkAgent2.Classes
             return sb.ToString();
         }
 
+        //Create HASH based on SHA384
         private static byte[] GetHash(string password)
         {
             SHA384 sha = new SHA384CryptoServiceProvider();

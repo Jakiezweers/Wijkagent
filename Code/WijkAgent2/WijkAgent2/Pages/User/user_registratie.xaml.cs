@@ -37,6 +37,7 @@ namespace WijkAgent2.Pages.User
             mw = MW;
             InitializeComponent();
 
+            //Create new connection
             cn = new Connection();
             cn.OpenConection();
 
@@ -77,9 +78,10 @@ namespace WijkAgent2.Pages.User
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
+            //Check if everything is correct filled in.
             if (Validate())
             {
-                //Image_Uploaded
+                //Save image to webserver and insert to database.
                 Int32 upload_id;
                 string SaveImage = "INSERT into [dbo].[uploads]" +
                     "(upload_path)" +
@@ -96,13 +98,14 @@ namespace WijkAgent2.Pages.User
                     cn.CloseConnection();
                 }
 
-
+                //SQL string for insert
                 string saveStaff = "INSERT into [dbo].[user]" +
                     "(rol_id,eenheid_id,functie_id,kazerne_id,upload_id,name,badge_nr,password,tel,status) " +
                     "VALUES (@rol_id,@eenheid_id,@functie_id,@kazerne_id,@upload_id,@name,@badge_nr,@password,@tel,@status)";
 
                 using (SqlCommand querySaveStaff = new SqlCommand(saveStaff))
                 {
+                    //Open connection
                     cn.OpenConection();
                     querySaveStaff.Connection = cn.GetConnection();
 
@@ -195,10 +198,13 @@ namespace WijkAgent2.Pages.User
         private bool Validate()
         {
             bool validated = true;
+
+            //Loop through all items on view
             foreach (Control ctrl in Regular.Children)
             {
                 if (ctrl is TextBox)
                 {
+                    //Check is TextBox is filled.
                     if (((TextBox)ctrl).Text.ToString().Trim().Equals(""))
                     {
                         ((TextBox)ctrl).BorderBrush = System.Windows.Media.Brushes.Red;
@@ -211,6 +217,7 @@ namespace WijkAgent2.Pages.User
                 }
                 if (ctrl is PasswordBox)
                 {
+                    //Check if password is filled
                     if (((PasswordBox)ctrl).Password.ToString().Trim().Equals(""))
                     {
                         ((PasswordBox)ctrl).BorderBrush = System.Windows.Media.Brushes.Red;
@@ -223,10 +230,12 @@ namespace WijkAgent2.Pages.User
                 }
             }
 
+            //Loopthrough all ComboBoxes
             foreach (Control ctrl in ComboUsers.Children)
             {
                 if (ctrl is ComboBox)
                 {
+                    //Check if a item is selected in combobox
                     if (((ComboBox)ctrl).SelectedIndex == -1)
                     {
                         ((ComboBox)ctrl).BorderBrush = System.Windows.Media.Brushes.Red;
@@ -238,12 +247,14 @@ namespace WijkAgent2.Pages.User
                     }
                 }
             }
+            //Show message if not all fields are filled in.
             if (!validated)
             {
                 mw.ShowDialog("Niet alle velden zijn ingevoerd");
             }
             else
             {
+                //Check if image is selected
                 if (Image_Uploaded.Equals(""))
                 {
                     mw.ShowDialog("Please selecteer een image");
@@ -252,6 +263,7 @@ namespace WijkAgent2.Pages.User
             }
             if (validated)
             {
+                //Check if the Badge NR already exists
                 cn.OpenConection();
                 SqlDataReader SDR = cn.DataReader("select * from[dbo].[User] where badge_nr = '" + TxtBadgeNr.Text.ToString().Trim() + "'");
                 if (SDR.HasRows)
@@ -261,11 +273,13 @@ namespace WijkAgent2.Pages.User
                 }
                 else
                 {
+                    //Check if the passwords are equal.
                     if (!TxtPassword.Password.ToString().Trim().Equals(TxtPasswordRepeat.Password.ToString().Trim())){
                         mw.ShowDialog("Wachtwoorden komen niet overeen");
                         validated = false;
                     }
                 }
+                //Close connection
                 cn.CloseConnection();
             }
             return validated;
