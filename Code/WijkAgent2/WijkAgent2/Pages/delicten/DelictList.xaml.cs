@@ -77,13 +77,17 @@ namespace WijkAgent2.Pages.delicten
             validator.logged_in_user_id = user_id;
             if (activeDelicts)
             {
+                DelictListSwapBTN.Visibility = Visibility.Hidden;
                 DelictActivateBTN.Visibility = Visibility.Hidden;
                 if (validator.validate("Delicten_Archiveren")) { DelictArchiveBTN.Visibility = Visibility.Visible; } else { DelictArchiveBTN.Visibility = Visibility.Hidden; }
+                if (validator.validate("list_archive")) { DelictListSwapBTN.Visibility = Visibility.Visible; } else { DelictListSwapBTN.Visibility = Visibility.Hidden; }
             }
-            else
+            else 
             {
                 DelictArchiveBTN.Visibility = Visibility.Hidden;
+               
                 if (validator.validate("Delicten_Activeren")) { DelictActivateBTN.Visibility = Visibility.Visible; } else { DelictActivateBTN.Visibility = Visibility.Hidden; }
+                
             }
             cn.CloseConnection();
         }
@@ -97,7 +101,7 @@ namespace WijkAgent2.Pages.delicten
             mw.TopHeader.Text = "Wijkagent - Delicten lijst";
             DelictArchiveBTN.Visibility = Visibility.Visible;
             DelictActivateBTN.Visibility = Visibility.Hidden;
-
+            
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ORDER BY delict.delict_id DESC");
             while (sq.Read())
