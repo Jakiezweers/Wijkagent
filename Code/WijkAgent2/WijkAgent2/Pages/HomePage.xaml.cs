@@ -263,12 +263,14 @@ namespace WijkAgent2.Pages
                     delictPerson.Content = persons;
 
                 } 
+                //Check if MapMarking state is true
             }else if (mapMarking == true)
             {
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
                 mapview.GraphicsOverlays.Add(overlay);
                 MessageBoxResult dialogResult = MessageBox.Show("Wilt u een delict aanmaken?", "Aanmaken map delict", MessageBoxButton.YesNo);
+                //Confirmation to record a crime
                 if (dialogResult == MessageBoxResult.Yes)
                 {
                     mw.AddDelict(lon, lat);
