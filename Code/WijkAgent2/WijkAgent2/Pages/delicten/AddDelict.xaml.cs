@@ -118,6 +118,7 @@ namespace WijkAgent2.Pages.delicten
         //Triggers the save delict statement on a seperate thread.
         private void SaveDelict_Click(object sender, RoutedEventArgs e)
         {
+            BtnDasveDelict.IsEnabled = false;
             Thread t = new Thread(Run_This);
             t.Start();
         }
@@ -232,6 +233,7 @@ namespace WijkAgent2.Pages.delicten
                     mw.ShowMessage(errorBoxText);
                     errorBool = false;
                     errorMessage = "De volgende velden zijn niet correct ingevoerd: ";
+                    BtnDasveDelict.IsEnabled = true;
                 }));
             }
             else //Fucntion will execute a SQL query to insert an delict

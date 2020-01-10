@@ -13,6 +13,7 @@
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
+        materialDesign:ColorZoneAssist.Mode="Dark"
         FontFamily="{StaticResource MaterialDesignFont}" Icon="favicon.ico"
         Width="1920"
         Height="1080"
@@ -33,7 +34,7 @@
             <!-- data template used for the dialogs example, defines a View for a ViewModel of type DateTime  -->
             <DataTemplate DataType="{x:Type system:DateTime}">
                 <StackPanel Margin="16">
-                    <TextBlock>England win the World Cup:</TextBlock>
+                    <TextBlock>Changed:</TextBlock>
                     <TextBlock Margin="0 8 0 0" Text="{Binding }" />
                     <TextBlock Margin="0 8 0 0" >You will never see that again.</TextBlock>
                     <Button  Margin="0 8 0 0" IsDefault="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Style="{DynamicResource MaterialDesignFlatButton}">AWESOME</Button>

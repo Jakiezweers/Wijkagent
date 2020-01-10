@@ -8,7 +8,7 @@
       Title="add_delict">
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Width="780" Height="538">
-        <Button TabIndex="9" FontSize="18" Content="Delict opslaan" Margin="0,432,18,0" VerticalAlignment="Top" Height="36" Click="SaveDelict_Click" HorizontalAlignment="Right" Width="176"/>
+        <Button TabIndex="9" FontSize="18" x:Name="BtnDasveDelict" Content="Delict opslaan" Margin="0,432,18,0" VerticalAlignment="Top" Height="36" Click="SaveDelict_Click" HorizontalAlignment="Right" Width="176"/>
         <Button FontSize="18" Content="Delict annuleren" Margin="0,491,18,0" VerticalAlignment="Top" Height="37" Click="CancelDelict_Click" HorizontalAlignment="Right" Width="176"/>
         <Button TabIndex="8" FontSize="18" Content="Personen toevoegen" Margin="0,308,18,0" VerticalAlignment="Top" Height="50" x:Name="AddPersonButton" HorizontalAlignment="Right" Width="253"/>
         <ComboBox TabIndex="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="ComboBox_SelectionChanged" FontSize="18" ScrollViewer.VerticalScrollBarVisibility="Visible" Height="35" TextBoxBase.TextChanged="Category_TextChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Name="categoryCB" IsEditable="True" IsTextSearchEnabled="True" StaysOpenOnEdit="True" Width="210" Margin="41,63,0,0">
