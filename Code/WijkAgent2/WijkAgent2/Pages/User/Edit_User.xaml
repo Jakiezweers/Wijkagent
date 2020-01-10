@@ -8,7 +8,7 @@
       Title="EditUser" Width="1041.619" d:DesignHeight="290.182">
 
     <Grid Margin="0,0,0,-41">
-        <Image MaxWidth="256" MaxHeight="256" x:Name="UserImage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="256" Width="256"/>
+        <Image MaxWidth="256" MaxHeight="256" x:Name="userImage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="256" Width="256"/>
         <Label FontSize="18" Content="Gebruikersnaam: " x:Name="UserName" HorizontalAlignment="Left" Margin="271,10,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="Badge Id: " x:Name="BadgeId" HorizontalAlignment="Left" Margin="271,78,0,0" VerticalAlignment="Top"/>
         <Label FontSize="18" Content="Rol: " x:Name="Role" HorizontalAlignment="Left" Margin="271,109,0,0" VerticalAlignment="Top"/>

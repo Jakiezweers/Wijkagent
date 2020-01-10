@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
+using WijkAgent2.Classes;
 using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.User
@@ -36,7 +37,12 @@ namespace WijkAgent2.Pages.User
             Thread thr = new Thread(get_data);
             thr.IsBackground = true;
             thr.Start();
+            
 
+            Validator validator = new Validator();
+            int user_id = mw.GetUserID();
+            validator.logged_in_user_id = user_id;
+            if (validator.validate("Gebruikers_Aanmaken")) { BtnAddUser.Visibility = Visibility.Visible; } else { BtnAddUser.Visibility = Visibility.Hidden; }
         }
 
         public void get_data()

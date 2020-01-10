@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wijkagent2.Classes;
+using WijkAgent2.Classes;
 using WijkAgent2.Database;
 
 namespace WijkAgent2.Pages.User
@@ -82,6 +83,12 @@ namespace WijkAgent2.Pages.User
             Function.Content += ": " + FunctionName;
             KazerneId.Content += ": " + KazerneID;
             EenheidId.Content += ": " + EenheidID;
+
+            Validator validator = new Validator();
+            MainWindow mw = MW;
+            int user_id = mw.GetUserID();
+            validator.logged_in_user_id = user_id;
+            if (validator.validate("Gebruikers_Aanpassen")) { BTNPasGebruikerAan.Visibility = Visibility.Visible; } else { BTNPasGebruikerAan.Visibility = Visibility.Hidden; }
         }
 
         private void EditDelict_Click(object sender, RoutedEventArgs e)
