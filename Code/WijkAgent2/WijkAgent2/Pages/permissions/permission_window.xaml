@@ -35,8 +35,6 @@
 
         <Button Content="Opslaan" HorizontalAlignment="right" Margin="690,10,10,0" VerticalAlignment="Top" Width="94" Click="Button_Click"/>
         <Button Content="Rol toevoegen" HorizontalAlignment="right" Margin="0,325.8,10,-350.6" VerticalAlignment="Top" Width="177" Click="Button_ClickR" Grid.Row="2"/>
-        <Button Content="Permissie toevoegen" HorizontalAlignment="right" Margin="0,362.8,10,-390.4" VerticalAlignment="Top" Width="177" Click="Button_ClickP" Grid.Row="2" Height="34"/>
         <TextBox HorizontalAlignment="Right" Height="23" Margin="380,329.8,200,-343.2" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="211" Name="Rolbox"/>
-        <TextBox HorizontalAlignment="Right" Height="23" Margin="380,362.8,200,-374.6" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="211" Name="permissiebox"/>
     </Grid>
 </Page>

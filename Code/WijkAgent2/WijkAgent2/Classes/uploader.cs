@@ -18,13 +18,13 @@ namespace Wijkagent2.Classes
         {
         }
 
+        //Async method that send files to the VPS server
         public async Task<string> SendFileAsync(string file_data, string original_name, string folder, string filename_upload)
         {
 
-            System.Diagnostics.Debug.WriteLine("Starting");
-
             using (var client = new HttpClient())
             {
+                //Setting POST values
                 var values = new Dictionary<string, string>
                 {
                      { "fileName", original_name },
@@ -33,9 +33,8 @@ namespace Wijkagent2.Classes
                      { "FileNameUpload", filename_upload }
                 };
 
-                System.Diagnostics.Debug.WriteLine("Values set");
-
                 int limit = 2000;
+                //Building the post String with the file
                 StringContent content = new StringContent(values.Aggregate(new StringBuilder(), (sb, nxt) => {
                     StringBuilder sbInternal = new StringBuilder();
                     if (sb.Length > 0)
@@ -61,11 +60,11 @@ namespace Wijkagent2.Classes
                 }).ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
 
 
-                System.Diagnostics.Debug.WriteLine("Executing");
+                //Post the data to the server
                 var response = await client.PostAsync("http://141.138.137.63/uploader.php", content);
                 
-                System.Diagnostics.Debug.WriteLine(response);
                 var responseString = await response.Content.ReadAsStringAsync();
+                //Return the file path of the added file to the server
                 return "http://141.138.137.63/" + folder + filename_upload;
             }
         }

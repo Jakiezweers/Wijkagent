@@ -182,7 +182,7 @@
     <Compile Include="Classes\Kazerne.cs" />
     <Compile Include="Classes\Roles.cs" />
     <Compile Include="Classes\Unit.cs" />
-    <Compile Include="Classes\uploader.cs" />
+    <Compile Include="Classes\Uploader.cs" />
     <Compile Include="Classes\Uploads.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\Validator.cs" />
@@ -200,23 +200,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\delicten\add_delict.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\delicten\delicten_list.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\delicten\delict_archive.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\delicten\edit_delict.xaml">
+    <Page Include="Pages\delicten\AddDelict.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\delicten\view_delict.xaml">
+    <Page Include="Pages\delicten\DelictList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\delicten\EditDelict.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\delicten\ViewDelict.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -244,7 +240,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\User\user_registratie.xaml">
+    <Page Include="Pages\User\UserRegistratie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,20 +252,17 @@
     <Compile Include="Modals\Tweet.xaml.cs">
       <DependentUpon>Tweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\add_delict.xaml.cs">
-      <DependentUpon>add_delict.xaml</DependentUpon>
+    <Compile Include="Pages\delicten\AddDelict.xaml.cs">
+      <DependentUpon>AddDelict.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\delicten_list.xaml.cs">
-      <DependentUpon>delicten_list.xaml</DependentUpon>
+    <Compile Include="Pages\delicten\DelictList.xaml.cs">
+      <DependentUpon>DelictList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\delict_archive.xaml.cs">
-      <DependentUpon>delict_archive.xaml</DependentUpon>
+    <Compile Include="Pages\delicten\EditDelict.xaml.cs">
+      <DependentUpon>EditDelict.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\edit_delict.xaml.cs">
-      <DependentUpon>edit_delict.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\delicten\view_delict.xaml.cs">
-      <DependentUpon>view_delict.xaml</DependentUpon>
+    <Compile Include="Pages\delicten\ViewDelict.xaml.cs">
+      <DependentUpon>ViewDelict.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -289,8 +282,8 @@
     <Compile Include="Pages\User\User_List.xaml.cs">
       <DependentUpon>User_List.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\User\user_registratie.xaml.cs">
-      <DependentUpon>user_registratie.xaml</DependentUpon>
+    <Compile Include="Pages\User\UserRegistratie.xaml.cs">
+      <DependentUpon>UserRegistratie.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -309,6 +302,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include=".editorconfig" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

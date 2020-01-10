@@ -26,8 +26,10 @@ namespace WijkAgent2.Modals
             InitializeComponent();
         }
 
+        //Button Click 
         private void BtnShowTweet_Click(object sender, RoutedEventArgs e)
         {
+            //Try to open a browser with the Link that has been set in the view
             try
             {
                 Process.Start(Link.Text.ToString().Trim());

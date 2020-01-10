@@ -27,11 +27,13 @@ namespace WijkAgent2.Modals
     /// </summary>
     public partial class AddNewPerson : Window
     {
-        public List<int> bsnlist = new List<int>();
-        public List<string> typelist = new List<string>();
-        public List<int> person_idList = new List<int>();
-        private MainWindow mw;
+        public List<int> bsnlist = new List<int>(); //List containing the BSN number of a person
+        public List<string> typelist = new List<string>(); //List containing the type / categorie of a person (verdachte, slachtoffer etc...)
+        public List<int> person_idList = new List<int>();//List containing personID's connected to the delict.
 
+        private readonly MainWindow mw; //Required mainwindow
+
+        //Constructor for new delicts.
         public AddNewPerson(MainWindow MW)
         {
             InitializeComponent();
@@ -39,6 +41,8 @@ namespace WijkAgent2.Modals
             base.Closing += this.CloseWindow;
             mw = MW;
         }
+
+        //Constructor when there is a delict thats getting edited wich already contains persons.
         public AddNewPerson(MainWindow MW, List<string> _typelist, List<int> _bsnlist, List<int> _person_idList)
         {
             InitializeComponent();
@@ -53,6 +57,7 @@ namespace WijkAgent2.Modals
             person_idList = _person_idList;
         }
 
+        //Refreshes the shown person list with the newly added or removed persons.
         public void RefreshData()
         {
             Personen.Items.Clear();
@@ -65,6 +70,8 @@ namespace WijkAgent2.Modals
                 Personen.Items.Add(p1);
             }
         }
+
+        //Check to see if a string only contains digits, returns true or false.
         bool IsDigitsOnly(string str)
         {
             foreach (char c in str)
@@ -75,6 +82,8 @@ namespace WijkAgent2.Modals
 
             return true;
         }
+
+        //Method that gets fired when the user presses on "Persoon toevoegen". This then fires a series of checks making sure the person can be succesfully added. 
         private void AddPersonButton(object sender, RoutedEventArgs e)
         {
             string bsnTextField = bsnfield.Text;
@@ -128,10 +137,13 @@ namespace WijkAgent2.Modals
             RefreshData();
         }
 
+        //Mandatory method for person selection.
         private void Personen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
+
+        //Method to remove already added persons from the list. Removes person based on index.
         private void RemovePerson(object sender, RoutedEventArgs e)
         {
             var RemoveBSN = (int)((System.Windows.Controls.Button)sender).Tag;
@@ -143,28 +155,35 @@ namespace WijkAgent2.Modals
 
         }
 
+        //Mandatory method for the dropdown box
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
+
+        //Error message that pops up when something went wrong
         private void CheckErrorMessage(string message)
         {
-
             string errorBoxText = message;
             string errorCaption = "Persoon toevoegen mislukt.";
             System.Windows.Forms.MessageBoxButtons button = MessageBoxButtons.OK;
             MessageBox.Show(errorBoxText, errorCaption, button);
         }
 
+        //Method to close the windwow with the cancel button
         private void ClickCancel(object sender, RoutedEventArgs e)
         {
             Visibility = Visibility.Hidden;
         }
+
+        //Method to close the window trough the X
         private void CloseWindow(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
             Visibility = Visibility.Hidden;
         }
+
+        //Checks if a person exists in hte database, if the user exists the BSN number is returned. If not the AddPerson method is fired and it will get either a BSN back meaning it was succesfull. If it failed it will return a 0 or a 00
         private int CheckIfPersonExists(int personBSN)
         {
             string provider = ConfigurationManager.AppSettings["provider"];
@@ -193,12 +212,15 @@ namespace WijkAgent2.Modals
                 }
             }
         }
+
+        //Button to add a person that doesnt exist yet in the database.
         private int AddPerson(int bsnNumber)
         {
             int promptValue = Prompt.ShowDialog(bsnNumber);
             return promptValue;
         }
 
+        //Fill category dropdown
         private void AddPersonCategoryCB()
         {
             CategoryCB.Items.Add("Verdachte");
@@ -207,6 +229,8 @@ namespace WijkAgent2.Modals
             CategoryCB.Items.Add("Slachtoffer");
         }
     }
+
+    //If a person doesnt exist yet, they have to fill in some fields to create the person. The person is then uploaded to the database. Even if eventually the person isnt connected to a delict the person stays saved in the database.
     public class Prompt : Page
     {
         public static int ShowDialog(int bsnNumber)

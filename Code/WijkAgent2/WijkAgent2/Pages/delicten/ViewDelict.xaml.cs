@@ -29,20 +29,24 @@ namespace WijkAgent2.Pages.delicten
     /// <summary>
     /// Interaction logic for view_delict.xaml
     /// </summary>
-    public partial class view_delict : Page
+    public partial class ViewDelict : Page
     {
-        MainWindow mw;
-        int viewDelictID;
-        private Connection cn = new Connection();
-        double longitude;
-        double latitutde;
-        DateTime Date;
-        int returnPage = 0;
-        public view_delict(MainWindow MW, int delictID, int originalPage)
+        readonly MainWindow mw; //Required mainwindow
+
+        readonly int currDelictID; //Delict ID for the current opened delict.
+
+        double longitude; //Longitude for showing tweets
+        double latitude; //Latitude for showing tweets
+        DateTime date; //Date used for date and showing tweets
+        readonly int returnPage = 0; //Return page number for pathing.
+
+        private readonly Connection cn = new Connection();
+
+        public ViewDelict(MainWindow MW, int delictID, int originalPage)
         {
             Validator validator = new Validator();
 
-            viewDelictID = delictID;
+            currDelictID = delictID;
             InitializeComponent();
             LoadDelict(delictID);
             mw = MW;
@@ -53,6 +57,7 @@ namespace WijkAgent2.Pages.delicten
             if (validator.validate("Delicten_Wijzigen")) { BTNPasDelictAan.Visibility = Visibility.Visible; } else { BTNPasDelictAan.Visibility = Visibility.Hidden; }
         }
 
+        //Method to retrieve twitter messages.
         private void Get_Tweets()
         {
             Dispatcher.BeginInvoke((Action)(() =>
@@ -69,7 +74,7 @@ namespace WijkAgent2.Pages.delicten
 
             TwitterConroller TC = new TwitterConroller();
 
-            List<ITweet> TweetList = TC.getTwitterBerichten(longitude, latitutde, Date);
+            List<ITweet> TweetList = TC.getTwitterBerichten(longitude, latitude, date);
 
             Thread.Sleep(800);
 
@@ -112,10 +117,11 @@ namespace WijkAgent2.Pages.delicten
 
         }
 
-        private void LoadDelict(int viewDelictID)
+        //Method to load in everything needed for the delict. First it loads the delict content itself. Then the categories bound to it. and as last it loads in the persons.
+        private void LoadDelict(int currDelictID)
         {
             cn.OpenConection();
-            SqlDataReader sqc = cn.DataReader("SELECT * FROM dbo.delict WHERE delict_id = " + viewDelictID);
+            SqlDataReader sqc = cn.DataReader("SELECT * FROM dbo.delict WHERE delict_id = " + currDelictID);
             while (sqc.Read())
             {
                 string status = "";
@@ -146,14 +152,14 @@ namespace WijkAgent2.Pages.delicten
                 DelictDateLabel.Content += ": " + sqc["added_date"];
 
                 longitude = (double)sqc["long"];
-                latitutde = (double)sqc["lat"];
-                Date = (DateTime)sqc["date"];
+                latitude = (double)sqc["lat"];
+                date = (DateTime)sqc["date"];
             }
 
             cn.CloseConnection();
             cn.OpenConection();
 
-            SqlDataReader sqcd = cn.DataReader("SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + viewDelictID);
+            SqlDataReader sqcd = cn.DataReader("SELECT category.name FROM category_delict JOIN category ON category.category_id = category_delict.category_id WHERE delict_id = " + currDelictID);
 
             while (sqcd.Read())
             {
@@ -163,7 +169,7 @@ namespace WijkAgent2.Pages.delicten
             cn.CloseConnection();
             cn.OpenConection();
 
-            SqlDataReader sqp = cn.DataReader("SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + viewDelictID);
+            SqlDataReader sqp = cn.DataReader("SELECT p.bsn, dp.type FROM delict_person dp JOIN person p on dp.person_id = p.person_id WHERE delict_id = " + currDelictID);
 
             while (sqp.Read())
             {
@@ -176,7 +182,9 @@ namespace WijkAgent2.Pages.delicten
             thr.IsBackground = true;
             thr.Start();
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        //Backbutton method. Returnpage is for pathing.
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if(returnPage == 1)
             {
@@ -195,9 +203,11 @@ namespace WijkAgent2.Pages.delicten
             }
             mw.LoadHomeScreen();
         }
+
+        //Edit delict button click. Opens the edit delict screen with the correct delict open.
         private void EditDelict_Click(object sender, RoutedEventArgs e)
         {
-            mw.EditDelict(viewDelictID,returnPage);
+            mw.EditDelict(currDelictID,returnPage);
         }
     }
 }
