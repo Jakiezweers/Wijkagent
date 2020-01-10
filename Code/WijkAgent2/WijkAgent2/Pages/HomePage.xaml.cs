@@ -35,19 +35,16 @@ namespace WijkAgent2.Pages
         private MainWindow mw;
         private Connection cn = new Connection();
         private Connection cn1 = new Connection();
-        private Connection cn2 = new Connection();
-        public bool mapmarking = false;
-        System.Timers.Timer timer;
-        bool disablefield = false;
+        public bool mapMarking = false;
+        bool disableField = false;
         MapPoint mapPoint;
-        Viewpoint startingpoint;
+        Viewpoint startingPoint;
         Map Map { get; set; } = new Map(Basemap.CreateStreets());
         GraphicsOverlay overlay = new GraphicsOverlay();
         Graphic paint;
         SimpleMarkerSymbol marker = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Red, 20);
-        List<CategoryList> categoryList = new List<CategoryList>();
-        List<Delict> delictenlist = new List<Delict>();
-        List<Delict> delictenlist1 = new List<Delict>();
+        List<Delict> delictenList = new List<Delict>();
+        List<Delict> delictenList1 = new List<Delict>();
 
         int i = 0;
 
@@ -68,7 +65,8 @@ namespace WijkAgent2.Pages
 
         }
 
-        //wanneer er geklikt wordt op een delict, focus op de juiste locatie
+       
+        //When clicked on a delict, focus on the correct location
         private async void LoadMap(double x, double y)
         {
             mapPoint = new MapPoint(x, y, SpatialReferences.Wgs84);
@@ -78,24 +76,23 @@ namespace WijkAgent2.Pages
 
         private async void LoadMap()
         {
-            //Locatie op map tonen
+            //Show device location on map
             mapview.LocationDisplay.IsEnabled = true;
             mapview.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
 
-            //Map inladen
+            //Load map
             mapPoint = new MapPoint(6.100159, 52.512878, SpatialReferences.Wgs84);
 
 
-            startingpoint = new Viewpoint(mapPoint, 50000);
-            Map.InitialViewpoint = startingpoint;
+            startingPoint = new Viewpoint(mapPoint, 50000);
+            Map.InitialViewpoint = startingPoint;
             mapview.Map = Map;
 
-            //doubleclick afvangen
+            //prevent doubleclick
             mapview.PreviewMouseDoubleClick += (s, e) => e.Handled = true;
-            //  mapview.LocationDisplay.LocationChanged += changed;
 
-            //Delicten op map laden
+            //Delicts loading on map
             cn.OpenConection();
             SqlDataReader sq = cn.DataReader("SELECT long, lat, delict.delict_id as id, date as date, status as status from delict where status = 1 or status = 3");
 
@@ -112,14 +109,14 @@ namespace WijkAgent2.Pages
                 StringBuilder categories = new StringBuilder();
                 StringBuilder persons = new StringBuilder();
                 int i = 0;
-                int delictid = Convert.ToInt32(sq["id"].ToString());
+                int delictId = Convert.ToInt32(sq["id"].ToString());
                 int status = Convert.ToInt32(sq["status"].ToString());
 
-                DateTime delicttime = Convert.ToDateTime(sq["date"].ToString());
+                DateTime delictTime = Convert.ToDateTime(sq["date"].ToString());
 
-                //Categoriën bij delicten plaatsen
+                //Place categories with delicts
                 cn1.OpenConection();
-                SqlDataReader sq1 = cn1.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + delictid);
+                SqlDataReader sq1 = cn1.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + delictId);
                 while (sq1.Read())
                 {
                     if (i < 3)
@@ -134,19 +131,19 @@ namespace WijkAgent2.Pages
                 }
                 cn1.CloseConnection();
 
-
-                //Personen bij delicten plaatsen
-                cn2.OpenConection();
-                SqlDataReader sq2 = cn2.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + delictid);
+                //Place persons with delicts
+                cn1.OpenConection();
+                SqlDataReader sq2 = cn1.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + delictId);
                 while (sq2.Read())
                 {
                     persons.Append(' ' + sq2["firstname"].ToString() + " " + sq2["lastname"].ToString() + " (" + sq2["type"].ToString()[0] + ")  |");
                     Console.WriteLine(sq2["firstname"]);
                 }
-                cn2.CloseConnection();
+                cn1.CloseConnection();
 
 
-                //Check of er meer dan 3 categoriën zijn
+   
+                //Check if there are more than 3 categories
                 if (i > 3)
                 {
                     categories.Length = categories.Length - 2;
@@ -158,58 +155,64 @@ namespace WijkAgent2.Pages
                     categories.Length = categories.Length - 2;
                 }
 
-                //Check of er personen in de lijst aanwezig zijn
+                //check if there are more persons in the list present
                 if (persons.Length != 0)
                 {
                     persons.Length = persons.Length - 2;
                 }
 
-                //Elementen in lijst plaatsen
-                d.id = delictid;
+                //put elements in list
+                d.id = delictId;
                 d.status = status;
                 d.category = categories.ToString();
                 d.person = persons.ToString();
-                d.datetime1 = delicttime.ToString("dd-MM-yyyy");
+                d.datetime1 = delictTime.ToString("dd-MM-yyyy");
                 d.longitude = longitude;
                 d.lat = lat;
                 if (d.status == 1 || d.status == 3)
                 {
-                    delictenlist.Add(d);
+                    delictenList.Add(d);
                 }
 
                 mapview.GraphicsOverlays.Remove(overlay);
+
+                //add delict to map
                 overlay.Graphics.Add(paint);
                 mapview.GraphicsOverlays.Add(overlay);
             }
             cn.CloseConnection();
 
-            foreach (var be in delictenlist)
+            foreach (var be in delictenList)
             {
-                delictList.Items.Add(delictenlist[i]);
+                delictList.Items.Add(delictenList[i]);
                 i++;
 
             }
             i = 0;
         }
 
+
+        //When someone clicks on the map, this function will be executed
         private async void Click(object sender, Esri.ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
+            //Check the clicked location
             MapPoint point = e.Location;
-           
-    
-            MapPoint pointlatlong = GeometryEngine.Project(point, SpatialReferences.Wgs84) as MapPoint;
+            MapPoint pointLatLong = GeometryEngine.Project(point, SpatialReferences.Wgs84) as MapPoint;
             paint = new Graphic(point, marker);
             IdentifyGraphicsOverlayResult identifyResults = await mapview.IdentifyGraphicsOverlayAsync(overlay, e.Position, 0, false, 1);
-            double lon = pointlatlong.X;
-            double lat = pointlatlong.Y;
-            if (identifyResults.Graphics.Count > 0 && mapmarking == false)
+            double lon = pointLatLong.X;
+            double lat = pointLatLong.Y;
+
+
+            //if someone pressed on a delict
+            if (identifyResults.Graphics.Count > 0 && mapMarking == false)
             {
                 foreach (var i in identifyResults.Graphics)
                 {
                     TextBlock x = new TextBlock();
                     x.Text = i.Attributes.First().Key;
-                    setMarker(x);
-                    makeVisible();
+                    SetMarker(x);
+                    MakeVisible();
                     StringBuilder categories = new StringBuilder();
                     StringBuilder persons = new StringBuilder();
                     cn.OpenConection();
@@ -230,28 +233,27 @@ namespace WijkAgent2.Pages
                     }
                     cn.CloseConnection();
 
-                    //Categoriën bij delicten plaatsen
-                    cn1.OpenConection();
-                    SqlDataReader sq1 = cn1.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + x.Text);
+                    //Place categories with delicts
+                    cn.OpenConection();
+                    SqlDataReader sq1 = cn.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + x.Text);
                     while (sq1.Read())
                     {
-
-
                         categories.Append(sq1["name"].ToString() + ", ");
-
+                        
                     }
-                    cn1.CloseConnection();
+                    categories.Length = categories.Length - 2;
+                    cn.CloseConnection();
 
 
-                    //Personen bij delicten plaatsen
-                    cn2.OpenConection();
-                    SqlDataReader sq2 = cn2.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + x.Text);
+                    //Place persons with delicts
+                    cn.OpenConection();
+                    SqlDataReader sq2 = cn.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + x.Text);
                     while (sq2.Read())
                     {
                         persons.Append(' ' + sq2["firstname"].ToString() + " " + sq2["lastname"].ToString() + " (" + sq2["type"].ToString()[0] + ")  |");
                         Console.WriteLine(sq2["firstname"]);
                     }
-                    cn2.CloseConnection();
+                    cn.CloseConnection();
                     if (persons.Length != 0)
                     {
                         persons.Length = persons.Length - 2;
@@ -261,7 +263,7 @@ namespace WijkAgent2.Pages
                     delictPerson.Content = persons;
 
                 } 
-            }else if (mapmarking == true)
+            }else if (mapMarking == true)
             {
                 mapview.GraphicsOverlays.Remove(overlay);
                 overlay.Graphics.Add(paint);
@@ -281,7 +283,9 @@ namespace WijkAgent2.Pages
             }
         }
 
-        public void makeVisible()
+
+        // make box appear on screen
+        public void MakeVisible()
         {
             DelictInzienBTN.IsEnabled = true;
             labelsVis.Visibility = Visibility.Visible;
@@ -301,9 +305,12 @@ namespace WijkAgent2.Pages
             delictPerson.Visibility = Visibility.Visible;
             delictZip.Visibility = Visibility.Visible;
         }
-        public void clickDelict(Object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+
+        //if delict gets clicked from delictlist
+        public void ClickDelict_Click(Object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            makeVisible();
+            MakeVisible();
             StringBuilder categories = new StringBuilder();
             StringBuilder persons = new StringBuilder();
 
@@ -312,46 +319,44 @@ namespace WijkAgent2.Pages
 
                 TextBlock x = delictList.Columns[0].GetCellContent(delictList.Items[delictList.SelectedIndex]) as TextBlock;
                 cn.OpenConection();
-                Console.WriteLine("ID: " + x.Text);
                 SqlDataReader sq = cn.DataReader("SELECT * FROM delict WHERE delict_id = " + x.Text);
                 while (sq.Read())
                 {
                     delictName.Content = sq["delict_id"].ToString();
                     delictDescription.Content = sq["description"].ToString();
-                    DateTime delicttime = Convert.ToDateTime(sq["date"].ToString());
-                    delictDate.Content = delicttime.ToString("dd-MM-yyyy");
+                    DateTime delictTime = Convert.ToDateTime(sq["date"].ToString());
+                    delictDate.Content = delictTime.ToString("dd-MM-yyyy");
                     delictZip.Content = sq["zipcode"].ToString();
                     delictCoordinatesX.Content = "X: " + sq["long"].ToString();
                     delictCoordinatesY.Content = "Y: " + sq["lat"].ToString();
-                    double xcoor = double.Parse(sq["long"].ToString());
-                    double ycoor = double.Parse(sq["lat"].ToString());
-                    LoadMap(xcoor, ycoor);
+                    double xCoor = double.Parse(sq["long"].ToString());
+                    double yCoor = double.Parse(sq["lat"].ToString());
+                    LoadMap(xCoor, yCoor);
 
                 }
                 cn.CloseConnection();
 
-                //Categoriën bij delicten plaatsen
-                cn1.OpenConection();
-                SqlDataReader sq1 = cn1.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + x.Text);
+                //Place categories with delicts
+                cn.OpenConection();
+                SqlDataReader sq1 = cn.DataReader("SELECT category.name as name from category_delict INNER JOIN category on category_delict.category_id = category.category_id WHERE category_delict.delict_id = " + x.Text);
                 while (sq1.Read())
                 {
-
-
                     categories.Append(sq1["name"].ToString() + ", ");
-
                 }
-                cn1.CloseConnection();
+                categories.Length = categories.Length - 2;
+
+                cn.CloseConnection();
 
 
-                //Personen bij delicten plaatsen
-                cn2.OpenConection();
-                SqlDataReader sq2 = cn2.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + x.Text);
+                //Place persons with delicts
+                cn.OpenConection();
+                SqlDataReader sq2 = cn.DataReader("SELECT person.firstname as firstname, person.lastname as lastname, delict_person.type as type from delict_person INNER JOIN person on person.person_id = delict_person.person_id WHERE delict_person.delict_id = " + x.Text);
                 while (sq2.Read())
                 {
                     persons.Append(' ' + sq2["firstname"].ToString() + " " + sq2["lastname"].ToString() + " (" + sq2["type"].ToString()[0] + ")  |");
                     Console.WriteLine(sq2["firstname"]);
                 }
-                cn2.CloseConnection();
+                cn.CloseConnection();
                 if (persons.Length != 0)
                 {
                     persons.Length = persons.Length - 2;
@@ -360,14 +365,14 @@ namespace WijkAgent2.Pages
                 delictCategory.Content = categories;
                 delictPerson.Content = persons;
 
-                setMarker(x);
+                SetMarker(x);
             }
         }
 
 
 
-        //Marker highlighten
-        public void setMarker(TextBlock x)
+        //Highlight the marker
+        public void SetMarker(TextBlock x)
         {
             foreach (var a in overlay.Graphics)
             {
@@ -423,7 +428,9 @@ namespace WijkAgent2.Pages
             mw.LoadPermissionPage();
         }
 
-        private void Close_window(object sender, RoutedEventArgs e)
+
+        //make the box disappear from screen
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {
             DelictInzienBTN.IsEnabled = false;
             labelsVis.Visibility = Visibility.Hidden;
@@ -444,27 +451,32 @@ namespace WijkAgent2.Pages
             delictZip.Visibility = Visibility.Hidden;
             TextBlock x = new TextBlock();
             x.Text = "close";
-            setMarker(x);
+            SetMarker(x);
 
         }
 
-        private void AddMarkerDelict(object sender, RoutedEventArgs e)
+
+        //Check if in marker mode or not
+        private void AddMarkerDelict_Click(object sender, RoutedEventArgs e)
         {
            
-            if (mapmarking == false)
+            if (mapMarking == false)
             {
                 AddMarkerDelictBTN.Background = Brushes.Green;
-                mapmarking = true;
+                mapMarking = true;
             }
             else
             {
                 AddMarkerDelictBTN.Background = Brushes.Red;
-                mapmarking = false;
+                mapMarking = false;
             }
         }
 
-        private void filterMap(object sender, RoutedEventArgs e)
+        
+        private void FilterMap_Click(object sender, RoutedEventArgs e)
         {
+
+            //check if zipcode is correctly filled in, make uppercase
             for (int i = 0; i < ZIPfield.Text.Length; i++)
             {
                 if (i < 4)
@@ -481,23 +493,17 @@ namespace WijkAgent2.Pages
                 else
                 {
                     char nummers = ZIPfield.Text[i];
-                    char upper = Char.ToUpper(nummers);
-                    bool result = Char.IsUpper(upper);
-                    if (result == false)
-                    {
-                        mw.ShowDialog("Postcode verkeerd ingevoerd");
-                        return;
-                    }
-
-
+                    Char.ToUpper(nummers);
                 }
-
             }
+
+
+            //check if startdate isn't later than enddate
             if (startDate.SelectedDate != null && endDate.SelectedDate != null)
             {
-                DateTime startdate = Convert.ToDateTime(startDate.Text);
-                DateTime enddate = Convert.ToDateTime(endDate.Text);
-                if (startdate > enddate)
+                DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                DateTime endDateText = Convert.ToDateTime(endDate.Text);
+                if (startDateText > endDateText)
                 {
                     mw.ShowDialog("De startdatum is later dan de einddatum");
                     return;
@@ -507,21 +513,21 @@ namespace WijkAgent2.Pages
             delictList.Items.Clear();
             listview.Items.Clear();
             overlay.Graphics.Clear();
-            delictenlist1.Clear();
-
+            delictenList1.Clear();
+            string space = "                          ";
             if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate == null)
             {
-                listview.Items.Add(ZIPfield.Text);
+                listview.Items.Add(ZIPfield.Text + space);
                 cn.OpenConection();
                 SqlDataReader sq = cn.DataReader("SELECT delict_id as id FROM delict WHERE zipcode = " + "'" + ZIPfield.Text + "'");
                 while (sq.Read())
                 {
                     int id = Int32.Parse(sq["id"].ToString());
-                    foreach (var b in delictenlist)
+                    foreach (var b in delictenList)
                     {
                         if (b.id == id)
                         {
-                            delictenlist1.Add(b);
+                            delictenList1.Add(b);
                         }
                     }
                 }
@@ -531,18 +537,18 @@ namespace WijkAgent2.Pages
 
             if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate == null)
             {
-                listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem);
+                listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + space);
                 Console.WriteLine();
                 cn.OpenConection();
                 SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + "AND category.name = " + "'" + categoryBox.SelectedItem + "'");
                 while (sq.Read())
                 {
                     int id = Int32.Parse(sq["id"].ToString());
-                    foreach (var b in delictenlist)
+                    foreach (var b in delictenList)
                     {
                         if (b.id == id)
                         {
-                            delictenlist1.Add(b);
+                            delictenList1.Add(b);
                         }
                     }
                 }
@@ -555,17 +561,17 @@ namespace WijkAgent2.Pages
 
             if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate == null)
             {
-                listview.Items.Add(categoryBox.SelectedItem);
+                listview.Items.Add(categoryBox.SelectedItem + space);
                 cn.OpenConection();
                 SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'");
                 while (sq.Read())
                 {
                     int id = Int32.Parse(sq["id"].ToString());
-                    foreach (var b in delictenlist)
+                    foreach (var b in delictenList)
                     {
                         if (b.id == id)
                         {
-                            delictenlist1.Add(b);
+                            delictenList1.Add(b);
                         }
                     }
                 }
@@ -577,22 +583,22 @@ namespace WijkAgent2.Pages
 
             if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate != null)
             {
-                if (endDate.SelectedDate == null || disablefield == true)
+                if (endDate.SelectedDate == null || disableField == true)
                 {
                     cn.OpenConection();
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text);
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + space);
 
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + "AND category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date = " + "'" + correctStartDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -600,22 +606,22 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
-                    DateTime enddate = Convert.ToDateTime(endDate.Text);
-                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text + space);
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
+                    DateTime endDateText = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = endDateText.ToString("yyyy-MM-dd");
 
                     cn.OpenConection();
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + "AND category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -629,22 +635,22 @@ namespace WijkAgent2.Pages
 
             if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem != null && startDate.SelectedDate != null)
             {
-                if (endDate.SelectedDate == null || disablefield == true)
+                if (endDate.SelectedDate == null || disableField == true)
                 {
                     cn.OpenConection();
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    listview.Items.Add(categoryBox.SelectedItem + "\n" + startDate.Text);
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(categoryBox.SelectedItem + "\n" + startDate.Text + space);
 
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date = " + "'" + correctStartDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -652,23 +658,23 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-                    listview.Items.Add(categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+                    listview.Items.Add(categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text + space);
 
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
-                    DateTime enddate = Convert.ToDateTime(endDate.Text);
-                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
+                    DateTime endDateText = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = endDateText.ToString("yyyy-MM-dd");
 
                     cn.OpenConection();
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE category.name = " + "'" + categoryBox.SelectedItem + "'" + "AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -680,22 +686,22 @@ namespace WijkAgent2.Pages
 
             if (!string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate != null)
             {
-                if (endDate.SelectedDate == null || disablefield == true)
+                if (endDate.SelectedDate == null || disableField == true)
                 {
                     cn.OpenConection();
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    listview.Items.Add(ZIPfield.Text + "\n" + startDate.Text);
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(ZIPfield.Text + "\n" + startDate.Text + space);
 
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date = " + "'" + correctStartDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -703,23 +709,23 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+                    listview.Items.Add(ZIPfield.Text + "\n" + categoryBox.SelectedItem + "\n" + startDate.Text + "\n" + "T/M" + "\n" + endDate.Text + space);
 
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
-                    DateTime enddate = Convert.ToDateTime(endDate.Text);
-                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
+                    DateTime endDateText = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = endDateText.ToString("yyyy-MM-dd");
 
                     cn.OpenConection();
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict INNER JOIN category_delict ON category_delict.delict_id = delict.delict_id INNER JOIN category on category_delict.category_id = category.category_id WHERE zipcode = " + "'" + ZIPfield.Text + "'" + " AND date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -729,22 +735,22 @@ namespace WijkAgent2.Pages
             }
             if (string.IsNullOrEmpty(ZIPfield.Text) && categoryBox.SelectedItem == null && startDate.SelectedDate != null)
             {
-                if (endDate.SelectedDate == null || disablefield == true)
+                if (endDate.SelectedDate == null || disableField == true)
                 {
                     cn.OpenConection();
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    listview.Items.Add(startDate.Text);
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    listview.Items.Add(startDate.Text + space);
 
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict WHERE date = " + "'" + correctStartDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -752,23 +758,23 @@ namespace WijkAgent2.Pages
                 }
                 else
                 {
-                    listview.Items.Add(startDate.Text + "\n" + "T/M" + "\n" + endDate.Text);
+                    listview.Items.Add(startDate.Text + "\n" + "T/M" + "\n" + endDate.Text + space);
 
-                    DateTime startdate = Convert.ToDateTime(startDate.Text);
-                    string correctStartDate = startdate.ToString("yyyy-MM-dd");
-                    DateTime enddate = Convert.ToDateTime(endDate.Text);
-                    string correctEndDate = enddate.ToString("yyyy-MM-dd");
+                    DateTime startDateText = Convert.ToDateTime(startDate.Text);
+                    string correctStartDate = startDateText.ToString("yyyy-MM-dd");
+                    DateTime endDateText = Convert.ToDateTime(endDate.Text);
+                    string correctEndDate = endDateText.ToString("yyyy-MM-dd");
 
                     cn.OpenConection();
                     SqlDataReader sq = cn.DataReader("SELECT delict.delict_id as id FROM delict WHERE date BETWEEN " + "'" + correctStartDate + "'" + " AND " + "'" + correctEndDate + "'");
                     while (sq.Read())
                     {
                         int id = Int32.Parse(sq["id"].ToString());
-                        foreach (var b in delictenlist)
+                        foreach (var b in delictenList)
                         {
                             if (b.id == id)
                             {
-                                delictenlist1.Add(b);
+                                delictenList1.Add(b);
                             }
                         }
                     }
@@ -780,11 +786,11 @@ namespace WijkAgent2.Pages
 
 
 
-
-            foreach (var he in delictenlist1)
+            //make the filtered items appear on map and list
+            foreach (var he in delictenList1)
             {
                 Console.WriteLine("POSTCODE: " + he.id);
-                delictList.Items.Add(delictenlist1[i]);
+                delictList.Items.Add(delictenList1[i]);
                 MapPoint point = new MapPoint(he.longitude, he.lat, SpatialReferences.Wgs84);
                 paint = new Graphic(point, marker);
                 paint.Attributes.Add(he.id.ToString(), he.id.ToString());
@@ -797,30 +803,31 @@ namespace WijkAgent2.Pages
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ClearFilter_Click(object sender, RoutedEventArgs e)
         {
             listview.Items.Clear();
-            delictenlist.Clear();
+            delictenList.Clear();
             delictList.Items.Clear();
             LoadMap();
             categoryBox.SelectedItem = null;
         }
 
 
-        private void checkClick(object sender, RoutedEventArgs e)
+        private void CheckClick_Click(object sender, RoutedEventArgs e)
         {
-            if (disablefield == false)
+            if (disableField == false)
             {
                 endDate.IsEnabled = false;
-                disablefield = true;
+                disableField = true;
             }
             else
             {
                 endDate.IsEnabled = true;
-                disablefield = false;
+                disableField = false;
             }
         }
-        private void OpenDelict(object sender, RoutedEventArgs e)
+
+        private void OpenDelict_Click(object sender, RoutedEventArgs e)
         {
             mw.ShowDelict(Convert.ToInt32(delictName.Content), 3);
         }
