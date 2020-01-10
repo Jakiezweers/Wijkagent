@@ -143,7 +143,6 @@ namespace WijkAgent2.Pages.delicten
                 description = OmschijvingTB.Text;
                 date = DatumTB.Text;
                 checkCoord = street + ' ' + homeNumber + ' ' + placeName;
-
             }));
 
             StringBuilder homeNumbernum =
@@ -276,9 +275,6 @@ namespace WijkAgent2.Pages.delicten
                     longCoord = parseX;
                     latCoord = parseY;
                 }
-
-
-
             }
             catch (Exception eas) { Console.WriteLine(eas); }
             cn.CloseConnection();
