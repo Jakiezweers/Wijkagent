@@ -12,7 +12,7 @@
     <Grid Margin="0,0,10,-17">
         <esri:MapView x:Name="mapview" Margin="166,2,657,-2">
         </esri:MapView>
-        <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="clickDelict" IsReadOnly="True">
+        <DataGrid x:Name="delictList" Height="483" Margin="1250,15,-1122,-31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="662" MouseDoubleClick="ClickDelict_Click" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="Delict"  Header="Delict" Binding="{Binding id}"/>
                 <DataGridTextColumn Header="Categorie" Binding="{Binding category}"/>
@@ -20,21 +20,21 @@
                 <DataGridTextColumn Header="Datum" Binding="{Binding datetime1}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Click="AddMarkerDelict" Background="Red" x:Name="AddMarkerDelictBTN" Content="Map marker" HorizontalAlignment="Left" Margin="1275,528,-610,-93" VerticalAlignment="Top" Width="125"/>
-        <Button IsEnabled="false" x:Name="DelictInzienBTN" Content="Delict inzien" HorizontalAlignment="Left" Margin="1737,528,-1047,-93" VerticalAlignment="Top" Width="120" Click="OpenDelict"/>
+        <Button Click="AddMarkerDelict_Click" Background="Red" x:Name="AddMarkerDelictBTN" Content="Map marker" HorizontalAlignment="Left" Margin="1275,528,-610,-93" VerticalAlignment="Top" Width="125"/>
+        <Button IsEnabled="false" x:Name="DelictInzienBTN" Content="Delict inzien" HorizontalAlignment="Left" Margin="1737,528,-1047,-93" VerticalAlignment="Top" Width="120" Click="OpenDelict_Click"/>
         <Border x:Name="labelsVis6" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="256" Margin="1252,585,-1113,-374" VerticalAlignment="Top" Width="651" Visibility="Hidden"/>
         <Label x:Name="labelsVis5" Content="Delict" HorizontalAlignment="Left" Height="23" Margin="1277,602,-610,-158" VerticalAlignment="Top" Width="123" FontWeight="Bold" Visibility="Hidden"/>
         <Label x:Name="delictDate"  HorizontalAlignment="Left" Height="100" Margin="1429,601,-739,-234" VerticalAlignment="Top" Width="100" FontWeight="Bold"/>
         <TextBox x:Name="ZIPfield" HorizontalAlignment="Left" MaxLength="6" Height="22" Margin="22,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="categoryBox" HorizontalAlignment="Left" Margin="22,179,0,0" VerticalAlignment="Top" Width="120"/>
-        <CheckBox x:Name="checkBox" Content="Zoeken op één datum" HorizontalAlignment="Left" Margin="20,380,0,0" VerticalAlignment="Top" Click="checkClick"/>
+        <CheckBox x:Name="checkBox" Content="Zoeken op één datum" HorizontalAlignment="Left" Margin="20,380,0,0" VerticalAlignment="Top" Click="CheckClick_Click"/>
         <DatePicker x:Name="endDate" HorizontalAlignment="Left" Margin="18,334,0,0" VerticalAlignment="Top" Width="134"/>
         <DatePicker x:Name="startDate" HorizontalAlignment="Left" Margin="18,280,0,0" VerticalAlignment="Top" Width="134"/>
         <Label Content="Einddatum" HorizontalAlignment="Left" Margin="16,317,0,0" VerticalAlignment="Top"/>
         <Label Content="Begindatum" HorizontalAlignment="Left" Margin="16,256,0,0" VerticalAlignment="Top"/>
         <Label Content="Categorie" HorizontalAlignment="Left" Margin="16,152,0,0" VerticalAlignment="Top"/>
         <Label Content="Postcode" HorizontalAlignment="Left" Margin="16,80,0,0" VerticalAlignment="Top"/>
-        <Button Click="filterMap" Content="Filter" HorizontalAlignment="Left" Margin="11,495,0,-60" VerticalAlignment="Top" Width="75"/>
+        <Button Click="FilterMap_Click" Content="Filter" HorizontalAlignment="Left" Margin="11,495,0,-60" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="labelsVis" Content="Categorie" HorizontalAlignment="Left" Height="100" Margin="1277,687,-587,-320" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
         <Label x:Name="labelsVis1" Content="Personen" HorizontalAlignment="Left" Height="100" Margin="1278,724,-588,-357" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
         <Label x:Name="labelsVis2" Content="Omschrijving" HorizontalAlignment="Left" Height="100" Margin="1278,760,-588,-393" VerticalAlignment="Top" Width="100" FontWeight="Bold" Visibility="Hidden"/>
@@ -47,9 +47,9 @@
         <Label x:Name="delictCoordinatesX" HorizontalAlignment="Left" Height="100" Margin="1597,602,-1034,-235" VerticalAlignment="Top" Width="227"/>
         <Label x:Name="delictCoordinatesY"  HorizontalAlignment="Left" Height="100" Margin="1598,619,-1035,-252" VerticalAlignment="Top" Width="227"/>
         <Label x:Name="delictZip"  HorizontalAlignment="Left" Height="100" Margin="1598,653,-908,-286" VerticalAlignment="Top" Width="100"/>
-        <Button x:Name="labelsVis7" Content="X" HorizontalAlignment="Left" Margin="1851,589,-1108,-154" VerticalAlignment="Top" Width="47" Click="Close_window" Visibility="Hidden"/>
-        <Button Content="Verwijder Filter" HorizontalAlignment="Left" Margin="12,539,0,-104" VerticalAlignment="Top" Width="136" Click="Button_Click"/>
-        <ListView x:Name="listview" HorizontalAlignment="Left" Height="267" Margin="16,619,0,-419" VerticalAlignment="Top" MinWidth="142" Width="142">
+        <Button x:Name="labelsVis7" Content="X" HorizontalAlignment="Left" Margin="1851,589,-1108,-154" VerticalAlignment="Top" Width="47" Click="CloseWindow_Click" Visibility="Hidden"/>
+        <Button Content="Verwijder Filter" HorizontalAlignment="Left" Margin="12,539,0,-104" VerticalAlignment="Top" Width="136" Click="ClearFilter_Click"/>
+        <ListView x:Name="listview" HorizontalAlignment="Left" Height="267" Margin="16,619,0,-419" VerticalAlignment="Top" MinWidth="142" Width="142" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
