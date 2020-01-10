@@ -200,9 +200,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\delicten\add_delict.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Pages\delicten\AddDelict.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\delicten\DelictList.xaml">
       <SubType>Designer</SubType>
@@ -252,8 +252,8 @@
     <Compile Include="Modals\Tweet.xaml.cs">
       <DependentUpon>Tweet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\delicten\add_delict.xaml.cs">
-      <DependentUpon>add_delict.xaml</DependentUpon>
+    <Compile Include="Pages\delicten\AddDelict.xaml.cs">
+      <DependentUpon>AddDelict.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\delicten\DelictList.xaml.cs">
       <DependentUpon>DelictList.xaml</DependentUpon>
