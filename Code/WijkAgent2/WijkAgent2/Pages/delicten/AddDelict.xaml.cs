@@ -143,7 +143,6 @@ namespace WijkAgent2.Pages.delicten
                 description = OmschijvingTB.Text;
                 date = DatumTB.Text;
                 checkCoord = street + ' ' + homeNumber + ' ' + placeName;
-
             }));
 
             StringBuilder homeNumbernum =
@@ -276,9 +275,6 @@ namespace WijkAgent2.Pages.delicten
                     longCoord = parseX;
                     latCoord = parseY;
                 }
-
-
-
             }
             catch (Exception eas) { Console.WriteLine(eas); }
             cn.CloseConnection();
@@ -354,25 +350,21 @@ namespace WijkAgent2.Pages.delicten
                     }
                     // Attempt to commit the transaction.
                     transaction.Commit();
-                    Console.WriteLine("Both records are written to database.");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine("Commit Exception Type: {0}", ex.GetType());
-                    Console.WriteLine("  Message: {0}", ex.Message);
-
+                    mw.ShowMessage("Er is iets fout gegaan, we proberen het te herstellen.");
                     // Attempt to roll back the transaction.
                     try
                     {
                         transaction.Rollback();
                     }
-                    catch (Exception ex2)
+                    catch (Exception)
                     {
                         // This catch block will handle any errors that may have occurred
                         // on the server that would cause the rollback to fail, such as
                         // a closed connection.
-                        Console.WriteLine("Rollback Exception Type: {0}", ex2.GetType());
-                        Console.WriteLine("  Message: {0}", ex2.Message);
+                        mw.ShowMessage("Probleem is niet verholpen, neem contact op met de applicatie beheerder.");
                     }
                 }
             }
@@ -400,11 +392,14 @@ namespace WijkAgent2.Pages.delicten
         }
 
         //---Dropdown categories---//
+
+        //Method that gives the dropdown the right list containing all the categories.
         private void BindCategroryDropDown()
         {
             categoryCB.ItemsSource = categoryList;
         }
 
+        //Method that makes the user able to search for categories.
         private void Category_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!categoryCB.IsDropDownOpen)
@@ -415,11 +410,13 @@ namespace WijkAgent2.Pages.delicten
             categoryCB.ItemsSource = categoryList.Where(x => x.Category_Name.ToLower().StartsWith(categoryCB.Text.Trim().ToLower()));
         }
 
+        //Method that fires whenever a categories gets checked or unchecked
         private void AllCheckbocx_CheckedAndUnchecked(object sender, RoutedEventArgs e)
         {
             BindListBOX();
         }
 
+        //Shows selected categories in a list box and filters the table
         private void BindListBOX()
         {
             testListbox.Items.Clear();
@@ -432,6 +429,7 @@ namespace WijkAgent2.Pages.delicten
                 }
             }
         }
+        //Returns if a certain category is checked.
         private bool CheckCategorie()
         {
             foreach (var item in categoryList)
@@ -443,6 +441,8 @@ namespace WijkAgent2.Pages.delicten
             }
             return false;
         }
+
+        //Method to fix a known combobox bug in WPF.
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             categoryCB.SelectedIndex = -1;

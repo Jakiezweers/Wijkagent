@@ -192,7 +192,7 @@ namespace WijkAgent2
         public void UserView(int id)
         {
             MainFrame.Navigate(new UserView(this, id));
-            TopHeader.Text = "Wijkagent - Delict toevoegen";
+            TopHeader.Text = "Wijkagent - Gebruiker inzien";
         }
 
         //logout user and show Login page.

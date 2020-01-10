@@ -103,7 +103,7 @@ namespace WijkAgent2.Pages.delicten
             DelictActivateBTN.Visibility = Visibility.Hidden;
             
             cn.OpenConection();
-            SqlDataReader sq = cn.DataReader("SELECT DISTINCT delict.delict_id, delict.street, delict.date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.date ORDER BY delict.delict_id DESC");
+            SqlDataReader sq = cn.DataReader("SELECT DISTINCT delict.delict_id, delict.street, delict.added_date, COUNT(person.firstname) as firstname, COUNT(person.lastname) FROM dbo.delict LEFT JOIN dbo.delict_person ON delict.delict_id = delict_person.delict_id LEFT JOIN dbo.person ON person.person_id = delict_person.person_id WHERE delict.status = 1 GROUP BY delict.delict_id, delict.street, delict.added_date ORDER BY delict.delict_id DESC");
             while (sq.Read())
             {
                 int id = Convert.ToInt32(sq["delict_id"]);
@@ -112,7 +112,7 @@ namespace WijkAgent2.Pages.delicten
                 d1.id = id;
                 d1.street = GetDelictCategory(id);
 
-                d1.createtime = (DateTime)sq["date"];
+                d1.createtime = (DateTime)sq["added_date"];
 
                 d1.firstnamecount = count;
                 delictenlist.Add(d1);
@@ -145,7 +145,7 @@ namespace WijkAgent2.Pages.delicten
                 d1.id = id;
                 d1.street = GetDelictCategory(id);
                 d1.changedBy = Convert.ToInt32(sq["badge_nr"]);
-                d1.addedDate = (DateTime)sq["date_added"];
+                d1.createtime = (DateTime)sq["date_added"];
                 delictenlist.Add(d1);
             }
             cn.CloseConnection();
@@ -543,7 +543,7 @@ namespace WijkAgent2.Pages.delicten
             {
                 foreach (var item in delictenlist)
                 {
-                    if (item.createtime != StartDateDP.SelectedDate)
+                    if (item.createtime.Date != StartDateDP.SelectedDate)
                     {
                         sortedDelictList.Remove(item);
                     }
@@ -553,7 +553,7 @@ namespace WijkAgent2.Pages.delicten
             {
                 foreach (var item in delictenlist)
                 {
-                    if (item.createtime < StartDateDP.SelectedDate)
+                    if (item.createtime.Date < StartDateDP.SelectedDate)
                     {
                         sortedDelictList.Remove(item);
                     }
@@ -561,7 +561,7 @@ namespace WijkAgent2.Pages.delicten
                     {
                         foreach (var var in delictenlist)
                         {
-                            if (var.createtime > EndDateDP.SelectedDate && DateCB.IsChecked == false)
+                            if (var.createtime.Date > EndDateDP.SelectedDate && DateCB.IsChecked == false)
                             {
                                 sortedDelictList.Remove(var);
                             }
@@ -616,7 +616,7 @@ namespace WijkAgent2.Pages.delicten
         }
 
         //Method that makes the user able to search for categories.
-        private void category_TextChanged(object sender, TextChangedEventArgs e)
+        private void Category_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!categoryCB.IsDropDownOpen)
             {
