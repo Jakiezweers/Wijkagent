@@ -16,7 +16,7 @@
                 <DataGridTextColumn CanUserResize="False" CanUserReorder="False" CanUserSort="False" Header="Categorie" Binding="{Binding street}" Width="400"/>
 
 
-                <DataGridTextColumn CanUserResize="False" CanUserReorder="False" x:Name="ArchivelistAddedDate" Visibility="Hidden" Header="Archiveringsdatum" Binding="{Binding addedDate}"/>
+                <DataGridTextColumn CanUserResize="False" CanUserReorder="False" x:Name="ArchivelistAddedDate" Visibility="Hidden" Header="Archiveringsdatum" Binding="{Binding createtime, StringFormat=\{0:dd-MM-yy   HH:mm\}}"/>
                 <DataGridTextColumn CanUserResize="False" CanUserReorder="False" x:Name="ArchivelistChangedBy" Visibility="Hidden" Header="Gearchiveerd door" Binding="{Binding changedBy}"/>
 
                 <DataGridTextColumn CanUserResize="False" CanUserReorder="False" x:Name="ActivelistCreatedtime" Header="Aanmaakdatum" Binding="{Binding createtime, StringFormat=\{0:dd-MM-yy   HH:mm\}}"/>

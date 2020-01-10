@@ -224,9 +224,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\permissions\permission_window.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Pages\permissions\PermissionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\User\Edit_User.xaml">
       <SubType>Designer</SubType>
@@ -270,8 +270,8 @@
     <Compile Include="Pages\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\permissions\permission_window.xaml.cs">
-      <DependentUpon>permission_window.xaml</DependentUpon>
+    <Compile Include="Pages\permissions\PermissionWindow.xaml.cs">
+      <DependentUpon>PermissionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Edit_User.xaml.cs">
       <DependentUpon>Edit_User.xaml</DependentUpon>
